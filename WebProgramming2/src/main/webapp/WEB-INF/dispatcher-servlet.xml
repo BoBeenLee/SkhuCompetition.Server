@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+              http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/mvc 
+              http://www.springframework.org/schema/mvc/spring-mvc.xsd
+              http://www.springframework.org/schema/context 
+              http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config />
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/view/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	<bean id="helloController1" class="spring01.HelloController" />
+	<bean id="helloController2" class="spring02.HelloController" />
+	
+	<bean id="student1" class="spring02.Student" />
+	<bean id="student2" class="spring02.Student">
+		<constructor-arg>
+			<value>tom</value>
+		</constructor-arg>
+	</bean>
+	<bean id="string1" class="java.lang.String">
+		<constructor-arg value="jane" />
+	</bean>
+	<bean id="student3" class="spring02.Student">
+		<constructor-arg ref="string1" />
+	</bean>
+	<bean id="student4" class="spring02.Student">
+		<constructor-arg>
+			<null />
+		</constructor-arg>
+	</bean>
+		<bean id="student5" class="spring02.Student">
+		<constructor-arg value="#{ student1.name?.toUpperCase() }" />
+	</bean>
+</beans>
