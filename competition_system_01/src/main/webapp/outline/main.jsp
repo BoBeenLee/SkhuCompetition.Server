@@ -25,13 +25,19 @@
 	background-color: #991;
 }
 
-.box-login{
+.box-login {
 	top: 5%;
 }
 
-.box-register{
+.box-register {
 	top: 5%;
 }
+
+/* menu */
+.menu {
+	padding: 1%;
+}
+
 /* content */
 .content {
 	height: 550px;
@@ -95,6 +101,15 @@
 			Title
 			<button type="button" class="btn btn-default pull-right">Register</button>
 			<button type="button" class="btn btn-default pull-right">Login</button>
+		</div>
+		<div class="menu">
+			<ul class="nav nav-pills nav-justified">
+				<li><a href="#">Home</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">Messages</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">Messages</a></li>
+			</ul>
 		</div>
 		<div class="content row">
 			<div class="col-md-4">
