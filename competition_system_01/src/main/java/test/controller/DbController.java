@@ -1,4 +1,4 @@
-package test;
+package test.controller;
 
 import java.util.List;
 
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import test.TestMapper;
+
 @Controller
 public class DbController {
 	@Autowired
@@ -17,9 +19,11 @@ public class DbController {
 	
 	@RequestMapping("/dbtest.do")
 	public ModelAndView page1(HttpServletRequest request) {
-		ModelAndView result = new ModelAndView("layout");
+		ModelAndView result = new ModelAndView("/test/db");
 		
+		String tmp = tm.getTestSelect();
 		
+		result.addObject("test", tmp);
 		
 		return result;
 	}

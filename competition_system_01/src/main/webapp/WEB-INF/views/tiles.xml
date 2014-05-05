@@ -3,18 +3,25 @@
     "-//ApacheSoftwareFoundation//DTDTiles Configuration 2.1//EN" 
     "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<definition name="layout" template="/WEB-INF/views/layout.jsp">
+	<definition name="defaultLayout" template="/WEB-INF/views/layout/defaultLayout.jsp" >
 		<put-attribute name="title" value="LAYOUT" />
-		<put-attribute name="top" value="/WEB-INF/views/header/header.jsp" />
+		<put-attribute name="header" value="/WEB-INF/views/header/header.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/body/body.jsp" />
-		<put-attribute name="bottom" value="/WEB-INF/views/footer/footer.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/footer/footer.jsp" />
+	</definition>
+	<definition name="/index" extends="defaultLayout" >
+		<put-attribute name="title" value="main" />
+		<put-attribute name="body" value="/WEB-INF/views/body/main/main.jsp" />
 	</definition>
 
-<!-- 
-	<definition name="db" extends="layout">
-		<put-attribute name="title" value="db" />
-		<put-attribute name="body" value="/WEB-INF/views/db.jsp" />
+	<definition name="/sub/*" extends="defaultLayout" >
+		<put-attribute name="title" value="{1}" />
+		<put-attribute name="body" value="/WEB-INF/views/body/sub/{1}.jsp" />
 	</definition>
-	 -->
+
+	<definition name="/test/*" extends="defaultLayout">
+		<put-attribute name="title" value="{1}" />
+		<put-attribute name="body" value="/WEB-INF/views/test/{1}.jsp" />
+	</definition>
 </tiles-definitions>
 

@@ -5,123 +5,59 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insert title here</title>
+<title>경진대회 메인</title>
+<link rel="stylesheet/less" type="text/css" href="main.less">
 <link
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
 	rel="stylesheet">
 <script src="//code.jquery.com/jquery.js"></script>
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+<!--  경로 디폴트 설정  -->
+<base href="/competition_system_01/">
 </head>
-<style type="text/css">
-.container {
-	margin-top: 50px;
-}
-
-/* header */
-.header {
-	height: 170px;
-	background-color: #991;
-}
-
-.box-login {
-	top: 5%;
-}
-
-.box-register {
-	top: 5%;
-}
-
-/* menu */
-.menu {
-	padding: 1%;
-}
-
-/* content */
-.content {
-	height: 550px;
-}
-
-/* Box - Notice, Rank */
-.content div.col-md-4:nth-of-type(1) {
-	height: 100%;
-}
-
-.box-notice {
-	height: 50%;
-	background-color: #983;
-	padding: 5%;
-}
-
-.box-rank {
-	height: 50%;
-	background-color: #985;
-	padding: 5%;
-}
-
-/* Box - Quick, Calendar */
-.content div.col-md-4:nth-of-type(2) {
-	height: 100%;
-}
-
-.box-quick {
-	height: 50%;
-	background-color: #987;
-	padding: 5%;
-}
-
-.box-calendar {
-	height: 50%;
-	background-color: #989;
-	padding: 5%;
-}
-
-/* Box - Picturer */
-.content div.col-md-4:nth-of-type(3) {
-	height: 100%;
-}
-
-.box-pic {
-	height: 100%;
-	background-color: #980;
-	padding: 5%;
-}
-
-/* footer */
-.footer {
-	height: 150px;
-	background-color: #995;
-	padding: 5%;
-}
-</style>
-<body>
+<body class="test">
 	<div class="container">
 		<div class="header row">
-			Title
-			<button type="button" class="btn btn-default pull-right">Register</button>
-			<button type="button" class="btn btn-default pull-right">Login</button>
+			<span class="main-title">Skhu IT 경진대회</span> <a type="button"
+				class="box box-link btn btn-default btn-xs pull-right">링크</a> <a
+				type="button"
+				class="box box-login btn btn-default btn-xs pull-right">회원가입</a> <a
+				type="button"
+				class="box box-register btn btn-default btn-xs pull-right">로그인</a>
 		</div>
-		<div class="menu">
-			<ul class="nav nav-pills nav-justified">
-				<li><a href="#">Home</a></li>
-				<li><a href="#">Profile</a></li>
-				<li><a href="#">Messages</a></li>
-				<li><a href="#">Profile</a></li>
-				<li><a href="#">Messages</a></li>
+		<div class="menu row">
+			<ul class="box-menu nav nav-pills nav-justified">
+				<li><a href="notice.do">공지사항</a></li>
+				<li><a href="competition.do">경진대회</a></li>
+				<li><a href="data.do">대회자료</a></li>
+				<li><a href="qa.do">QA</a></li>
 			</ul>
 		</div>
 		<div class="content row">
 			<div class="col-md-4">
-				<div class="row box-notice">Notice</div>
-				<div class="row box-rank">Rank</div>
+				<div class="box box-notice">
+					Notice
+					<div>
+						<table>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+							<tr><td>test</td></tr>
+						</table>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4">
-				<div class="row box-quick">Quick</div>
-				<div class="row box-calendar">Calendar</div>
+			<div class="col-md-5">
+				<div class="box box-board">Board</div>
 			</div>
-			<div class="col-md-4">
-				<div class="row box-pic">Picture</div>
+			<div class="col-md-3">
+				<div class="box box-calendar">Calendar</div>
 			</div>
 		</div>
 		<div class="footer row">Footer</div>
