@@ -1,0 +1,47 @@
+
+@body-background: #eee;
+@board-background: white;
+body {
+	background-color: @body-background ! important;
+}
+
+* {
+	color: #444 ! important;
+}
+
+.container {
+	.board {
+		background-color: @board-background;
+		.board-content {
+			table tr th:nth-of-type(2) {
+				width: 65%;
+			}
+			
+		}
+
+		.board-menu {
+			div {
+				display: inline-block;
+			}
+
+			.board-search {
+			}
+
+			.board-page-list {
+				margin-left: 15%;
+				ul {
+					
+					display: inline;
+				}
+			}
+
+			.board-write {
+			}
+
+			.auto {
+				width: auto;
+			}
+		}
+	}
+}
+

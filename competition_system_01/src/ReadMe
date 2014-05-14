@@ -1,0 +1,9 @@
+주의할 점 :
+경로 
+jsp context 명부터 /bbs3/index.jsp
+xml, controller action 메소드는 붙이지 않는다.
+xml context 이후 부터 적는 다. /index.jsp
+
+
+
+jstl : not empty - 널아니면 true

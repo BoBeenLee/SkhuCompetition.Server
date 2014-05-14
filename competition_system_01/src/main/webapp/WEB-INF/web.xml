@@ -13,17 +13,22 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
 				/WEB-INF/spring/mvc/dispatcher-servlet.xml
+			</param-value>
+		</init-param>
+	</servlet>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
 				/WEB-INF/spring/jdbc/spring-jdbc.xml
 				/WEB-INF/spring/tiles/spring-tiles.xml
 				/WEB-INF/spring/security/spring-security.xml
-			</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+		</param-value>
+	</context-param>
 	<servlet-mapping>
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener

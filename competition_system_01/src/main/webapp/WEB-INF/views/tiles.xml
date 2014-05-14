@@ -3,20 +3,59 @@
     "-//ApacheSoftwareFoundation//DTDTiles Configuration 2.1//EN" 
     "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<definition name="defaultLayout" template="/WEB-INF/views/layout/defaultLayout.jsp" >
+	<definition name="defaultLayout" template="/WEB-INF/views/layout/defaultLayout.jsp">
 		<put-attribute name="title" value="LAYOUT" />
 		<put-attribute name="header" value="/WEB-INF/views/header/header.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/body/body.jsp" />
 		<put-attribute name="footer" value="/WEB-INF/views/footer/footer.jsp" />
 	</definition>
-	<definition name="/index" extends="defaultLayout" >
+	<definition name="/index" extends="defaultLayout">
 		<put-attribute name="title" value="main" />
 		<put-attribute name="body" value="/WEB-INF/views/body/main/main.jsp" />
 	</definition>
 
-	<definition name="/sub/*" extends="defaultLayout" >
-		<put-attribute name="title" value="{1}" />
-		<put-attribute name="body" value="/WEB-INF/views/body/sub/{1}.jsp" />
+	<!--  board -->
+	<definition name="/sub/board" extends="defaultLayout">
+		<put-attribute name="title" value="board" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub.jsp">
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/common/board/board.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+	<definition name="/sub1/board" extends="defaultLayout">
+		<put-attribute name="title" value="board" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub1.jsp">
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/common/board/board.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+
+	<!--  article  -->
+	<definition name="/sub/article" extends="defaultLayout">
+		<put-attribute name="title" value="article" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub.jsp">
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/common/board/article.jsp" />
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/common/board/comment.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+	<definition name="/sub1/article" extends="defaultLayout">
+		<put-attribute name="title" value="article" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub1.jsp">
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/common/board/article.jsp" />
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/common/board/comment.jsp" />
+			</definition>
+		</put-attribute>
 	</definition>
 
 	<definition name="/test/*" extends="defaultLayout">

@@ -12,10 +12,28 @@
 
 <link rel="stylesheet/less" type="text/css" href="css/main/main.less">
 <link rel="stylesheet/less" type="text/css" href="css/common/common.less">
+
+<!-- sub1 -->
+<!-- <link rel="stylesheet/less" type="text/css" href="css/common/sub1.less">  -->
+<link rel="stylesheet/less" type="text/css" href="css/common/sub.less">
+
+<!-- board -->
+<link rel="stylesheet/less" type="text/css" href="css/common/board.less">
+
+
+<link
+	href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css"
+	rel='stylesheet' />
+<link
+	href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.print.css"
+	rel='stylesheet' media='print' />
 <link
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
 	rel="stylesheet">
+
 <script src="//code.jquery.com/jquery.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"></script>
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>

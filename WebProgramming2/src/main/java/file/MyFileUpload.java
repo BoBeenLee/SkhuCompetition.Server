@@ -53,5 +53,4 @@ public class MyFileUpload {
 		}
 		return resultList;
 	}
-
 }

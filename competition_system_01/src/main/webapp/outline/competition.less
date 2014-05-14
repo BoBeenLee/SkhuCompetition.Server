@@ -1,0 +1,28 @@
+
+@body-background: #eee;
+@competition-background: white;
+body {
+	background-color: @body-background ! important;
+}
+
+* {
+	color: #444 ! important;
+}
+
+.container {
+	.content {
+		.competition {
+			padding: 2% 25% 2% 25%;
+			background-color: @competition-background;
+			.competition-content {
+				table tr th:nth-of-type(2) {
+					width: 40%;
+				}
+			}
+
+			.competition-menu {
+			}
+		}
+	}
+}
+
