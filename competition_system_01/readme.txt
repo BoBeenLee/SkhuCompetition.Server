@@ -1,6 +1,9 @@
 궁금 사항
 1. annotation-config, component-scan, ContextLoaderListener 의 역할
 2. org.mybatis.spring.mapper.MapperScannerConfigurer 사용법
+3. less 한곳에 모아놓아서 충돌 날 수 있으니 유의
+
+
 js, css 참조 부분
 
 <!-- 항목별 -->

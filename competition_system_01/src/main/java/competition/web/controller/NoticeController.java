@@ -21,7 +21,8 @@ public class NoticeController {
 	public ModelAndView getCompetitionBoard(HttpServletRequest request){
 		ModelAndView modelAndView = new ModelAndView("/sub1/board"); 
 		
-		articleService.addArticle();
+		modelAndView.addObject("noticeList", articleService.findArticle());
+		
 		
 		return modelAndView;
 	}

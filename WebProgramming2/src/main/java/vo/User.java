@@ -1,4 +1,4 @@
-package spring6;
+package vo;
 
 public class User {
 

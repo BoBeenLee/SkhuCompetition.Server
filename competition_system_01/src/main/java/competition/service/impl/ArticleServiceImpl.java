@@ -14,13 +14,18 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	ArticleMapper articleMapper;
 	
-	public boolean addArticle() {
-		System.out.println(articleMapper);
+	public boolean addArticle(ArticleView article) {
+		///articleMapper.addArticle(article);
 		
 		
 		return false;
 	}
 
+	public boolean addArticle() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	public boolean modifyArticle() {
 		// TODO Auto-generated method stub
 		return false;
@@ -37,6 +42,7 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	
 	public List<ArticleView> findArticle(){
-		return null;
+		return articleMapper.findArticle();
 	}
+
 }

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +15,8 @@
 <link rel="stylesheet/less" type="text/css" href="css/common/common.less">
 
 <!-- sub1 -->
-<!-- <link rel="stylesheet/less" type="text/css" href="css/common/sub1.less">  -->
+<link rel="stylesheet/less" type="text/css" href="css/user/login.less"> 
+<link rel="stylesheet/less" type="text/css" href="css/common/sub1.less"> 
 <link rel="stylesheet/less" type="text/css" href="css/common/sub.less">
 
 <!-- board -->

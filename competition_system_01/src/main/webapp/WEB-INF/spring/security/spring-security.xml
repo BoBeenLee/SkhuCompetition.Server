@@ -17,12 +17,13 @@
 	<authentication-manager>
 		<authentication-provider>
 			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query="select 로그인명 username, 비밀번호 password, 1 enabled 
-                                     from 사용자 
-                                     where 로그인명 = ?"
-				authorities-by-username-query="select 로그인명 username, 역할 authority 
-                                           from 사용자 
-                                           where 로그인명 = ?" />
+				users-by-username-query="select userId username, password, password, 1 enabled 
+                                     from user_db user 
+                                     where userId = ?"
+				authorities-by-username-query="select userId username, auth.authName authority 
+                                           from user_db user join auth_db auth 
+                                           on user.authId = auth.authId 
+                                           where userId = ?" />
 		</authentication-provider>
 	</authentication-manager>
 

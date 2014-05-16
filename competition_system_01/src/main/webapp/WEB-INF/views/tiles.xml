@@ -14,8 +14,19 @@
 		<put-attribute name="body" value="/WEB-INF/views/body/main/main.jsp" />
 	</definition>
 
+	<!--  User  -->
+	<definition name="/sub1/user/register" extends="defaultLayout">
+		<put-attribute name="title" value="user" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub1.jsp">
+				<put-attribute name="content"
+					value="/WEB-INF/views/body/user/register.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+
 	<!--  board -->
-	<definition name="/sub/board" extends="defaultLayout">
+	<definition name="/sub/board" extends="defaultLayout"> <!--  main --> 
 		<put-attribute name="title" value="board" />
 		<put-attribute name="body">
 			<definition template="/WEB-INF/views/body/common/layout/sub.jsp">
@@ -24,7 +35,7 @@
 			</definition>
 		</put-attribute>
 	</definition>
-	<definition name="/sub1/board" extends="defaultLayout">
+	<definition name="/sub1/board" extends="defaultLayout"> <!--  sub, main -->
 		<put-attribute name="title" value="board" />
 		<put-attribute name="body">
 			<definition template="/WEB-INF/views/body/common/layout/sub1.jsp">
