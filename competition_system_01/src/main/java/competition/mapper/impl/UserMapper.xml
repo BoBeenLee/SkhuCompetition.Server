@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.UserMapper">
-	<select id="selectById" resultType="bbs3.User">
-		SELECT *
-		FROM 사용자 WHERE  = #{id}
+	<select id="getAuthId" resultType="competition.domain.Auth">
+		SELECT authId
+		FROM Auth WHERE  authName = #{authName}
 	</select>
 
-
+	<insert id="addUser"
+		parameterType="competition.domain.User"	>		
+		insert into User(userId, authId, userName, userPW, userTel, userEmail, question, answer, groupPW, department)
+			select #{userId}, authId, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{groupPW}, #{department}
+			from auth_db
+			where authName = #{authName}
+			
+			<!-- #{userId}, #{authId}, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{groupPW}, #{department} -->
+	</insert>
 </mapper> 

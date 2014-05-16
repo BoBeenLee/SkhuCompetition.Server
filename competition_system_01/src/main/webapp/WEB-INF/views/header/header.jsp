@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%>
 <div class="header row">
 	<span class="main-title">IT Competition System</span> <a
-		class="box box-link btn btn-default btn-xs pull-right">링크</a> <a
-		class="box box-login btn btn-default btn-xs pull-right">회원가입</a> <a
-		class="box box-register btn btn-default btn-xs pull-right">로그인</a>
+		href="skhu.ac.kr" class="box box-link btn btn-default btn-xs pull-right">링크</a> <a
+		href="register.do" class="box box-login btn btn-default btn-xs pull-right">회원가입</a> <a
+		href="login.do" class="box box-register btn btn-default btn-xs pull-right">로그인</a>
 </div>
 <div class="menu row">
 	<ul class="box-menu nav nav-pills nav-justified">

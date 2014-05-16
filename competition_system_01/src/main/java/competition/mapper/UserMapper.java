@@ -11,5 +11,4 @@ public interface UserMapper {
 	public void removeUser(int id);
 	public void modifyUser(User user);
 	public List<UserView> findUser(Pagination pagination);
-	
 }

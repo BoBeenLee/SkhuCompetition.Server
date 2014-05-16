@@ -4,10 +4,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <body>
-	<a href="dbtest.do">dbtest</a>
+	<c:redirect url="index.do"></c:redirect>
+	<!--  
+		<a href="dbtest.do">dbtest</a>
 	<a href="mailtest.do">mailtest</a>
 	<a href="competition.do">competition</a>
 	<a href="index.do">index</a>
 	<a href="notice.do">notice</a>
+	 -->
 </body>
 </html>

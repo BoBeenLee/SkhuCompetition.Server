@@ -10,7 +10,12 @@
               http://www.springframework.org/schema/context 
               http://www.springframework.org/schema/context/spring-context.xsd">
 
+<!-- added this because I think it makes annotations work? -->
 	<context:annotation-config />
+	
+	
+  <!-- enable component scanning (beware that this does not enable 
+mapper scanning!) --> 
 	<!-- <context:component-scan base-package="competition.web.controller, competition.service.impl, test.controller, test.service"  /> -->
  	<context:component-scan base-package="competition, test">
 		<context:include-filter type="regex" expression="(service|controller)\..*"/>

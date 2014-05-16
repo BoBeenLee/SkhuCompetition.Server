@@ -10,6 +10,7 @@
 
 	<properties>
 		<org.springframework.version>4.0.2.RELEASE</org.springframework.version>
+		<org.apache.tiles.version>3.0.3</org.apache.tiles.version>
 	</properties>
 
 	<dependencies>
@@ -53,17 +54,22 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>${org.springframework.version}</version>
 		</dependency>
-		
+
 		<!-- Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-core</artifactId>
-			<version>3.0.3</version>
+			<version>${org.apache.tiles.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-extras</artifactId>
-			<version>3.0.3</version>
+			<version>${org.apache.tiles.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-jsp</artifactId>
+			<version>${org.apache.tiles.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

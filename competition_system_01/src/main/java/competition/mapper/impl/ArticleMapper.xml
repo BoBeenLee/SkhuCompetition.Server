@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.ArticleMapper">
-	<select id="selectById" resultType="bbs3.User">
-		SELECT *
-		FROM 사용자 WHERE  = #{id}
+	<select id="findArticle" resultType="competition.domain.Article">
+		select *
+		from article_db
 	</select>
 
+	<insert id="addArticle" parameterType="competition.domain.Article">
+	
+		insert into Article(title, content, writtenDate, hit, writerId, boardCodeId, notice, startPeriod, endPeriod, password, articleHidden) 
+		values(#{title}, #{content}, #{writtenDate}, #{hit}, #{writerId}, #{boardCodeId}, #{notice}, #{startPeriod}, #{endPeriod}, #{password}, #{articleHidden})
+	</insert>
 
 </mapper> 
