@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="competition.mapper.ScoreMapper">
+	<insert id="addScoreCode" parameterType="competition.domain.code.ScoreCode">
+		insert into
+		scorecode_db(boardCodeId, scoreName, content)
+		values(#{boardCodeId},
+		#{scoreName}, #{content})
+	</insert>
+
+	<update id="modifyScoreCode" parameterType="competition.domain.code.ScoreCode">
+		update scorecode_db set
+		boardCodeId = #{boardCodeId}, 
+		scoreName = #{scoreName}, 
+		content = #{content}
+		where scoreCodeId = #{scoreCodeId}
+	</update>
+
+	<delete id="removeScoreCode" parameterType="int">
+		delete from scorecode_db
+		where scoreCodeId = #{scoreCodeId}
+	</delete>
+
+	<select id="getScoreCode" parameterType="int" resultType="competition.domain.view.code.ScoreCodeView">
+		select *
+		from scorecode_db
+		where scoreCodeId = #{scoreCodeId}
+	</select>
+
+	<select id="findScoreCodes" parameterType="int" resultType="competition.domain.view.code.ScoreCodeView">
+		select scoreCodeId, sc1.boardCodeId boardCodeId, scoreName, content, rank, sc1.teamCodeId teamCodeId, teamName, sum(s1.score) sum
+		from scorecode_db sc1 left join teamcode_db tc1
+		on sc1.teamCodeId = tc1.teamCodeId
+		left join score_db s1
+		on sc1.teamCodeId = s1.teamCodeId 
+		where sc1.boardCodeId = #{boardCodeId}
+		group by sc1.scoreCodeId
+	</select>
+
+	<insert id="addScore" parameterType="competition.domain.Score">
+		insert into
+		score_db(score, articleId, teamCodeId, userId, valuerId)
+		values(#{score},
+		#{articleId}, #{teamCodeId}, #{userId}, #{valuerId})
+	</insert>
+
+	<update id="modifyScore" parameterType="competition.domain.Score">
+		update score_db set
+		score = #{score}
+		where scoreId = #{scoreId}
+	</update>
+
+	<delete id="removeScore" parameterType="int">
+		delete from score_db
+		where
+		scoreId = #{scoreId}
+	</delete>
+
+	<select id="getScore" parameterType="int" resultType="competition.domain.view.ScoreView">
+		select *
+		from score_db
+		where scoreId = #{scoreId}
+	</select>
+
+	<select id="findScores" resultType="competition.domain.view.ScoreView">
+		select s1.scoreId scoreId, s1.score score, a1.articleId articleId, s1.teamCodeId teamCodeId, f1.userId userId, s1.valuerId valuerId, f1.fileName fileName, f1.fileId fileId, a1.title title
+		from article_db a1 join file_db f1
+		on a1.articleId = f1.articleId
+		left join score_db s1
+		on a1.articleId = s1.articleId
+		where f1.isArticle = 0 and a1.boardCodeId = #{boardCodeId}
+		and (s1.valuerId is null or s1.valuerId = #{valuerId})
+		and (s1.teamCodeId is null or s1.teamCodeId = #{teamCodeId})
+		order by a1.articleId asc
+	</select>
+</mapper> 

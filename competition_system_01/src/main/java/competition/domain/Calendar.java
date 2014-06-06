@@ -4,11 +4,9 @@ import java.sql.Timestamp;
 
 public class Calendar {
 	private int calendarId;
-	private int boardCodeId;
 	private Timestamp startDate;
 	private Timestamp endDate;
 	private String content;
-	private int calendarHidden;
 
 	public int getCalendarId() {
 		return calendarId;
@@ -18,13 +16,6 @@ public class Calendar {
 		this.calendarId = calendarId;
 	}
 
-	public int getBoardCodeId() {
-		return boardCodeId;
-	}
-
-	public void setBoardCodeId(int boardCodeId) {
-		this.boardCodeId = boardCodeId;
-	}
 
 	public Timestamp getStartDate() {
 		return startDate;
@@ -50,11 +41,4 @@ public class Calendar {
 		this.content = content;
 	}
 
-	public int getCalendarHidden() {
-		return calendarHidden;
-	}
-
-	public void setCalendarHidden(int calendarHidden) {
-		this.calendarHidden = calendarHidden;
-	}
 }

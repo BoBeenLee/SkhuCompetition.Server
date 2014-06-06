@@ -1,61 +1,97 @@
 package competition.domain;
 
 public class Pagination {
-	private int currentPage = 1;
-	private int pageSize = 15;
-	private int srchType;
-	private String srchText;
-	private String category;
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private String srchType;
+    private String content;
+    private int boardCodeId;
+    
+    public int getPg() {
+        return currentPage;
+    }
 
-	public int getPg() {
+    public void setPg(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getSz() {
+        return pageSize;
+    }
+    
+    public void setSz(int pageSize) {
+        this.pageSize = pageSize;
+    }
+    
+    public String getSt() {
+        return srchType;
+    }
+    
+    public void setSt(String srchType) {
+        this.srchType = srchType;
+    }
+	
+	public int getBid() {
+		return boardCodeId;
+	}
+
+	public void setBid(int boardCodeId) {
+		this.boardCodeId = boardCodeId;
+	}   
+    
+	public String getCt() {
+		return content;
+	}
+
+	public void setCt(String content) {
+		this.content = content;
+	}
+	
+    public int getCurrentPage() {
 		return currentPage;
 	}
 
-	public void setPg(int currentPage) {
+	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
 	}
 
-	public int getSz() {
+	public int getPageSize() {
 		return pageSize;
 	}
 
-	public void setSz(int pageSize) {
+	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
 
-	public int getSt() {
+	public String getSrchType() {
 		return srchType;
 	}
 
-	public void setSt(int srchType) {
+	public void setSrchType(String srchType) {
 		this.srchType = srchType;
 	}
-
-	public String getTt() {
-		return srchText;
+	
+	public int getBoardCodeId() {
+		return boardCodeId;
 	}
 
-	public void setTt(String srchText) {
-		this.srchText = srchText;
+	public void setBoardCodeId(int boardCodeId) {
+		this.boardCodeId = boardCodeId;
 	}
 
-	public String getCt() {
-		return category;
+	public String getContent() {
+		return content;
 	}
 
-	public void setCt(String category) {
-		this.category = category;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("pg=%d&sz=%d", currentPage, pageSize));
-		if (srchType != 0)
-			sb.append(String.format("&st=%d", srchType));
-		if (srchText != null)
-			sb.append("&tt=" + srchText);
-		if (category != null)
-			sb.append("&ct=" + category);
-		return sb.toString();
-	}
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("bid=%d&sz=%d", boardCodeId, pageSize));
+        if (srchType != null) sb.append("&st=" + srchType);
+        if (content != null) sb.append("&ct=" + content);
+        return sb.toString();
+    }
 }

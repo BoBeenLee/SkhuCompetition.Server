@@ -2,32 +2,42 @@ package competition.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import competition.domain.Article;
-import competition.domain.Comment;
 import competition.domain.Pagination;
 import competition.domain.QA;
-import competition.domain.User;
 import competition.domain.code.BoardCode;
 import competition.domain.view.ArticleView;
 import competition.domain.view.QAView;
-import competition.domain.view.UserView;
+import competition.domain.view.code.BoardCodeView;
+
 
 public interface ArticleMapper{
+//	 QAs 만 빼고 테스트 해봄.
 	
-	// Article
-	public void addArticle(Article article);
-	public void removeArticle(int id);	
-	public void modifyArticle(Article article);
-	public ArticleView getArticle(int id);
-	public QAView getQA(int id);
+	public int addBoardCode(BoardCode boardCode);
+	public int removeBoard(int boardCodeId);
+	public int modifyBoardCode(BoardCode boardCode);
+	public List<BoardCodeView> getAllBoardCodes();	
+	public BoardCodeView getBoard(int boardCodeId);
+	public List<BoardCodeView> findBoards(@Param("builderId") String builderId, @Param("parentBoardCodeId") int parentBoardCodeId);
 	
-	public List<ArticleView> findArticle();
-	//public List<ArticleView> findArticle(BoardCode boardCode, Pagination pagination);
-	public List<QAView> findQA(BoardCode boardCode, Pagination pagination);
+	public int addQA(QA qa);
+	public int modifyQA(QA qa);	
 	
-	// Comment
-	public void addComment(Comment comment);
-	public void removeComment(int id);
-	public void modifyComment(Comment comment);
-	public List<UserView> findComment(Pagination pagination);
+	public QAView getQA(int articleId);
+	public List<QAView> findQAs(Pagination pagination);
+	
+	
+	public int addArticle(Article article);
+	public int modifyArticle(Article article);	
+	public int removeArticle(int articleId);	
+	
+	public ArticleView getArticle(int articleId);
+	public List<ArticleView> findArticles(Pagination pagination);
+	public List<ArticleView> findNotices(Pagination pagination);	
+	public int getTotalArticles(Pagination pagination);
+	
+	public String getBoardName(int boardCodeId);	
 }

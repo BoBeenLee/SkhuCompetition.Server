@@ -5,7 +5,7 @@
 
 <div class="content row">
 	<div class="content-header">
-		<h4>IT 경진대회11</h4>
+		<h4>${ subTitle }</h4>
 	</div>
 	<div class="content-body">
 		<tiles:insertAttribute name="content" />

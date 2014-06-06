@@ -11,7 +11,7 @@ public class User {
 	private String userEmail;
 	private String question;
 	private String answer;
-	private String groupPW;
+	private int grade;
 	private String department;
 	private Timestamp createdDate;
 	
@@ -63,11 +63,11 @@ public class User {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
-	public String getGroupPW() {
-		return groupPW;
+	public int getGrade() {
+		return grade;
 	}
-	public void setGroupPW(String groupPW) {
-		this.groupPW = groupPW;
+	public void setGrade(int grade) {
+		this.grade = grade;
 	}
 	public String getDepartment() {
 		return department;

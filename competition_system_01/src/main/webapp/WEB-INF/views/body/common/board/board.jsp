@@ -1,74 +1,92 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <div class="board">
 	<div class="board-content">
 		<table class="table table-striped table-condensed table-hover">
 			<thead>
 				<tr>
-					<th>번호</th>
+					<th class="text-center">번호</th>
 					<th>제목</th>
-					<th>글쓴이</th>
-					<th>날짜</th>
-					<th>조회</th>
+					<th class="text-center">글쓴이</th>
+					<th class="text-center">날짜</th>
+					<th class="text-center">조회</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>1</td>
-					<td><a href="#">아녕하세요 안녕하세요 안녕.</a></td>
-					<td>이보빈</td>
-					<td>01-01</td>
-					<td>1422</td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td><a href="#">아녕하요 안녕.</a></td>
-					<td>이보빈</td>
-					<td>01-01</td>
-					<td>1422</td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td><a href="#">아녕하세요 안녕하세요 안녕.</a></td>
-					<td>이보dd빈</td>
-					<td>01-01</td>
-					<td>1422</td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td><a href="#">아녕하세요 안녕하세요 안녕.</a></td>
-					<td>이보빈</td>
-					<td>01-01</td>
-					<td>1422</td>
-				</tr>
+				<c:if test="${ pagination.currentPage <= 1 }">
+					<c:forEach var="notice" items="${ noticeList }">
+						<tr>
+							<td class="text-center"><span class="glyphicon glyphicon-volume-down"></span></td>
+							<td><a
+								href="${ boardType }/article/read.do?${ pagination }&pg=${ pagination.currentPage}&ai=${ notice.articleId }">${ notice.title }[${notice.commentCount}]</a></td>
+							<td class="text-center">${ notice.writerId }</td>
+							<td class="text-center">${ notice.writtenDate }</td>
+							<td class="text-center">${ notice.hit }</td>
+						</tr>
+					</c:forEach>
+				</c:if>
+				<c:forEach var="article" varStatus="idx" items="${ boardList }">
+					<c:set var="articleNum"
+						value="${ (boardCount - (pagination.currentPage - 1) * pagination.pageSize)  - (idx.index) }" />
+					<tr>
+						<td class="text-center">${ articleNum }</td>
+						<td><a
+							href="${ boardType }/article/read.do?${ pagination }&pg=${ pagination.currentPage}&ai=${ article.articleId }">${ article.title }[${article.commentCount}]</a></td>
+						<td class="text-center">${ article.writerId }</td>
+						<td class="text-center">${ article.writtenDate }</td>
+						<td class="text-center">${ article.hit }</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
 	</div>
 	<div class="board-menu">
-		<div class="board-search pull-left">
-			<form class="form-inline" role="form">
-				<select class="form-control input-sm">
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-				</select> <input type="text" class="form-control input-sm" />
-				<button class="form-control btn btn-default input-sm" type="button">Go!</button>
-			</form>
-		</div>
-		<div class="board-page-list">
-			<ul class="pagination">
-				<li><a href="#">«</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">»</a></li>
-			</ul>
-		</div>
-		<div class="board-write pull-right">
-			<button class="btn btn-default input-sm" type="button">글쓰기</button>
-		</div>
+		<form class="form-inline" action="${ boardType }/board.do"
+			method="get" role="form">
+			<input type="hidden" name="bid" value="${ pagination.boardCodeId }" />
+			<div class="board-search pull-left">
+				<select name="st" class="form-control input-sm">
+					<option
+						<c:if test="${pagination.srchType == 'title' }">selected="selected"</c:if>
+						value="title">제목</option>
+					<option
+						<c:if test="${pagination.srchType == 'writerId' }">selected="selected"</c:if>
+						value="writerId">글쓴이</option>
+				</select> <input type="text" name="ct" class="form-control input-sm"
+					value="${pagination.content}" /> <input
+					class="form-control btn btn-default input-sm" type="submit"
+					value="검색" />
+			</div>
+
+			<div class="board-page-list">
+				<ul class="pagination">
+					<c:if test="${ pagination.currentPage - 1 > 0}">
+						<li><a
+							href="${ boardType }/board.do?${ pagination }&pg=${ pagination.currentPage - 1 }">«</a></li>
+					</c:if>
+
+					<c:set var="maxPageNum"
+						value="${ (boardCount / pagination.pageSize) - (boardCount / pagination.pageSize) % 1 + 1 }" />
+					<c:forEach var="pageNum" begin="1" end="${ maxPageNum }">
+						<li><a
+							href="${ boardType }/board.do?${ pagination }&pg=${ pageNum }">${ pageNum }</a></li>
+					</c:forEach>
+					<c:if
+						test="${ pagination.currentPage + 1 <= boardCount / pagination.pageSize + 1 }">
+						<li><a
+							href="${ boardType }/board.do?${ pagination }&pg=${ pagination.currentPage + 1 }">»</a></li>
+					</c:if>
+				</ul>
+			</div>
+			<div class="board-write pull-right">
+				<a
+					href="${ boardType }/article/write.do?${ pagination }&pg=${ pagination.currentPage}"
+					class="btn btn-default input-sm">글쓰기</a>
+			</div>
+		</form>
 	</div>
 </div>

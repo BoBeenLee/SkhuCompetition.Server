@@ -1,6 +1,6 @@
 package competition.domain;
 
-public class QA {
+public class QA extends Article{
 	private int qaId;
 	private int articleId;
 	private int processId;

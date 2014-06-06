@@ -11,6 +11,7 @@ public class File {
 	private String fileUrl;
 	private int articleId;
 	private String userId;
+	private int isArticle;
 	
 	public int getFileId() {
 		return fileId;
@@ -59,5 +60,11 @@ public class File {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public int getIsArticle() {
+		return isArticle;
+	}
+	public void setIsArticle(int isArticle) {
+		this.isArticle = isArticle;
 	}
 }

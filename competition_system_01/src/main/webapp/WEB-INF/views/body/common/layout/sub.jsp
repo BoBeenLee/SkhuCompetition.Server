@@ -2,29 +2,22 @@
 	pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <div class="content row">
-	<div class="content-sub col-md-3">
-		<h4>경진대회</h4>
+	<div class="content-sub col-md-2">
 		<ul class="list-group">
-			<li class="list-group-item"><a class="btn btn-default" href="#">IT
-					경진대회</a></li>
-			<li class="list-group-item"><a class="btn btn-default" href="#">IT
-					경진대회</a></li>
-			<li class="list-group-item"><a class="btn btn-default" href="#">IT
-					경진대회</a></li>
-			<li class="list-group-item"><a class="btn btn-default" href="#">IT
-					경진대회</a></li>
+			<c:forEach var="page" items="${ pgList }">
+				<li class="list-group-item"><a class="btn btn-default" href="${ page.url }">${ page.korName }</a></li>			
+			</c:forEach>		
 		</ul>
-		<hr>
 	</div>
-	<div class="content-main col-md-9">
+	<div class="content-main col-md-10">
 		<div class="content-header">
-			<h4>IT 경진대회11</h4>
+			<h4>${ subTitle }</h4>
 		</div>
 		<div class="content-body">
 			<tiles:insertAttribute name="content" />
 		</div>
 	</div>
-
 </div>

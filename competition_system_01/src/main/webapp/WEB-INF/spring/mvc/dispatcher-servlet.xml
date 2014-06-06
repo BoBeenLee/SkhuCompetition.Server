@@ -10,16 +10,29 @@
               http://www.springframework.org/schema/context 
               http://www.springframework.org/schema/context/spring-context.xsd">
 
-<!-- added this because I think it makes annotations work? -->
+	<!-- added this because I think it makes annotations work? -->
 	<context:annotation-config />
-	
-	
-  <!-- enable component scanning (beware that this does not enable 
-mapper scanning!) --> 
-	<!-- <context:component-scan base-package="competition.web.controller, competition.service.impl, test.controller, test.service"  /> -->
- 	<context:component-scan base-package="competition, test">
-		<context:include-filter type="regex" expression="(service|controller)\..*"/>
+
+	<!-- enable component scanning (beware that this does not enable mapper 
+		scanning!) -->
+	<!-- <context:component-scan base-package="competition.web.controller, competition.service.impl, 
+		test.controller, test.service" /> -->
+	<context:component-scan base-package="competition, test">
+		<context:include-filter type="regex"
+			expression="(service|controller)\..*" />
 	</context:component-scan>
+
+	<!-- Json Message Converter -->
+	<bean id="jsonHttpMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
 
 	<!-- Mail -->
 	<!-- SET default mail properties -->
@@ -38,10 +51,17 @@ mapper scanning!) -->
 		</property>
 	</bean>
 
-   <!-- You can have some pre-configured messagess also which are ready to send -->
-    <bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
-        <property name="to" value="cultist_tp@daum.com"></property>
-        <property name="from" value="cultisttp@gmail.com"></property>
-        <property name="subject" value="FATAL - Application crash. Save your job !!"/>
-    </bean>
+	<!-- You can have some pre-configured messagess also which are ready to 
+		send -->
+	<bean id="preConfiguredMessage" class="org.springframework.mail.SimpleMailMessage">
+		<property name="to" value="cultist_tp@daum.com"></property>
+		<property name="from" value="cultisttp@gmail.com"></property>
+		<property name="subject" value="FATAL - Application crash. Save your job !!" />
+	</bean>
+	
+	<!-- File -->
+	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+		<!-- upload Size -->
+		  <property name="maxUploadSize" value="10240000"/>
+	</bean>
 </beans>

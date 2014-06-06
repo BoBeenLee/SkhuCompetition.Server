@@ -4,10 +4,13 @@ import java.sql.Blob;
 import java.sql.Timestamp;
 
 public class Comment {
+	public static final boolean COMMENT_COUNT_UP = true;
+	public static final boolean COMMENT_COUNT_DOWN = false;
+	
 	private int commentId;
 	private int articleId;
 	private String writerId;
-	private Blob content;
+	private byte[] content;
 	private Timestamp writtenDate;
 	private int parentCommentId;
 	private int distance;
@@ -37,11 +40,11 @@ public class Comment {
 		this.writerId = writerId;
 	}
 
-	public Blob getContent() {
+	public byte[] getContent() {
 		return content;
 	}
 
-	public void setContent(Blob content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 

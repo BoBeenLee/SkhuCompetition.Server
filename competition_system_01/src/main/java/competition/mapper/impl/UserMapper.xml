@@ -1,18 +1,126 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.UserMapper">
-	<select id="getAuthId" resultType="competition.domain.Auth">
-		SELECT authId
-		FROM Auth WHERE  authName = #{authName}
+
+	
+	<!-- 구현한 것 -->
+
+	<insert id="addUser" parameterType="competition.domain.view.UserView">
+		insert into user_db(userId, authId, userName, userPW, userTel,
+		userEmail,
+		question, answer, grade, department)
+		select #{userId}, authId,
+		#{userName},
+		#{userPW}, #{userTel}, #{userEmail},
+		#{question},
+		#{answer},
+		#{grade},
+		#{department}
+		from auth_db
+		where authName = #{authName} and
+		groupPW = #{groupPW}
+		<!-- #{userId}, #{authId}, #{userName}, #{userPW}, #{userTel}, #{userEmail}, 
+			#{question}, #{answer}, #{groupPW}, #{department} -->
+	</insert>
+
+	<delete id="removeUser">
+		delete from user_db
+		where userId = #{userId} and
+		userPW = #{userPW}
+	</delete>
+
+	<select id="getUser" resultType="competition.domain.view.UserView">
+		select userId, u1.authId,
+		authName, userName,
+		userPW, userTel, userEmail, question, answer,
+		grade, department, createdDate
+		from user_db u1 join auth_db a1
+		on u1.authId =
+		a1.authId
+		where userId = #{userId} and userPW = #{userPW}
 	</select>
 
-	<insert id="addUser"
-		parameterType="competition.domain.User"	>		
-		insert into User(userId, authId, userName, userPW, userTel, userEmail, question, answer, groupPW, department)
-			select #{userId}, authId, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{groupPW}, #{department}
-			from auth_db
-			where authName = #{authName}
-			
-			<!-- #{userId}, #{authId}, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{groupPW}, #{department} -->
-	</insert>
+	<select id="getAuthId" resultType="int">
+		SELECT authId
+		FROM auth_db
+		WHERE authName = #{authName}
+	</select>
+
+	<select id="getAuthName" resultType="string">
+		select authName
+		from user_db u1 join auth_db a1
+		on u1.authId = a1.authId
+		where userId = #{userId}
+	</select>
+
+	<select id="getChkGroupPW" parameterType="competition.domain.view.UserView"
+		resultType="int">
+		select count(*)
+		from
+		auth_db
+		where authName = #{authName}
+		AND
+		groupPW = #{groupPW}
+	</select>
+
+	<update id="modifyUser" parameterType="competition.domain.view.UserView">
+		update user_db
+		set
+		userName
+		= #{userName},
+		userTel = #{userTel},
+		userEmail =
+		#{userEmail},
+		question =
+		#{question},
+		answer = #{answer},
+		grade =
+		#{grade},
+		department =
+		#{department}
+		where userId =
+		#{userId}
+	</update>
+
+	<update id="changePW" parameterType="competition.domain.view.UserView">
+		update user_db
+		set
+		userPW
+		=
+		#{userPW}
+		where userId = #{userId} and userPW = #{preUserPW}
+	</update>
+	
+		<select id="findUsers" resultType="competition.domain.view.UserView">
+		select userId, u1.authId authId,
+		authName, userName,
+		userPW, userTel,
+		userEmail, question, answer, grade,
+		department, createdDate
+		from user_db u1
+		join auth_db a1
+		on u1.authId =
+		a1.authId
+		where 1 
+		<include refid="userCondition" />
+	</select>
+
+	<sql id="userCondition">
+		<if test="srchType != null">
+			<choose>
+				<when test="srchType.equals('userId')">
+					AND u1.userId like concat("%", #{content}, "%")
+				</when>
+				<when test="srchType.equals('userName')">
+					AND u1.userName like concat("%", #{content}, "%")
+				</when>
+				<when test="srchType.equals('department')">
+					AND u1.department like concat("%", #{content}, "%")
+				</when>				
+				<when test="srchType.equals('authName')">
+					AND u1.authName like concat("%", #{content}, "%")
+				</when>
+			</choose>
+		</if>
+	</sql>
 </mapper> 

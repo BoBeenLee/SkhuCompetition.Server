@@ -1,15 +1,235 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.ArticleMapper">
-	<select id="findArticle" resultType="competition.domain.Article">
-		select *
-		from article_db
+
+
+	<!-- QA 같은 경우는 articleId로 조건을 지정한다. 미확인 -->
+	<select id="findQAs" resultType="competition.domain.view.QAView">
+		select a1.articleId article, title, writtenDate, hit, writerId, boardCodeId,
+		isNotice,
+		startPeriod, endPeriod, password, authId, qaId,
+		processId,
+		parentQAId, distance, step
+		from article_db a1 join qa_db q1
+		on
+		a1.articleId = q1.articleId
+		where
+		a1.boardCodeId = #{boardCodeId}
+		<include refid="articleCondition" />
+		AND a1.articleId &lt;= (
+		<include refid="findMaxArticleId" />
+		)
+		order by a1.articleId desc
+		limit #{ pageSize }
 	</select>
 
-	<insert id="addArticle" parameterType="competition.domain.Article">
-	
-		insert into Article(title, content, writtenDate, hit, writerId, boardCodeId, notice, startPeriod, endPeriod, password, articleHidden) 
-		values(#{title}, #{content}, #{writtenDate}, #{hit}, #{writerId}, #{boardCodeId}, #{notice}, #{startPeriod}, #{endPeriod}, #{password}, #{articleHidden})
+	<select id="getAllBoardCodes" resultType="competition.domain.view.code.BoardCodeView">
+		select * 
+		from boardcode_db;	
+	</select>
+
+	<!-- 테스트 한 것 -->
+	<!-- On delete cascade라서 필요 없음. <select id="removeQA" parameterType="int"> 
+		delete from qa_db where articleId = #{id} </select> -->
+
+
+	<insert id="addBoardCode" parameterType="competition.domain.code.BoardCode">
+		insert into
+		boardCode_db(builderId, boardType, boardName, isHidden,
+		parentBoardCodeId)
+		values(#{builderId},
+		#{boardType}, #{boardName},
+		#{isHidden}, #{parentBoardCodeId})
 	</insert>
 
+	<update id="modifyBoardCode" parameterType="competition.domain.code.BoardCode">
+		update boardCode_db
+		set boardName =
+		#{boardName},
+		boardType = #{boardType},
+		isHidden =
+		#{isHidden},
+		parentBoardCodeId = #{parentBoardCodeId}
+		where
+		boardCodeId =
+		#{boardCodeId}
+	</update>
+
+	<delete id="removeBoard" parameterType="int">
+		delete from boardCode_db
+		where boardCodeId = #{boardCodeId}
+	</delete>
+	
+	<select id="getBoard" parameterType="int"
+		resultType="competition.domain.view.code.BoardCodeView">
+		select *
+		from boardcode_db
+		where boardCodeId = #{boardCodeId}
+	</select>
+
+	<select id="findBoards" resultType="competition.domain.view.code.BoardCodeView">
+		select *
+		from boardcode_db
+		where isHidden = 0
+		<if test="builderId != null">
+			and builderId = #{builderId}
+		</if>
+		<if test="parentBoardCodeId != 0">
+			and parentBoardCodeId = #{parentBoardCodeId}
+		</if>
+	</select>
+	
+	<select id="getBoardName" resultType="string">
+		select boardName
+		from
+		boardcode_db
+		where boardCodeId = #{boardCodeId}
+	</select>
+
+
+	<insert id="addQA" parameterType="competition.domain.QA">
+		insert into qa_db(articleId,
+		processId, parentQAId, distance, step)
+		values(#{articleId},
+		#{processId}, #{parentQAId}, #{distance}, #{step})
+	</insert>
+
+	<update id="modifyQA" parameterType="competition.domain.QA">
+		update qa_db
+		set processId =
+		#{processId},
+		distance = #{distance},
+		step = #{step}
+		where articleId =
+		#{articleId}
+	</update>
+
+	<select id="getQA" resultType="competition.domain.view.QAView">
+		select *
+		from qa_db qa join
+		article_db ar
+		on qa.articleId = ar.articleId
+		where qa.articleId =
+		#{articleId}
+	</select>
+
+
+	<insert id="addArticle" parameterType="competition.domain.Article"
+		useGeneratedKeys="true" keyProperty="articleId">
+		insert into
+		article_db(title,
+		content, writtenDate, writerId, boardCodeId,
+		isNotice,
+		startPeriod,
+		endPeriod, password, authId, fileLimitDate, isFile)
+		values(#{title},
+		#{content},
+		#{writtenDate}, #{writerId},
+		#{boardCodeId}, #{isNotice},
+		#{startPeriod},
+		#{endPeriod}, #{password},
+		#{authId}, #{fileLimitDate},
+		#{isFile})
+	</insert>
+
+	<update id="modifyArticle" parameterType="competition.domain.Article">
+		update article_db set
+		title = #{title},
+		content = #{content}, 
+		writtenDate = #{writtenDate},
+		hit = #{hit},
+		writerId = #{writerId}, 
+		boardCodeId = #{boardCodeId},
+		isNotice = #{isNotice},
+		startPeriod = #{startPeriod},
+		endPeriod = #{endPeriod},
+		commentCount = #{commentCount},
+		password = #{password}, 
+		authId = #{authId},
+		fileLimitDate = #{fileLimitDate},
+		isFile = #{isFile}
+		where
+		articleId = #{articleId}
+	</update>
+
+	<delete id="removeArticle" parameterType="int">
+		delete from article_db
+		where articleId = #{articleId}
+	</delete>
+
+	<select id="getArticle" resultType="competition.domain.view.ArticleView">
+		select * from article_db 
+		where articleId = #{articleId}
+	</select>
+	
+	<select id="findArticleAll" resultType="competition.domain.view.ArticleView">
+		select *
+		from article_db
+		where boardCodeId = #{boardCodeId}
+		<include refid="articleCondition" />
+	</select>
+	<select id="findArticles" resultType="competition.domain.view.ArticleView">
+		select articleId, title, writtenDate, hit, writerId, boardCodeId,
+		isNotice,
+		startPeriod, endPeriod, password, authId, commentCount
+		from article_db	a1
+		where
+		a1.boardCodeId = #{boardCodeId}
+		<if test="srchType == null">
+			AND ((a1.isNotice = 1 AND a1.startPeriod &gt; now() ) OR a1.isNotice = 0)
+		</if>
+		<include refid="articleCondition" />
+		AND a1.articleId &lt;= (
+		<include refid="findMaxArticleId" />
+		)
+		order by a1.articleId desc
+		limit #{ pageSize }
+	</select>
+
+	<select id="findNotices" resultType="competition.domain.view.ArticleView">
+		select articleId, title, writtenDate, hit, writerId, boardCodeId,
+		isNotice,
+		startPeriod, endPeriod, password, authId, commentCount
+		from article_db 
+		where boardCodeId = #{boardCodeId}
+		AND isNotice = 1
+		AND (startPeriod &lt;= now() AND endPeriod &gt;= now())
+		order by articleId desc
+	</select>
+
+	<select id="getTotalArticles" resultType="int">
+		select count(*)
+		from
+		article_db a1
+		where a1.boardCodeId = #{boardCodeId}
+		<include refid="articleCondition" />
+	</select>
+
+	<sql id="findMaxArticleId">
+		select a1.articleId
+		from article_db a1 join article_db a2
+		on
+		a2.articleId &gt;= a1.articleId
+		where a1.boardCodeId = #{boardCodeId}
+		and a2.boardCodeId = #{boardCodeId}
+		<include refid="articleCondition" />
+		group by a1.articleId
+		having count(*) &gt; ((#{currentPage} - 1) *
+		#{pageSize})
+		order by a1.articleId desc
+		limit 1
+	</sql>
+
+	<sql id="articleCondition">
+		<if test="srchType != null">
+			<choose>
+				<when test="srchType.equals('title')">
+					AND a1.title like concat("%", #{content}, "%")
+				</when>
+				<when test="srchType.equals('writerId')">
+					AND a1.writerId like concat("%", #{content}, "%")
+				</when>
+			</choose>
+		</if>
+	</sql>
 </mapper> 

@@ -1,60 +1,25 @@
 package competition.domain.view;
 
-import java.sql.Timestamp;
+import java.text.ParseException;
 
-public class CalendarView {
-	private int calendarId;
-	private int boardCodeId;
-	private Timestamp startDate;
-	private Timestamp endDate;
-	private String content;
-	private int calendarHidden;
+import util.DateUtils;
 
-	public int getCalendarId() {
-		return calendarId;
+import competition.domain.Calendar;
+
+public class CalendarView extends Calendar {
+	public void setStartDateView(String startDate) throws ParseException {
+		setStartDate(DateUtils.getStringToTimestamp(startDate));
 	}
 
-	public void setCalendarId(int calendarId) {
-		this.calendarId = calendarId;
+	public void setEndDateView(String endDate) throws ParseException {
+		setEndDate(DateUtils.getStringToTimestamp(endDate));
 	}
 
-	public int getBoardCodeId() {
-		return boardCodeId;
+	public String getStartDateView() {
+		return DateUtils.getTimestampToString(super.getStartDate());
 	}
 
-	public void setBoardCodeId(int boardCodeId) {
-		this.boardCodeId = boardCodeId;
-	}
-
-	public Timestamp getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Timestamp startDate) {
-		this.startDate = startDate;
-	}
-
-	public Timestamp getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Timestamp endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public int getCalendarHidden() {
-		return calendarHidden;
-	}
-
-	public void setCalendarHidden(int calendarHidden) {
-		this.calendarHidden = calendarHidden;
+	public String getEndDateView() {
+		return DateUtils.getTimestampToString(super.getEndDate());
 	}
 }

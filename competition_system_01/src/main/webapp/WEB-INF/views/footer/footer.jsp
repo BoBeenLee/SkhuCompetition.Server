@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div class="footer row">
-	<p>
-		서울시 구로구 항동 1-1 성공회대학교 (152-716) Tel : 02.2610.4334 Fax : 02.2610.4330
-		문의 : swadmin@skhu.ac.kr<br>copyright 2014 (c) sungkonghoe univ.
-		software egineering dept. Bobin Lee. All rights reserved.
-	</p>
+	<div>
+		<a href="http://www.skhu.ac.kr"><img src="image/footer/skhu.jpg" /></a>
+	</div>
+	<div>152-716 서울시 구로구 연동로 320 / 지하철 1.7호선 온수(성공회대입구)역 02-2610-4114</div>
+	<div>Copyright (c) Sung-Kong-Hoe Univisity. All rights reserved.</div>
 </div>

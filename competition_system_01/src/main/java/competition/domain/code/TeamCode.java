@@ -10,6 +10,7 @@ public class TeamCode {
 	private Timestamp teamDate;
 	private String teamType;
 	private String teamContent;
+	private int isPermission;
 	
 	public int getTeamCodeId() {
 		return teamCodeId;
@@ -35,4 +36,29 @@ public class TeamCode {
 	public void setBoardCodeId(int boardCodeId) {
 		this.boardCodeId = boardCodeId;
 	}
+	public Timestamp getTeamDate() {
+		return teamDate;
+	}
+	public void setTeamDate(Timestamp teamDate) {
+		this.teamDate = teamDate;
+	}
+	public String getTeamType() {
+		return teamType;
+	}
+	public void setTeamType(String teamType) {
+		this.teamType = teamType;
+	}
+	public String getTeamContent() {
+		return teamContent;
+	}
+	public void setTeamContent(String teamContent) {
+		this.teamContent = teamContent;
+	}
+	public int getIsPermission() {
+		return isPermission;
+	}
+	public void setIsPermission(int isPermission) {
+		this.isPermission = isPermission;
+	}
+	
 }

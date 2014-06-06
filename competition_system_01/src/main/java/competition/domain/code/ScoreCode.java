@@ -5,6 +5,8 @@ public class ScoreCode {
 	private int boardCodeId;
 	private String scoreName;
 	private String content;
+	private int rank;
+	private int teamCodeId;
 	
 	public int getScoreCodeId() {
 		return scoreCodeId;
@@ -29,5 +31,17 @@ public class ScoreCode {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+	public int getTeamCodeId() {
+		return teamCodeId;
+	}
+	public void setTeamCodeId(int teamCodeId) {
+		this.teamCodeId = teamCodeId;
 	}
 }

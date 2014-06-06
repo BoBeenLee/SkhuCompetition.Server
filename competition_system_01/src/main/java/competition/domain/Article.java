@@ -4,26 +4,32 @@ import java.sql.Blob;
 import java.sql.Timestamp;
 
 public class Article {
-	private int aritcleId;
+	public static final int IS_ARTICLE = 1;
+	public static final int IS_NOT_ARTICLE = 0;
+	public static final int IS_NOT_MODIFY = 0;
+	
+	private int articleId;
 	private String title;
-	private Blob content;
+	private byte[] content;
 	private Timestamp writtenDate;
 	private int hit;
 	private String writerId;
 	private int boardCodeId;
-	private int notice;
+	private int isNotice;
 	private Timestamp startPeriod;
 	private Timestamp endPeriod;
 	private int commentCount;
 	private String password;
-	private int articleHidden;
+	private int authId;
+	private Timestamp fileLimitDate;
+	private int isFile;
 
-	public int getAritcleId() {
-		return aritcleId;
+	public int getArticleId() {
+		return articleId;
 	}
 
-	public void setAritcleId(int aritcleId) {
-		this.aritcleId = aritcleId;
+	public void setArticleId(int articleId) {
+		this.articleId = articleId;
 	}
 
 	public String getTitle() {
@@ -34,11 +40,11 @@ public class Article {
 		this.title = title;
 	}
 
-	public Blob getContent() {
+	public byte[] getContent() {
 		return content;
 	}
 
-	public void setContent(Blob content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 
@@ -74,12 +80,12 @@ public class Article {
 		this.boardCodeId = boardCodeId;
 	}
 
-	public int getNotice() {
-		return notice;
+	public int getIsNotice() {
+		return isNotice;
 	}
 
-	public void setNotice(int notice) {
-		this.notice = notice;
+	public void setIsNotice(int isNotice) {
+		this.isNotice = isNotice;
 	}
 
 	public Timestamp getStartPeriod() {
@@ -111,14 +117,32 @@ public class Article {
 	}
 
 	public void setPassword(String password) {
+		if(password == null || password.equals(""))
+			return ;
 		this.password = password;
 	}
 
-	public int getArticleHidden() {
-		return articleHidden;
+	public int getAuthId() {
+		return authId;
 	}
 
-	public void setArticleHidden(int articleHidden) {
-		this.articleHidden = articleHidden;
+	public void setAuthId(int authId) {
+		this.authId = authId;
+	}
+
+	public Timestamp getFileLimitDate() {
+		return fileLimitDate;
+	}
+
+	public void setFileLimitDate(Timestamp fileLimitDate) {
+		this.fileLimitDate = fileLimitDate;
+	}
+
+	public int getIsFile() {
+		return isFile;
+	}
+
+	public void setIsFile(int isFile) {
+		this.isFile = isFile;
 	}
 }

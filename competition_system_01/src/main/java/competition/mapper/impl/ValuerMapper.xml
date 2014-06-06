@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="competition.mapper.ValuerMapper">
+	<insert id="addValuer" parameterType="competition.domain.Valuer">
+		insert into
+		valuer_db(userId, boardCodeId)
+		values(#{userId}, #{boardCodeId})
+	</insert>
+
+	<update id="modifyValuer" parameterType="competition.domain.Valuer">
+		update valuer_db set
+		userId = #{userId}, 
+		boardCodeId = #{boardCodeId}
+		where valuerId = #{valuerId}
+	</update>
+
+	<delete id="removeValuer" parameterType="int">
+		delete from valuer_db
+		where valuerId = #{valuerId}
+	</delete>
+
+	<select id="getValuer" resultType="competition.domain.view.ValuerView">
+		select *
+		from valuer_db
+		where userId = #{userId} and boardCodeId = #{boardCodeId}
+	</select>
+
+	<select id="findValuers" resultType="competition.domain.view.ValuerView">
+		select *
+		from valuer_db
+		where boardCodeId = #{boardCodeId}
+	</select>
+</mapper> 

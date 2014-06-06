@@ -32,9 +32,9 @@ body {
 		background-color: @header-background-color;
 		.main-title {
 			display: inline-block;
-			margin-top: 5%;
-			margin-left: 5%;
-			font-size: 50px;
+			margin-top: 40px;
+			margin-left: 40px;
+			font-size: 200%;
 		}
 		
 		.box-link {
@@ -66,14 +66,21 @@ body {
 			padding-bottom: 15px;
 			border-bottom: 2px solid #b0b0b0;
 		}
-		
-		
 	}
 
 	.footer {
 		padding: 2%;
 		height: @footer-height;
 		background-color: @footer-background-color;
+		div:nth-of-type(1) {			
+			float: left; padding-right: 20px;
+		}
+		div:nth-of-type(2) {
+			font: normal 9pt arial; color: #666; margin-top: 15px;
+		}
+		div:nth-of-type(3) {
+			font: normal 9pt arial; color: #aaa; margin-top: 5px;
+		}
 	}
 }
 

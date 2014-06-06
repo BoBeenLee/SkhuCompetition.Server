@@ -1,20 +1,19 @@
 package competition.mapper;
 
+import java.sql.Timestamp;
 import java.util.List;
 
-import competition.domain.Article;
+import org.apache.ibatis.annotations.Param;
+
 import competition.domain.Calendar;
-import competition.domain.Pagination;
-import competition.domain.code.BoardCode;
-import competition.domain.view.ArticleView;
 import competition.domain.view.CalendarView;
-import competition.domain.view.QAView;
 
 public interface CalendarMapper {
 	// Calendar
-	public void addCalendar(Calendar calendar);
-	public void removeCalendar(int id);	
-	public void modifyCalendar(Calendar calendar);
-	public CalendarView getCalendar(int id);
-	public List<CalendarView> findCalendar();
+	public int addCalendar(Calendar calendar);
+	public int removeCalendar(int calendarId);	
+	public int modifyCalendar(Calendar calendar);
+	
+	public CalendarView getCalendar(int calendarId);
+	public List<CalendarView> findCalendars(@Param("startDate") Timestamp startDate, @Param("endDate") Timestamp endDate);
 }

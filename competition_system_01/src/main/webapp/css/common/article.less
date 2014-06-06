@@ -1,17 +1,28 @@
 
-@body-background: #eee;
+
 @article-background: white;
-body {
-	background-color: @body-background ! important;
+.write {
+	background-color: @article-background;
+	.title {
+	}
 }
 
-* {
-	color: #444 ! important;
-}
+.read {
+	background-color: @article-background;
+	
+	.read-header {
+		.panel-title {
+			text-align: left;
+		}	
+	}
 
-.container {
-	.article {
-		background-color: @article-background;
+	.read-content {
+		padding-top: 10px;
+	}
+
+	.read-comment {
+		margin-top: 10px;
+		border-top: 3px solid #eee;
 	}
 }
 

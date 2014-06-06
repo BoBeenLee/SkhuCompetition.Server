@@ -3,86 +3,99 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <div class="register">
-	<form:form action="sendRegister.do" method="post">
-		<table>
-			<tr>
-				<td>구분 :</td>
-				<td><select name="authId">
-						<option value="ROLE_STUDENT">학생</option>
-						<option value="ROLE_PROFESOR">교수</option>
-						<option value="ROLE_USER">일반인</option>
-				</select></td>
-			</tr>
-			<tr>
-				<td>아이디 :</td>
-		
-				<td><input name="userId" /></td>
-			</tr>
-			<tr>
-				<td>이름 :</td>
-				<td><input name="userName" /></td>
-			</tr>
-			<tr>
-				<td>이메일 :</td>
-				<td><input name="userEmail" /></td>
-			</tr>
-			<tr>
-				<td>전화번호 :</td>
-				<td><input name="userTel" /></td>
-			</tr>
-			<tr>
-				<td>패스워드 :</td>
-				<td><input name="userPw" type="password" /></td>
-			</tr>
-			<tr>
-				<td>패스워드 재확인 :</td>
-				<td><input type="password" /></td>
-			</tr>
-			<tr>
-				<td>질문 :</td>
-				<td><input name="question" /></td>
-			</tr>
-			<tr>
-				<td>대답 :</td>
-				<td><input name="answer" /></td>
-			</tr>
-			<tr>
-				<td>학과 :</td>
-				<td><input name="department" /></td>
-			</tr>
-			<tr>
-				<td>그룹 패스워드 :</td>
-				<td><input name="groupPW" /></td>
-			</tr>
-			<tr>
-				<td colspan="2"><input type="submit" value="확인" /></td>
-			</tr>
-		</table>
-	</form:form>
-
-	<!-- 
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label for="inputEmail1" class="col-md-3 control-label">Email</label>
-						<div class="col-md-9">
-							<input type="email" class="form-control" id="inputEmail1"
-								placeholder="Email">
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="inputPassword1" class="col-md-3 control-label">Password</label>
-						<div class="col-md-9">
-							<input type="password" class="form-control" id="inputPassword1"
-								placeholder="Password">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-md-offset-3 col-md-9">
-							<button type="submit" class="btn btn-default">Login</button>
-							<button type="submit" class="btn btn-default">Register</button>
-							<button type="submit" class="btn btn-default">Forget</button>
-						</div>
-					</div>
-				</form>
- -->
+	<form class="form-horizontal" action="user/register.do" method="post">
+		<div class="form-group">
+			<label for="inputType" class="col-md-3 control-label">구분 : </label>
+			<div class="col-md-5">
+				<select id="inputType" class="form-control" name="authName">
+					<option value="ROLE_STUDENT">학생</option>
+					<option value="ROLE_PROFESOR">교수</option>
+					<option value="ROLE_USER">일반인</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputId" class="col-md-3 control-label">아이디 : </label>
+			<div class="col-md-5">
+				<input id="inputId" type="text" class="form-control" name="userId" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputName" class="col-md-3 control-label">이름 : </label>
+			<div class="col-md-5">
+				<input id="inputName" type="text" class="form-control" name="userName" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputEmail" class="col-md-3 control-label">이메일 :
+			</label>
+			<div class="col-md-5">
+				<input id="inputEmail" type="text" class="form-control"
+					name="userEmail" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputTel" class="col-md-3 control-label">전화번호 :</label>
+			<div class="col-md-5">
+				<input id="inputTel" type="text" class="form-control" name="userTel" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputPassword" class="col-md-3 control-label">패스워드
+				:</label>
+			<div class="col-md-5">
+				<input type="password" id="inputPassword" class="form-control"
+					name="userPW" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputRePassword" class="col-md-3 control-label">패스워드
+				재확인 :</label>
+			<div class="col-md-5">
+				<input id="inputRePassword" class="form-control" type="password" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputQuestion" class="col-md-3 control-label">질문
+				:</label>
+			<div class="col-md-5">
+				<input id="inputQuestion" type="text" class="form-control"
+					name="question" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputAnswer" class="col-md-3 control-label">대답 :</label>
+			<div class="col-md-5">
+				<input id="inputAnswer" type="text" class="form-control" name="answer" />
+			</div>
+		</div>		
+		<div class="form-group">
+			<label for="inputGrade" class="col-md-3 control-label">학년
+				:</label>
+			<div class="col-md-5">
+				<input id="inputGrade" type="text" class="form-control"
+					name="grade" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputDepartment" class="col-md-3 control-label">학과
+				:</label>
+			<div class="col-md-5">
+				<input id="inputDepartment" type="text" class="form-control"
+					name="department" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="inputGroupPW" class="col-md-3 control-label">그룹
+				패스워드 :</label>
+			<div class="col-md-5">
+				<input id="inputGroupPW" type="password" class="form-control"
+					name="groupPW" />
+			</div>
+		</div>
+		<div class="form-group">
+			<input type="submit" class="btn col-md-offset-3" value="확인" /> <a
+				href="index.do" class="btn">취소</a>
+		</div>
+	</form>
 </div>

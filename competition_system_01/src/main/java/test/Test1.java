@@ -10,25 +10,24 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-
 public class Test1 {
-	
 	// DB Test - 1
 	@Test
-	public void test1() throws SQLException{
-		Connection  connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "1q2w3e");
+	public void test1() throws SQLException {
+		Connection connection = DriverManager.getConnection(
+				"jdbc:mysql://localhost:3306/test", "root", "1q2w3e");
 		Statement stmt = connection.createStatement();
 		stmt.executeUpdate("CREATE TABLE a (id int not null primary key, value varchar(20))");
 		stmt.close();
 		connection.close();
 	}
-	
+
 	// File Test - 1
 	@Test
-	public void test2() throws SQLException{
+	public void test2() throws SQLException {
 		String PROPERTIES_FILE = "test/TestProperties.properties";
 		String UPLOAD_PATH = null;
-		
+
 		try {
 			InputStream inputstream = getClass().getClassLoader()
 					.getResourceAsStream(PROPERTIES_FILE);
@@ -40,10 +39,10 @@ public class Test1 {
 		}
 		System.out.println(UPLOAD_PATH);
 	}
-	
+
 	// Email Test - 1
 	@Test
-	public void test3() throws SQLException{
-		
+	public void test3() throws SQLException {
+
 	}
 }

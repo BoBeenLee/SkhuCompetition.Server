@@ -3,6 +3,7 @@ package competition.domain;
 public class Auth {
 	private int authId;
 	private String authName;
+	private String groupPW;
 	
 	public int getAuthId() {
 		return authId;
@@ -15,5 +16,11 @@ public class Auth {
 	}
 	public void setAuthName(String authName) {
 		this.authName = authName;
+	}
+	public String getGroupPW() {
+		return groupPW;
+	}
+	public void setGroupPW(String groupPW) {
+		this.groupPW = groupPW;
 	}
 }

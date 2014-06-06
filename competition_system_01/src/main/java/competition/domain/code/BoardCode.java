@@ -5,7 +5,9 @@ public class BoardCode {
 	private String builderId;
 	private String boardType;
 	private String boardName;
-	private int boardHidden;
+	private int isHidden;
+	private int parentBoardCodeId;
+	
 	
 	public int getBoardCodeId() {
 		return boardCodeId;
@@ -31,10 +33,17 @@ public class BoardCode {
 	public void setBoardName(String boardName) {
 		this.boardName = boardName;
 	}
-	public int getBoardHidden() {
-		return boardHidden;
+	public int getIsHidden() {
+		return isHidden;
 	}
-	public void setBoardHidden(int boardHidden) {
-		this.boardHidden = boardHidden;
+	public void setIsHidden(int isHidden) {
+		this.isHidden = isHidden;
 	}
+	public int getParentBoardCodeId() {
+		return parentBoardCodeId;
+	}
+	public void setParentBoardCodeId(int parentBoardCodeId) {
+		this.parentBoardCodeId = parentBoardCodeId;
+	}
+	
 }
