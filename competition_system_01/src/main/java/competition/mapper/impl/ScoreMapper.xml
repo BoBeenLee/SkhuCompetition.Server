@@ -2,17 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.ScoreMapper">
 	<insert id="addScoreCode" parameterType="competition.domain.code.ScoreCode">
-		insert into
-		scorecode_db(boardCodeId, scoreName, content)
-		values(#{boardCodeId},
-		#{scoreName}, #{content})
+		insert into scorecode_db(boardCodeId, scoreName, content, rank) 
+		values(#{boardCodeId}, #{scoreName}, #{content}, #{rank})
 	</insert>
 
 	<update id="modifyScoreCode" parameterType="competition.domain.code.ScoreCode">
 		update scorecode_db set
-		boardCodeId = #{boardCodeId}, 
 		scoreName = #{scoreName}, 
-		content = #{content}
+		content = #{content},
+		rank = #{rank},
+		teamCodeId = #{teamCodeId}
 		where scoreCodeId = #{scoreCodeId}
 	</update>
 
@@ -38,22 +37,21 @@
 	</select>
 
 	<insert id="addScore" parameterType="competition.domain.Score">
-		insert into
-		score_db(score, articleId, teamCodeId, userId, valuerId)
-		values(#{score},
-		#{articleId}, #{teamCodeId}, #{userId}, #{valuerId})
+		insert into score_db(score, articleId, teamCodeId, userId, valuerId)
+		values(#{score}, #{articleId}, #{teamCodeId}, #{userId}, #{valuerId})
 	</insert>
 
 	<update id="modifyScore" parameterType="competition.domain.Score">
 		update score_db set
-		score = #{score}
+		score = #{score},
+		userId = #{userId},
+		valuerId = #{valuerId}
 		where scoreId = #{scoreId}
 	</update>
 
 	<delete id="removeScore" parameterType="int">
 		delete from score_db
-		where
-		scoreId = #{scoreId}
+		where scoreId = #{scoreId}
 	</delete>
 
 	<select id="getScore" parameterType="int" resultType="competition.domain.view.ScoreView">
@@ -69,7 +67,6 @@
 		left join score_db s1
 		on a1.articleId = s1.articleId
 		where f1.isArticle = 0 and a1.boardCodeId = #{boardCodeId}
-		and (s1.valuerId is null or s1.valuerId = #{valuerId})
 		and (s1.teamCodeId is null or s1.teamCodeId = #{teamCodeId})
 		order by a1.articleId asc
 	</select>

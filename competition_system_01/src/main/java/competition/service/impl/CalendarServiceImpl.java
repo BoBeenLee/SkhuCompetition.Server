@@ -13,7 +13,7 @@ import competition.service.CalendarService;
 
 @Service("calendarService")
 public class CalendarServiceImpl implements CalendarService {
-	@Autowired
+	@Autowired(required=false)
 	CalendarMapper calendarMapper;
 		
 	public boolean addCalendar(Calendar calendar) {

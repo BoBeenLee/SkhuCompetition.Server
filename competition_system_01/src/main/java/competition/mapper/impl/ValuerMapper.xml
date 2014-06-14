@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.ValuerMapper">
 	<insert id="addValuer" parameterType="competition.domain.Valuer">
-		insert into
-		valuer_db(userId, boardCodeId)
+		insert into valuer_db(userId, boardCodeId)
 		values(#{userId}, #{boardCodeId})
 	</insert>
 
@@ -14,9 +13,9 @@
 		where valuerId = #{valuerId}
 	</update>
 
-	<delete id="removeValuer" parameterType="int">
+	<delete id="removeValuers" parameterType="int">
 		delete from valuer_db
-		where valuerId = #{valuerId}
+		where boardCodeId = #{boardCodeId}
 	</delete>
 
 	<select id="getValuer" resultType="competition.domain.view.ValuerView">
@@ -25,9 +24,16 @@
 		where userId = #{userId} and boardCodeId = #{boardCodeId}
 	</select>
 
-	<select id="findValuers" resultType="competition.domain.view.ValuerView">
-		select *
-		from valuer_db
-		where boardCodeId = #{boardCodeId}
+	<select id="findValuers" parameterType="int" resultType="competition.domain.view.ValuerView">
+		select valuerId, v1.userId userId, boardCodeId, userName
+		from valuer_db v1 join user_db u1
+		on v1.userId = u1.userId
+		where 
+		<if test="boardCodeId != 0">
+			boardCodeId = #{boardCodeId}
+		</if>
+		<if test="userId != null">
+			v1.userId = #{userId}
+		</if>
 	</select>
 </mapper> 

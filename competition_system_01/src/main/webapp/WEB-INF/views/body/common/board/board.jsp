@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <div class="board">
 	<div class="board-content">
-		<table class="table table-striped table-condensed table-hover">
+		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
 					<th class="text-center">번호</th>
@@ -54,11 +55,14 @@
 						<c:if test="${pagination.srchType == 'title' }">selected="selected"</c:if>
 						value="title">제목</option>
 					<option
+						<c:if test="${pagination.srchType == 'tagName' }">selected="selected"</c:if>
+						value="tagName">태그</option>	
+					<option
 						<c:if test="${pagination.srchType == 'writerId' }">selected="selected"</c:if>
 						value="writerId">글쓴이</option>
 				</select> <input type="text" name="ct" class="form-control input-sm"
 					value="${pagination.content}" /> <input
-					class="form-control btn btn-default input-sm" type="submit"
+					class="form-control btn btn-default" type="submit"
 					value="검색" />
 			</div>
 
@@ -82,11 +86,14 @@
 					</c:if>
 				</ul>
 			</div>
+			
+			<c:if test="${ isWrite }">
 			<div class="board-write pull-right">
 				<a
 					href="${ boardType }/article/write.do?${ pagination }&pg=${ pagination.currentPage}"
-					class="btn btn-default input-sm">글쓰기</a>
+					class="btn btn-default">글쓰기</a>
 			</div>
+			</c:if>
 		</form>
 	</div>
 </div>

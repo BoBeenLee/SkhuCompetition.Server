@@ -10,16 +10,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import competition.domain.Page;
+import competition.domain.view.MailView;
 import competition.domain.view.UserView;
+import competition.service.MailService;
 import competition.service.UserService;
 
 @Controller
 public class UserController {
 	@Autowired
 	UserService userService;
+	@Autowired
+	MailService mailService;
 	
 //	<!-- User -->
 	@RequestMapping("/user/login.do")
@@ -41,12 +46,23 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/user/forget.do", method=RequestMethod.POST)
-	public String forget(){
-		String url = "";
+	public String forget(@RequestParam(value="userEmail", required=false) String userEmail, @RequestParam(value="userId", required=false) String userId, @RequestParam(value="question", required=false) String question, @RequestParam(value="answer", required=false) String answer){
+		String toMail = null;
 		
-		
-		
-		return url;
+		if(userId != null && question != null && answer != null){
+			MailView mailView = mailService.getEmail(userId, question, answer);
+			toMail = mailView.getToMail();
+		}
+		if(userId != null && userEmail != null){
+			MailView mailView = mailService.getEmail(userId, null, null);
+			toMail = mailView.getToMail().equals(userEmail)? userEmail : null;
+		}
+		if(userId != null && toMail != null){
+//			System.out.println(userId + " - " + toMail);
+			userService.forgetPW(userId, "test");
+			mailService.sendMail(toMail, "비밀번호 변경 완료", "비밀번호 : test");
+		}
+		return  "redirect:" + "/index.do?message=forget";
 	}
 	
 	@RequestMapping(value="/user/register.do", method=RequestMethod.GET)
@@ -71,7 +87,7 @@ public class UserController {
 	    if(isUser)
 	    	url = "redirect:" + "/index.do?message=register";
 	    else
-	    	url = "redirect:" + "/index.do?message=fail";			
+	    	url = "redirect:" + "/user/register.do";			
 		return url;
 	}	
 }

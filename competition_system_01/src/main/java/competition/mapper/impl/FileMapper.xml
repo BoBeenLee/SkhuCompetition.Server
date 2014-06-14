@@ -2,18 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.FileMapper">
 	<insert id="addFile" parameterType="competition.domain.File">
-		insert into
-		file_db(fileName, fileSize, fileType, fileDate, fileUrl, articleId, userId, isArticle)
-		values(#{fileName},
-		#{fileSize}, #{fileType},
-		#{fileDate},
-		#{fileUrl}, #{articleId}, #{userId}, #{isArticle})
+		insert into file_db(fileName, fileSize, fileType, fileDate, fileUrl, articleId, userId, isArticle)
+		values(#{fileName}, #{fileSize}, #{fileType}, #{fileDate}, #{fileUrl}, #{articleId}, #{userId}, #{isArticle})
 	</insert>
 
 	<delete id="removeFile" parameterType="int">
 		delete from file_db
-		where
-		fileId = #{fileId}
+		where fileId = #{fileId}
 	</delete>
 
 	<select id="getFile" parameterType="int" resultType="competition.domain.view.FileView">

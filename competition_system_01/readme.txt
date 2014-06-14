@@ -1,3 +1,5 @@
+1. article_db에 authId 부분 애매모호함 - 읽기도 boardcode_db에 놓는것이 좀더 올바를 듯
+
 궁금 사항
 1. annotation-config, component-scan, ContextLoaderListener 의 역할
 2. select id, name, @RNUM

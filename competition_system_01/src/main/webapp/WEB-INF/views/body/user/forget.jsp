@@ -1,11 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div class="forget">
-	<form class="form-horizontal" action="login_process.do" method="post">
+	<form class="form-horizontal" action="user/forget.do" method="post">
+		<div class="form-group">
+			<label for="inputUserId1" class="col-md-3 control-label">UserId</label>
+			<div class="col-md-5">
+				<input type="text" name="userId" id="inputUserId1" class="form-control" />
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="inputEmail1" class="col-md-3 control-label">Email</label>
 			<div class="col-md-5">
-				<input type="email" name="email" class="form-control"
+				<input type="email" name="userEmail" class="form-control"
 					id="inputEmail1" placeholder="Email">
 			</div>
 		</div>
@@ -15,11 +21,22 @@
 			</div>
 		</div>
 	</form>
-	<form class="form-horizontal" action="login_process.do" method="post">
+	<form class="form-horizontal" action="user/forget.do" method="post">
+		<div class="form-group">
+			<label for="inputUserId2" class="col-md-3 control-label">UserId</label>
+			<div class="col-md-5">
+				<input type="text" name="userId" id="inputUserId2" class="form-control" />
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="inputQuestion1" class="col-md-3 control-label">Question</label>
 			<div class="col-md-5">
-				<label id="inputQuestion1" class="form-control">Question1</label>
+				<select id="inputQuestion" class="form-control"
+					name="question">
+					<option value="1">나의 보물 제 1호는?</option>
+          			<option value="2">어머니 고향은?</option>
+		          	<option value="3">아버지 고향은?</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">
@@ -35,9 +52,4 @@
 			</div>
 		</div>
 	</form>
-
-	<c:if test="${not empty errorMessage}">
-		<div class="alert alert-error">${ errorMessage }</div>
-	</c:if>
-
 </div>

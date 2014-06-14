@@ -22,5 +22,5 @@ public interface ScoreMapper {
 	public int removeScore(int scoreId);
 	public int modifyScore(Score Score);
 	public ScoreView getScore(int scoreId);
-	public List<ScoreView> findScores(@Param("boardCodeId") int boardCodeId, @Param("valuerId") int valuerId, @Param("teamCodeId") int teamCodeId);
+	public List<ScoreView> findScores(@Param("boardCodeId") int boardCodeId, @Param("teamCodeId") int teamCodeId);
 }

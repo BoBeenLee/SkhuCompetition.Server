@@ -3,13 +3,15 @@ package competition.domain.view;
 import competition.domain.Comment;
 
 public class CommentView extends Comment {
-	public void setContentView(String content){
+
+	public void setContentView(String content) {
 		setContent(content.getBytes());
 	}
-	public String getContentView(){
-		if(getContent() != null)
+
+	public String getContentView() {
+		if (getContent() != null)
 			return new String(getContent());
-		else 
+		else
 			return "";
 	}
 }

@@ -17,7 +17,7 @@
 		<property name="username" value="root" />
 		<property name="password" value="root" />
 	</bean>
-
+ 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath:competition/mapper/impl/*.xml" />
@@ -28,7 +28,7 @@
 	</bean>
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="competition.mapper, test" />
+		<property name="basePackage" value="competition.mapper" />
 	</bean>
 
 	<!-- <bean id="testMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> 

@@ -3,8 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<div class="cpt">
-	<form:form class="form-horizontal" action="mypage/addcpt.do"
+<div class="addcpt">
+	<form:form class="form-horizontal" action="competition/addcpt.do"
 		method="post" commandName="boardCodeView">
 		<div class="form-group">
 			<label for="inputComName" class="col-md-3 control-label">대회명
@@ -18,10 +18,10 @@
 			<form:hidden path="isHidden" />
 			<form:hidden path="parentBoardCodeId" />
 		</div>
-		<input type="submit" class="btn col-md-offset-3" value="확인" />
+		<input type="submit" class="btn btn-default col-md-offset-3" value="확인" />
 	</form:form>
 	<hr />
-	<form class="form-horizontal" action="mypage/hiddencpt.do" method="post">
+	<form class="form-horizontal" action="competition/hiddencpt.do" method="post">
 		<div class="form-group">
 			<label for="inputType" class="col-md-3 control-label">대회명 : </label>
 			<div class="col-md-4">
@@ -38,9 +38,6 @@
 				</select>
 			</div>
 		</div>
-		<div class="form-group">
-			<label class="col-md-3 control-label"></label>
-			<input class="btn" type="submit" value="확인" />
-		</div>
+		<input class="btn btn-default col-md-offset-3" type="submit" value="확인" />
 	</form>
 </div>

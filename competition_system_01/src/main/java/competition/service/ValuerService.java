@@ -7,8 +7,8 @@ import competition.domain.view.ValuerView;
 
 public interface ValuerService {
 	public boolean addValuer(Valuer valuer);
-	public boolean removeValuer(int valuerId);
+	public boolean removeValuers(int boardCodeId);
 	public boolean modifyValuer(Valuer valuer);
 	public ValuerView getValuer(String userId, int boardCodeId);
-	public List<ValuerView> findValuers(int boardCodeId);
+	public List<ValuerView> findValuers(int boardCodeId, String userId);
 }

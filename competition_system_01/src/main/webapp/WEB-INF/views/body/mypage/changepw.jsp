@@ -26,7 +26,9 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<input type="submit" class="btn col-md-offset-3" value="확인" />
+			<div class="col-md-offset-3 col-md-9">
+				<input type="submit" class="btn btn-default" value="확인" />
+			</div>
 		</div>
 	</form>
 </div>

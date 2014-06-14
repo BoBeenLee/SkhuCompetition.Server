@@ -4,7 +4,7 @@ public class Valuer {
 	private int valuerId;
 	private String userId;
 	private int boardCodeId;
-	
+
 	public int getValuerId() {
 		return valuerId;
 	}

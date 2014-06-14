@@ -16,7 +16,6 @@ public class Calendar {
 		this.calendarId = calendarId;
 	}
 
-
 	public Timestamp getStartDate() {
 		return startDate;
 	}

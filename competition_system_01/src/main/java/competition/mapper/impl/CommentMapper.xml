@@ -2,12 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.CommentMapper">
 	<insert id="addComment" parameterType="competition.domain.Comment">
-		insert into
-		comment_db(articleId, writerId, content, writtenDate, parentCommentId,
-		distance, step)
-		values(#{articleId},
-		#{writerId}, #{content},
-		#{writtenDate}, #{parentCommentId}, #{distance}, #{step})
+		insert into comment_db(articleId, writerId, content, writtenDate, parentCommentId, distance, step)
+		values(#{articleId}, #{writerId}, #{content}, #{writtenDate}, #{parentCommentId}, #{distance}, #{step})
 	</insert>
 
 	<delete id="removeComment" parameterType="int">
@@ -17,9 +13,7 @@
 
 	<update id="modifyComment" parameterType="competition.domain.Comment">
 		update comment_db
-		set
-		articleId =
-		#{articleId},
+		set articleId = #{articleId},
 		writerId = #{writerId},
 		content = #{content},
 		writtenDate = #{writtenDate},
@@ -36,8 +30,7 @@
 	</select>
 
 	<select id="findComments" parameterType="int" resultType="competition.domain.view.CommentView">
-		select
-		*
+		select * 
 		from comment_db
 		where articleId = #{articleId}
 	</select>

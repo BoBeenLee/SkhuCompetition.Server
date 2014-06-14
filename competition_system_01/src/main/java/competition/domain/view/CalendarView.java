@@ -7,6 +7,7 @@ import util.DateUtils;
 import competition.domain.Calendar;
 
 public class CalendarView extends Calendar {
+	
 	public void setStartDateView(String startDate) throws ParseException {
 		setStartDate(DateUtils.getStringToTimestamp(startDate));
 	}

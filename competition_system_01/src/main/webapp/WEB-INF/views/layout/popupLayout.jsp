@@ -25,17 +25,22 @@
 <script type="text/javascript">
 	var myAppModule = angular.module('popup', [ 'ui.bootstrap' ]);
 
+	
 	myAppModule.controller('ReturnCtrl', [ '$scope', '$window', function($scope, $window) {
-		$scope.parentWindow = $window.opener.$windowScope;
+		$scope.$parentScope = $window.opener.$windowScope;
+		
 		$scope.setParent = function(itemId, itemName){
 			var item = {"itemId" : itemId, "itemName" : itemName};
-		
-			$scope.parentWindow.addItem(item);
+			
+			$scope.$parentScope.addItem(item);
+			$scope.$apply();	
 		};		
 	} ]);
 </script>
 </head>
 <body>
-	<tiles:insertAttribute name="body" />
+	<div class="container">
+		<tiles:insertAttribute name="body" />
+	</div>
 </body>
 </html>

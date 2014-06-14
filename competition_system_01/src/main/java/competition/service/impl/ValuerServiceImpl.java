@@ -12,7 +12,7 @@ import competition.service.ValuerService;
 
 @Service("valuerService")
 public class ValuerServiceImpl implements ValuerService{
-	@Autowired
+	@Autowired(required=false)
 	ValuerMapper valuerMapper;
 	
 	public boolean addValuer(Valuer valuer) {
@@ -20,8 +20,8 @@ public class ValuerServiceImpl implements ValuerService{
 		return isValuer;
 	}
 
-	public boolean removeValuer(int valuerId) {
-		boolean isValuer = (1 == valuerMapper.removeValuer(valuerId))? true : false;
+	public boolean removeValuers(int boardCodeId){
+		boolean isValuer = (1 == valuerMapper.removeValuers(boardCodeId))? true : false;
 		return isValuer;
 	}
 
@@ -35,8 +35,8 @@ public class ValuerServiceImpl implements ValuerService{
 		return valuerView;
 	}
 
-	public List<ValuerView> findValuers(int boardCodeId) {
-		List<ValuerView> valuerList = valuerMapper.findValuers(boardCodeId);
+	public List<ValuerView> findValuers(int boardCodeId, String userId) {
+		List<ValuerView> valuerList = valuerMapper.findValuers(boardCodeId, userId);
 		return valuerList;
 	}
 }

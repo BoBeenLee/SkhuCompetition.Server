@@ -3,6 +3,9 @@ package competition.domain.code;
 import java.sql.Timestamp;
 
 public class TeamCode {
+	public static final int IS_NOT_PERMISSION = 0;
+	public static final int IS_PERMISSION = 1;
+	
 	private int teamCodeId;
 	private String leaderId;
 	private String teamName;
@@ -11,6 +14,24 @@ public class TeamCode {
 	private String teamType;
 	private String teamContent;
 	private int isPermission;
+	
+	public TeamCode() {
+		super();
+	}
+	
+	public TeamCode(int teamCodeId, String leaderId, String teamName,
+			int boardCodeId, Timestamp teamDate, String teamType,
+			String teamContent, int isPermission) {
+		super();
+		this.teamCodeId = teamCodeId;
+		this.leaderId = leaderId;
+		this.teamName = teamName;
+		this.boardCodeId = boardCodeId;
+		this.teamDate = teamDate;
+		this.teamType = teamType;
+		this.teamContent = teamContent;
+		this.isPermission = isPermission;
+	}
 	
 	public int getTeamCodeId() {
 		return teamCodeId;

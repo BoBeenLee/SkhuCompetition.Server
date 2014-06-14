@@ -27,7 +27,7 @@
 		<div class="content row">
 			<div class="board">
 				<div class="board-content">
-					<table class="table table-striped table-condensed table-hover">
+					<table class="table table-condensed table-hover">
 						<thead>
 							<tr>
 								<th>번호</th>

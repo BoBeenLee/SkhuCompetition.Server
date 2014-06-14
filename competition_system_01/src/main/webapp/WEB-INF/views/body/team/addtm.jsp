@@ -34,27 +34,30 @@
 		<!-- 팀원은 추가하는 방식으로  -->
 		<hr>
 		<div class="form-group">
-			<label for="inputTeamContent" class="col-md-3 control-label">
-				팀장 : 나 </label>
+			<label class="col-md-3 control-label">
+				팀장 : </label>
+			<div class="col-md-5">
+				<label class="control-label">나</label>
+			</div>
 		</div>
 		<hr>
 		<div ng-controller="OpenWindowCtrl" class="form-group">
 			<label for="inputTeamContent" class="col-md-3 control-label">
 				팀원 </label>
 			<input type="button" ng-click="popup('findUsers.do')"
-				class="btn btn-default input-sm" value="찾기" />
-			<div class="teamList">
+				class="btn btn-default" value="찾기" />
+			<hr>
+			<div class="teamList col-md-offset-2">
 				<!-- 평가자 명단을 어떻게 불러올 것인가?? -->
 				<ul>
 					<li ng-repeat="item in itemList"><input type="hidden"
-						name="teamList" value="{{ item.itemId }}" />이름 : {{ item.itemName
-						}}</li>
+						name="teamList" value="{{ item.itemId }}" />이름 : {{ item.itemName }}<input type="button" ng-click="removeItem($index)" class="btn" value="삭제" /></li>
 				</ul>
 			</div>
 		</div>
 		<hr>
 		<div class="form-group">
-			<input type="submit" class="btn col-md-offset-3" value="확인" />
+			<input type="submit" class="btn btn-default col-md-offset-3" value="확인" />
 		</div>
 	</form>
 </div>

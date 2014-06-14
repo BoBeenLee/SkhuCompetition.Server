@@ -1,25 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.TeamMapper">
-<!-- 
-//	TeamCode
-	public void addTeamCode(TeamCode teamCode);
-	public void removeTeamCode(int teamCodeId);
-	public void modifyTeamCode(TeamCode teamCode);
-	public TeamCode getTeamCode(int teamCodeId);
-	public List<TeamCode> findTeamCodes(String learderId);
-	
-	
-//	Team
-	public void addTeam(Team team);
-	public void removeTeam(int teamId);
-	public void modifyTeam(Team team);
-	public TeamView getTeam(int teamId);
-	public List<TeamView> findTeams(int teamCodeId);
- -->
 	<insert id="addTeamCode"  parameterType="competition.domain.code.TeamCode" useGeneratedKeys="true" keyProperty="teamCodeId">
-		insert into teamcode_db(leaderId,
-		teamName, boardCodeId, teamType, teamContent)
+		insert into teamcode_db(leaderId, teamName, boardCodeId, teamType, teamContent)
 		values(#{leaderId}, #{teamName}, #{boardCodeId}, #{teamType}, #{teamContent})
 	</insert>
 
@@ -28,14 +11,14 @@
 		set leaderId = #{leaderId},
 		teamName = #{teamName},
 		teamType = #{teamType},
-		teamContent = #{teamContent}
+		teamContent = #{teamContent},
+		isPermission = #{isPermission} 
 		where teamCodeId = #{teamCodeId}
 	</update>
  
 	<delete id="removeTeamCode" parameterType="int">
 		delete from teamcode_db
-		where
-		teamCodeId = #{teamCodeId}
+		where teamCodeId = #{teamCodeId}
 	</delete>
 
 	<select id="getTeamCode" resultType="competition.domain.view.code.TeamCodeView">
@@ -45,9 +28,16 @@
 	</select>
 
 	<select id="findTeamCodes" resultType="competition.domain.view.code.TeamCodeView">
-		select *
-		from teamcode_db
+		select tc1.teamCodeId teamCodeId, leaderId, teamName, boardCodeId, teamDate, teamType, teamContent, isPermission, sum(s1.score) sum
+		from teamcode_db tc1 left join score_db s1
+		on tc1.teamCodeId = s1.teamCodeId
 		where boardCodeId = #{boardCodeId}
+		<if test="userId != null">
+			and tc1.teamCodeId in (select teamCodeId
+							from team_db
+							where userId = #{userId})
+		</if>
+		group by tc1.teamCodeId
 	</select>
 
 	<select id="findRanks" resultType="competition.domain.Rank">
@@ -60,33 +50,36 @@
 	</select>
 
 	<insert id="addTeam" parameterType="competition.domain.view.TeamView">
-		insert into team_db(teamId,
-		teamCodeId, userId)
-		values(#{teamId},
-		#{teamCodeId}, #{userId})
+		insert into team_db(teamId, teamCodeId, userId)
+		values(#{teamId}, #{teamCodeId}, #{userId})
 	</insert>
 
 	<delete id="removeTeam" parameterType="int">
 		delete from team_db
-		where
-		teamId = #{teamId}
+		where teamId = #{teamId}
 	</delete>
 
 	<select id="getTeam" resultType="competition.domain.view.TeamView">
-		select teamId, teamCodeId,
-		t1.userId userId
+		select teamId, teamCodeId, t1.userId userId
 		from team_db t1 join user_db u1
 		on t1.userId = u1.userId
-		where teamId =
-		#{teamId}
+		where teamId = #{teamId}
 	</select>
 
 	<select id="findTeams" resultType="competition.domain.view.TeamView">
-		select teamId, teamCodeId,
-		t1.userId userId
+		select teamId, teamCodeId, t1.userId userId, userName, department, userTel, userEmail
 		from team_db t1 join user_db u1
 		on t1.userId = u1.userId
-		where teamCodeId =
-		#{teamCodeId}
+		where teamCodeId = #{teamCodeId}
+	</select>
+	
+	<select id="containsTeam" resultType="int">
+		select count(*)
+		from team_db t1 join user_db u1
+		on t1.userId = u1.userId
+		join teamcode_db tc1
+		on t1.teamCodeId = tc1.teamCodeId
+		where t1.userId = #{userId} 
+		and tc1.boardCodeId = #{boardCodeId}
 	</select>
 </mapper> 

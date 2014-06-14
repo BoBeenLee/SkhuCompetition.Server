@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.CalendarMapper">
-
 	<insert id="addCalendar" parameterType="competition.domain.Calendar">
-		insert into
-		calendar_db(startDate, endDate, content)
-		values(#{startDate}, #{endDate}, #{content})
+		insert into calendar_db(startDate, endDate, content) 
+			values(#{startDate}, #{endDate}, #{content})
 	</insert>
 
 	<update id="modifyCalendar" parameterType="competition.domain.Calendar">
@@ -19,14 +17,13 @@
 	<delete id="removeCalendar" parameterType="int">
 		delete from
 		calendar_db
-		where
-		calendarId = #{calendarId}
+		where calendarId = #{calendarId}
 	</delete>
 
 	<select id="findCalendars" resultType="competition.domain.view.CalendarView">
 		select *
 		from calendar_db
-		where
+		where 
 		(startDate &gt;= #{startDate} and startDate &lt;= #{endDate}) or
 		(endDate &gt;= #{startDate} and endDate &lt;= #{endDate}) or
 		(#{startDate} &gt;= startDate and #{startDate} &lt;= endDate) or
@@ -36,7 +33,6 @@
 	<select id="getCalendar" resultType="competition.domain.view.CalendarView">
 		select *
 		from calendar_db
-		where
-		calendarId = #{calendarId}
+		where calendarId = #{calendarId}
 	</select>
 </mapper> 

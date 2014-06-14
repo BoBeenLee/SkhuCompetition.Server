@@ -4,9 +4,7 @@ public class Page {
 	private String korName;
 	private String url;
 	
-	public Page() {
-		// TODO Auto-generated constructor stub
-	}
+	public Page() {}
 	public Page(String korName, String url) {
 		this.korName = korName;
 		this.url = url;

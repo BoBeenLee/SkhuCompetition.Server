@@ -12,7 +12,7 @@ import competition.service.CommentService;
 
 @Service("commentService")
 public class CommentServiceImpl implements CommentService {
-	@Autowired
+	@Autowired(required=false)
 	CommentMapper commentMapper;
 	
 	public boolean addComment(Comment comment) {

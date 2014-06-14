@@ -6,9 +6,13 @@ import competition.domain.view.ScoreView;
 
 public class ScoreList {
 	List<ScoreView> scores;
-	int boardCodeId;
-	int teamCodeId;
+	private int boardCodeId;
+	private int teamCodeId;
 
+	public ScoreList() {
+		super();
+	}
+	
 	public List<ScoreView> getScores() {
 		return scores;
 	}

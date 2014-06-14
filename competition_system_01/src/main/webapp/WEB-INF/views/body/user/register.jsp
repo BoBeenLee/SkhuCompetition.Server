@@ -59,8 +59,12 @@
 			<label for="inputQuestion" class="col-md-3 control-label">질문
 				:</label>
 			<div class="col-md-5">
-				<input id="inputQuestion" type="text" class="form-control"
-					name="question" />
+				<select id="inputQuestion" class="form-control"
+					name="question">
+					<option value="1">나의 보물 제 1호는?</option>
+          			<option value="2">어머니 고향은?</option>
+		          	<option value="3">아버지 고향은?</option>
+				</select>
 			</div>
 		</div>
 		<div class="form-group">

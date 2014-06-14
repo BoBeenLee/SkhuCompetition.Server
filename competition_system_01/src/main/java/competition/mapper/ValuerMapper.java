@@ -10,8 +10,8 @@ import competition.domain.view.ValuerView;
 
 public interface ValuerMapper {
 	public int addValuer(Valuer valuer);
-	public int removeValuer(int valuerId);
+	public int removeValuers(int boardCodeId);
 	public int modifyValuer(Valuer valuer);
 	public ValuerView getValuer(@Param("userId") String userId, @Param("boardCodeId") int boardCodeId);
-	public List<ValuerView> findValuers(int boardCodeId);
+	public List<ValuerView> findValuers(@Param("boardCodeId") int boardCodeId, @Param("userId") String userId);
 }

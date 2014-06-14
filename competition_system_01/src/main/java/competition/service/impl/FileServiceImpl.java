@@ -12,7 +12,7 @@ import competition.service.FileService;
 
 @Service("fileService")
 public class FileServiceImpl implements FileService {
-	@Autowired
+	@Autowired(required=false)
 	FileMapper fileMapper;
 	
 	public boolean addFile(File file) {

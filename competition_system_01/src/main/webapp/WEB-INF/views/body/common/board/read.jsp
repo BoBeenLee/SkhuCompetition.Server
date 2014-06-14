@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<sec:authentication property="name" var="currentUserName"/>
 
 <div class="read">
 	<div class="read-header">
@@ -18,13 +21,13 @@
 		</div>
 		${ article.contentView }
 	</div>
-	<jsp:useBean id="now" class="java.util.Date"/>
-	
-	<c:if test="${(article.isFile == 1) && (empty article.fileLimitDate || now <= article.fileLimitDate)}">
+	<hr>
+	<jsp:useBean id="now" class="java.util.Date"/>	
+	<c:if test="${isTeam && (article.isFile == 1) && (empty article.fileLimitDate || now <= article.fileLimitDate)}">
 		<form class="form-inline" action="${ boardType }/article/uploadfile.do" method="post" enctype="multipart/form-data">
 			<div class="form-group">
-				<label for="inputFile" class="control-label">파일 제출 : </label>
-				<input id="inputFile" class="form-control" type="file" name="uploadfile" />
+				<label for="inputFile" class="control-label"> 파일 제출 : </label>
+				<input id="inputFile" class="" type="file" name="uploadfile" />
 			</div>
 			<div class="form-group">
 				<input type="hidden" name="ai" value="${ article.articleId }" />
@@ -34,6 +37,7 @@
 			</div>
 		</form>
 	</c:if>
+	<hr>
 	<c:if test="${ not empty fileList }">
 	<div class="user-file">
 		<label>제출 파일</label>
@@ -47,7 +51,9 @@
 	<div class="read-comment">
 		<jsp:include page="comment.jsp"></jsp:include>
 	</div>
+	<c:if test="${ article.writerId == currentUserName }">
 	<div class="read-option">
-		<a class="btn btn-default input-sm" href="${ boardType }/article/write.do?${ pagination }&ai=${ article.articleId }">수정</a><a class="btn btn-default input-sm" href="${ boardType }/article/remove.do?${ pagination }&ai=${ article.articleId }">삭제</a>
+		<a class="btn btn-default" href="${ boardType }/article/write.do?${ pagination }&ai=${ article.articleId }">수정</a><a class="btn btn-default" href="${ boardType }/article/remove.do?${ pagination }&ai=${ article.articleId }">삭제</a>
 	</div>
+	</c:if>
 </div>

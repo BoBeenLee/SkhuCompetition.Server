@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import competition.domain.Pagination;
 import competition.domain.User;
+import competition.domain.view.AuthView;
+import competition.domain.view.MailView;
 import competition.domain.view.UserView;
 
 public interface UserService {
@@ -18,5 +20,7 @@ public interface UserService {
 	
 	public int getAuthId(String authName);
 	public String getAuthName(String userId);
+	public List<AuthView> getAllAuths();
 	public boolean getChkGroupPW(UserView user);
+	public boolean forgetPW(String userId, String userPW);
 }

@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <body>
-	<c:redirect url="index.do"></c:redirect>
+	<c:redirect url="main/main.do"></c:redirect>
 	<!--  
 		<a href="dbtest.do">dbtest</a>
 	<a href="mailtest.do">mailtest</a>

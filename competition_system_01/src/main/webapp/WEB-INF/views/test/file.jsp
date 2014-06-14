@@ -3,9 +3,10 @@
 <%@ page import="java.util.*, org.apache.commons.fileupload.*" %>
 <%@ page isELIgnored="false"%>
 <%
-	List<FileItem> fileItemList = (List) request.getAttribute("resultList");
+	List<FileItem> fileItemList = null; //(List) request.getAttribute("resultList");
 	for (FileItem fileItem : fileItemList) {
 %>
+
 <table border="1">
 	<tr>
 		<td>form field name:</td>
@@ -25,6 +26,7 @@
 	</tr>
 </table>
 <br />
-<%
+
+ <%
 	}
 %>

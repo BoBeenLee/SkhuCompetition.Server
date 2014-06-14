@@ -15,7 +15,7 @@
 	<link rel="stylesheet" type="text/css"
 		href="css/calendar/bootstrap-datepicker.css" />
 
-	<form:form class="form-inline" action="mypage/managecal.do"
+	<form:form class="form-inline" action="main/managecal.do"
 		method="get" commandName="calendarView1">
 		<div class="datepair form-group">
 			<form:input path="startDateView"
@@ -24,7 +24,7 @@
 			<form:input path="endDateView"
 				class="datepair-date form-control input-sm" placeholder="end" />
 		</div>
-		<input class="form-control btn btn-default input-sm" type="submit"
+		<input class="form-control btn btn-default" type="submit"
 			value="조회" />
 	</form:form>
 	<hr>
@@ -46,20 +46,21 @@
 						<td>${ calendar.startDateView }</td>
 						<td>${ calendar.endDateView }</td>
 						<td>${ calendar.content }</td>
-						<td><form:form action="mypage/removeCalendar.do" method="get"
+						<td><form:form action="main/removeCalendar.do" method="get"
 								commandName="calendarView1">
 								<form:hidden path="startDateView" />
 								<form:hidden path="endDateView" />
 								<input type="hidden" name="cId" value="${ calendar.calendarId }" />
-								<input class="btn btn-default input-sm" type="submit" value="삭제" />
+								<input class="btn btn-xs" type="submit" value="삭제" />
 							</form:form></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
-	<form:form class="form-inline" action="mypage/addCalendar.do"
-		method="post" commandName="calendarView2">
+	<hr>
+	<form:form class="form-inline" action="main/addCalendar.do"
+		method="post" commandName="calendarView2" ng-controller="DatepickerCtrl" ng-init="init()">
 		<div class="datepair form-group">
 			<form:input path="startDateView"
 				class="datepair-date form-control input-sm" placeholder="start" />
@@ -71,16 +72,10 @@
 			placeholder="내용" />
 		<input type="hidden" name="sd" value="${ calendarView1.startDateView }" />
 		<input type="hidden" name="ed" value="${ calendarView1.endDateView }" />
-		<input class="form-control btn btn-default input-sm" type="submit"
+		<input class="form-control btn btn-default" type="submit"
 			value="추가" />
 	</form:form>
 	<script>
-		$('.datepair .datepair-date').datepicker({
-			'format' : 'yyyy-m-d',
-			'autoclose' : true
-		});
 
-		// initialize datepairs
-		$('.datepair').datepair();
 	</script>
 </div>

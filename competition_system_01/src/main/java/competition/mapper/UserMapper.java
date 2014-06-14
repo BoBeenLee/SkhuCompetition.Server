@@ -3,9 +3,10 @@ package competition.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.junit.runners.Parameterized.Parameters;
 
 import competition.domain.Pagination;
+import competition.domain.view.AuthView;
+import competition.domain.view.MailView;
 import competition.domain.view.UserView;
 
 public interface UserMapper {
@@ -19,5 +20,9 @@ public interface UserMapper {
 	
 	public int getAuthId(String authName);
 	public String getAuthName(String userId);
+	public List<AuthView> getAllAuths();
 	public int getChkGroupPW(UserView user);
+	public int forgetPW(@Param("userId") String userId, @Param("userPW") String userPW);
+//	Mail
+	public MailView getEmail(@Param("userId") String userId, @Param("question") String question, @Param("answer") String answer);
 }

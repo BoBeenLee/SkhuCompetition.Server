@@ -8,6 +8,21 @@ public class ScoreCode {
 	private int rank;
 	private int teamCodeId;
 	
+	public ScoreCode() {
+		super();
+	}
+	
+	public ScoreCode(int scoreCodeId, int boardCodeId, String scoreName,
+			String content, int rank, int teamCodeId) {
+		super();
+		this.scoreCodeId = scoreCodeId;
+		this.boardCodeId = boardCodeId;
+		this.scoreName = scoreName;
+		this.content = content;
+		this.rank = rank;
+		this.teamCodeId = teamCodeId;
+	}
+	
 	public int getScoreCodeId() {
 		return scoreCodeId;
 	}

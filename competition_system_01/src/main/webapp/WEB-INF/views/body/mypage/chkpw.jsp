@@ -11,9 +11,9 @@
 					id="inputPassword" placeholder="Password">
 			</div>
 		</div>
-		<div class="form-group form-inline">
+		<div class="form-group">
 			<div class="col-md-offset-3 col-md-9">
-				<button type="submit" class="form-control btn btn-default">확인</button>
+				<button type="submit" class="btn btn-default">확인</button>
 			</div>
 		</div>
 		<input type="hidden" name="cmd" value="modify" />

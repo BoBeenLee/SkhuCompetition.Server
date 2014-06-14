@@ -2,6 +2,8 @@ package competition.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import competition.domain.Rank;
 import competition.domain.Team;
 import competition.domain.code.TeamCode;
@@ -14,7 +16,7 @@ public interface TeamService {
 	public boolean removeTeamCode(int teamCodeId);
 	public boolean modifyTeamCode(TeamCode teamCode);
 	public TeamCodeView getTeamCode(int teamCodeId);
-	public List<TeamCodeView> findTeamCodes(int boardCodeId);
+	public List<TeamCodeView> findTeamCodes(int boardCodeId, String userId);
 	public List<Rank> findRanks(int boardCodeId);
 	
 //	Team
@@ -22,4 +24,5 @@ public interface TeamService {
 	public boolean removeTeam(int teamId);
 	public TeamView getTeam(int teamId);
 	public List<TeamView> findTeams(int teamCodeId);
+	public boolean containsTeam(String userId, int boardCodeId);
 }

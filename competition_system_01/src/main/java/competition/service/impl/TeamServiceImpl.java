@@ -15,7 +15,7 @@ import competition.service.TeamService;
 
 @Service("teamService")
 public class TeamServiceImpl implements TeamService {
-	@Autowired
+	@Autowired(required=false)
 	TeamMapper teamMapper;
 	
 	public boolean addTeamCode(TeamCode teamCode) {
@@ -38,8 +38,8 @@ public class TeamServiceImpl implements TeamService {
 		return teamCode;
 	}
 
-	public List<TeamCodeView> findTeamCodes(int boardCodeId) {
-		List<TeamCodeView> teamCodeList = teamMapper.findTeamCodes(boardCodeId);
+	public List<TeamCodeView> findTeamCodes(int boardCodeId, String userId) {
+		List<TeamCodeView> teamCodeList = teamMapper.findTeamCodes(boardCodeId, userId);
 		return teamCodeList;
 	}
 
@@ -66,5 +66,10 @@ public class TeamServiceImpl implements TeamService {
 	public List<TeamView> findTeams(int teamCodeId) {
 		List<TeamView> teamList = teamMapper.findTeams(teamCodeId);
 		return teamList;
+	}
+
+	public boolean containsTeam(String userId, int boardCodeId) {
+		boolean isTeam = (teamMapper.containsTeam(userId, boardCodeId) == 1)? true : false;
+		return isTeam;
 	}
 }

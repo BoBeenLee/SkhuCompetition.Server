@@ -2,7 +2,18 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div ng-controller="CalendarCtrl" class="content row">
+<div ng-controller="CalendarCtrl" class="content row" 
+ng-init="init([
+ <c:forEach var="calendar" varStatus="idx" items="${ calendarList }">
+	{
+	    title : '${ calendar.content }',
+	    start : '${ calendar.startDateView }',
+	    end : '${ calendar.endDateView }',
+	    allDay : false
+	} 
+ <c:if test="${ !idx.last }">, </c:if>
+ </c:forEach>  
+])"	>
 	<div class="col-md-4">
 		<div class="box box-board col-md-12 row">
 			<h4>공지사항</h4>
@@ -25,6 +36,7 @@
 	</div>
 	<div class="col-md-8">
 		<div class="box box-calendar">
+			<a href="main/managecal.do" class="btn btn-default pull-right">달력관리</a>
 			<div id="calendar"></div>
 		</div>
 	</div>

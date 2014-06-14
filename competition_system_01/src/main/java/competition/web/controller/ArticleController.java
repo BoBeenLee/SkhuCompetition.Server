@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,71 +22,108 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import util.AuthUtils;
 import util.BeanUtils;
 import util.FileUtils;
 import competition.domain.Article;
+import competition.domain.Auth;
 import competition.domain.Comment;
 import competition.domain.Page;
 import competition.domain.Pagination;
+import competition.domain.code.BoardCode;
 import competition.domain.view.ArticleView;
+import competition.domain.view.AuthView;
 import competition.domain.view.CommentView;
 import competition.domain.view.FileView;
 import competition.domain.view.code.BoardCodeView;
 import competition.service.ArticleService;
 import competition.service.CommentService;
 import competition.service.FileService;
+import competition.service.TeamService;
 import competition.service.UserService;
 
 @Controller
-public class ArticleController implements ApplicationContextAware  {
-	private WebApplicationContext context = null;
-	
+public class ArticleController  {
 	@Autowired
 	ArticleService articleService;
 	@Autowired
 	UserService userService;
 	@Autowired
+	TeamService teamService;
+	@Autowired
 	CommentService commentService;
 	@Autowired
 	FileService fileService;
-
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		this.context  = (WebApplicationContext) applicationContext;
-	}
 
 	@ModelAttribute
 	private void addModelData(Model model, Pagination pagination) {
 		if (pagination != null) {
 			String subTitle = articleService.getBoardName(pagination.getBid());
 			BoardCodeView bcv = articleService.getBoard(pagination.getBid());
-			List<Page> pgList = null;
+			List<Page> pgList = new ArrayList<Page>();
 			
+			pgList.addAll(getSubList(bcv.getParentBoardCodeId()));
 			// get Sub Boards
 			if(bcv != null)
-				pgList = getPageList(bcv.getParentBoardCodeId());
+				pgList.addAll(articleService.getPageList(bcv.getParentBoardCodeId()));
 			
 			model.addAttribute("subTitle", subTitle);
 			model.addAttribute("pgList", pgList);
 		}
 	}
 
+	private List<Page> getSubList(int boardCodeId){
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		List<String> authNames = AuthUtils.getAuthNames(auth);
+		List<Page> pgList = new ArrayList<Page>();
+		
+		if(BoardCode.BOARDCODE_COMPETITION == boardCodeId){
+			if(authNames.contains(Auth.ROLE_ADMIN) || authNames.contains(Auth.ROLE_PROFESOR)){
+				pgList.add(new Page("대회관리", "competition/managecpt.do"));
+			} else if(authNames.contains(Auth.ROLE_STUDENT)){
+				pgList.add(new Page("대회신청", "competition/addcpt.do"));
+				pgList.add(new Page("대회관리", "competition/managecpt.do"));
+			}
+		}
+		return pgList;
+	}
+	
 	// Board
 	@RequestMapping("/{boardType}/board.do")
 	public ModelAndView getBoard(@PathVariable String boardType,
 			@ModelAttribute("pagination") Pagination pagination) {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();	
 		ModelAndView modelAndView = new ModelAndView("/" + boardType + "/board");
+		boolean isWrite = false;
 		int boardCount = articleService.getTotalArticles(pagination);
 		List<ArticleView> avList = articleService.findArticles(pagination);
+		List<AuthView> authList = userService.getAllAuths();
+		BoardCodeView boardCodeView = articleService.getBoard(pagination.getBoardCodeId());
+		List<String> authNames = AuthUtils.getAuthNames(authList, boardCodeView.getWriteLevel());
 		
+		for(GrantedAuthority granted : auth.getAuthorities()) 
+			if(authNames.contains(granted.getAuthority()))
+				isWrite = true;
+		//System.out.println(isWrite);
+
 		// Test
-//		System.out.println(pagination);
+		try {
+			System.out.println(BeanUtils.getBeanGetValue(pagination));
+			System.out.println(boardCount);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Sub List, Notice List, Board List, Pagination, BoardType (Sub, Sub1)
-		if(pagination.getCurrentPage() <= 1){
+		if(pagination.getCurrentPage() <= 1 && pagination.getCt() == null){
 			List<ArticleView> ntList = articleService.findNotices(pagination);
 			modelAndView.addObject("noticeList", ntList);
 		}
+		
+		modelAndView.addObject("isWrite", isWrite);
 		modelAndView.addObject("boardList", avList);
 		modelAndView.addObject("boardCount", boardCount);
 		modelAndView.addObject("pagination", pagination);
@@ -104,6 +142,8 @@ public class ArticleController implements ApplicationContextAware  {
 				+ "/article/read");
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();	
+		boolean isTeam = false;
+		
 		CommentView commentView = null;
 		ArticleView av = articleService.getArticle(articleId);
 		List<FileView> aricleFile = fileService.findFiles(av.getArticleId(), null, Article.IS_ARTICLE);
@@ -112,10 +152,12 @@ public class ArticleController implements ApplicationContextAware  {
 		// increase Hit
 		boolean isHit = articleService.increaseHit(av.getArticleId());
 		
+		isTeam = teamService.containsTeam(auth.getName(), pagination.getBoardCodeId());
 		// Test
 //		System.out.println(BeanUtils.getBeanGetValue(av));
 //		System.out.println(BeanUtils.getBeanGetValue(pagination));
-
+		// isTeam
+		modelAndView.addObject("isTeam", isTeam);
 		// Article
 		modelAndView.addObject("article", av);
 		// file List
@@ -127,7 +169,7 @@ public class ArticleController implements ApplicationContextAware  {
 		
 		// Comment
 		List<CommentView> commentList = commentService.findComments(articleId);
-
+		// Write Comment 
 		commentView = new CommentView();
 		commentView.setArticleId(articleId);
 		commentView.setWriterId(auth.getName());
@@ -196,7 +238,7 @@ public class ArticleController implements ApplicationContextAware  {
 	public String writeArticle(@PathVariable String boardType,
 			@ModelAttribute("articleView") ArticleView articleView)
 			throws Exception {
-		FileView fileView = new FileView();
+		FileView fileView =  null;
 		MultipartFile uploadfile = null;
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();	
@@ -220,14 +262,12 @@ public class ArticleController implements ApplicationContextAware  {
 		
 		if(fileView != null){
 			List<FileView> fileList = fileService.findFiles(articleView.getArticleId(), articleView.getWriterId(), Article.IS_ARTICLE);
-			
 			if(fileList != null){
 				for(FileView fv : fileList)
 					fileService.removeFile(fv.getFileId());
 			}
 			fileService.addFile(fileView);
 		}
-		
 //		System.out.println(BeanUtils.getBeanGetValue(fileView));
 
 		message = (isArticle) ? "success" : "fail";
@@ -289,18 +329,5 @@ public class ArticleController implements ApplicationContextAware  {
 		message = (isComment) ? "success" : "fail";
 //		 bid=%d&sz=%d pg
 		return "redirect:" + "/" + boardType + "/article/read.do?" + pagination.toString() + "&ai=" + articleId + "&message=" + message;
-	}
-	
-	
-	public List<Page> getPageList(int parentBoardId) {
-		List<BoardCodeView> bcList = articleService.findBoards(null,
-				parentBoardId);
-
-		ArrayList<Page> pgList = new ArrayList<Page>();
-
-		for (BoardCodeView bc : bcList)
-			pgList.add(new Page(bc.getBoardName(), "sub/board.do?bid="
-					+ bc.getBoardCodeId()));
-		return pgList;
 	}
 }

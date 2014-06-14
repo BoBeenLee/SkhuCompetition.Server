@@ -7,7 +7,7 @@ public class Pagination {
     private String content;
     private int boardCodeId;
     
-    public int getPg() {
+	public int getPg() {
         return currentPage;
     }
 

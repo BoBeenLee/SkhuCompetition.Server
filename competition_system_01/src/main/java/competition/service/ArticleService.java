@@ -3,6 +3,7 @@ package competition.service;
 import java.util.List;
 
 import competition.domain.Article;
+import competition.domain.Page;
 import competition.domain.Pagination;
 import competition.domain.QA;
 import competition.domain.code.BoardCode;
@@ -27,7 +28,8 @@ public interface ArticleService {
 	public List<ArticleView> findArticles(Pagination pagination);
 	public List<ArticleView> findNotices(Pagination pagination);	
 	public int getTotalArticles(Pagination pagination);
-	
+	 List<Page> getPageList(int parentBoardId);
+	 
 	public boolean addQA(QA qa);
 	public boolean modifyQA(QA qa);	
 //	 remove QA가 없는 건 Article만 지워도 같이 지워진다.

@@ -3,9 +3,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div ng-controller="ManageScCtrl" class="managesc">
-	<form class="form-inline" action="mypage/managesc.do" method="get">
-		<select name="bid" class="form-control input-sm" ng-model="bid" ng-change="getSelectedBid('mypage/tclist.do')">
+<div class="managesc">
+	<div ng-controller="BidToTidCtrl" ng-init="init('${ scoreList.boardCodeId }', '${ scoreList.teamCodeId }', 'team/tclist.do')">
+	<form class="form-inline" action="team/managesc.do" method="get">
+		<select name="bid" class="form-control input-sm" ng-model="bid" ng-change="getSelectedBid('team/tclist.do')">
 			<c:forEach var="boardCode" items="${ boardCodeList }">
 				<option value="${ boardCode.boardCodeId }">${ boardCode.boardName }</option>
 			</c:forEach>
@@ -13,12 +14,13 @@
 		<select name="tid" class="form-control input-sm" ng-model="tid">
 			<option ng-repeat="team in teamList" value="{{ team.teamCodeId }}">{{team.teamName}}</option>
 		</select>
-		<input class="form-control btn btn-default input-sm" type="submit"
+		<input class="form-control btn btn-default" type="submit"
 			value="조회" />
 	</form>
+	</div>
 	<hr>
 	<div>
-		<form:form action="mypage/managesc.do?cmd=save" method="post" commandName="scoreList">
+		<form:form action="team/managesc.do?cmd=save" method="post" commandName="scoreList">
 		<table class="table table-striped table-condensed table-hover">
 			<thead>
 				<tr>
@@ -39,14 +41,17 @@
 					</td>
 					<td>${ score.title }</td>
 					<td>${ score.userId }<form:hidden path="scores[${ idx.index }].userId" /></td>
-					<td><form:input path="scores[${ idx.index }].score" class="input-sm" type="text" /><input type="checkbox" /></td>
+					<td><form:input path="scores[${ idx.index }].score" class="input-sm" type="text" /></td>
 					<td><a href="fileDown.do?fi=${ score.fileId }">${ score.fileName }</a></td>
 				</tr>
 				</c:forEach>
 			</tbody>
 		</table>
-		<input class="btn btn-default input-sm pull-right" type="submit" value="확인" />
+		<c:if test="${ isValuer }">
+			<input class="btn btn-default pull-right" type="submit" value="확인" />
+		</c:if>
 		<form:hidden path="boardCodeId" />
+		<form:hidden path="teamCodeId" />
 		</form:form>
 	</div>
 	<hr>

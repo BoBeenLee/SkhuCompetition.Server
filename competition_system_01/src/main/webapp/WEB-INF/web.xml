@@ -2,7 +2,7 @@
     xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
     http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-    
+   
 	<display-name>Archetype Created Web Application</display-name>
 
 	<!-- Spring Settings -->
@@ -19,8 +19,9 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-				/WEB-INF/spring/jdbc/spring-jdbc.xml
-				/WEB-INF/spring/tiles/spring-tiles.xml
+				/WEB-INF/spring/mvc/dispatcher-servlet.xml,
+				/WEB-INF/spring/jdbc/spring-jdbc.xml,
+				/WEB-INF/spring/tiles/spring-tiles.xml,
 				/WEB-INF/spring/security/spring-security.xml
 		</param-value>
 	</context-param>
@@ -35,8 +36,7 @@
 		</listener-class>
 	</listener>
 
-
-	<!-- SecurityFilter -->
+	<!-- SecurityFilter --> 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>
@@ -48,8 +48,7 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
-
+ 
 	<!-- UTF-8 Filter -->
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>
@@ -67,5 +66,4 @@
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
 </web-app>

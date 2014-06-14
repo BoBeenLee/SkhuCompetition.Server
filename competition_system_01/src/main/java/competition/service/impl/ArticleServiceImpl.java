@@ -1,28 +1,39 @@
 package competition.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import competition.domain.Article;
+import competition.domain.Page;
 import competition.domain.Pagination;
 import competition.domain.QA;
+import competition.domain.Valuer;
 import competition.domain.code.BoardCode;
 import competition.domain.view.ArticleView;
 import competition.domain.view.QAView;
 import competition.domain.view.code.BoardCodeView;
 import competition.mapper.ArticleMapper;
 import competition.service.ArticleService;
+import competition.service.ValuerService;
 
 @Service("articleService")
 public class ArticleServiceImpl implements ArticleService {
-	@Autowired
+	@Autowired(required=false)
 	ArticleMapper articleMapper;
+	@Autowired(required=false)
+	ValuerService valuerService;
+	
 	
 	public boolean addBoardCode(BoardCode boardCode) {
-		boolean isBoardCode = (1 == articleMapper.addBoardCode(boardCode))? true : false;		
-		return isBoardCode;
+		Valuer valuer = new Valuer();
+		boolean isBoardCode = (1 == articleMapper.addBoardCode(boardCode))? true : false;
+		valuer.setBoardCodeId(boardCode.getBoardCodeId());
+		valuer.setUserId(boardCode.getBuilderId());
+		boolean isValuer = (valuerService.addValuer(valuer))? true : false;
+		return isBoardCode && isValuer;
 	}
 
 	public boolean modifyBoardCode(BoardCode boardCode) {
@@ -88,6 +99,19 @@ public class ArticleServiceImpl implements ArticleService {
 		int totalArticleCount = articleMapper.getTotalArticles(pagination);
 		return totalArticleCount;
 	}
+	
+	public List<Page> getPageList(int parentBoardId) {
+		List<BoardCodeView> bcList = findBoards(null,
+				parentBoardId);
+
+		ArrayList<Page> pgList = new ArrayList<Page>();
+
+		for (BoardCodeView bc : bcList)
+			pgList.add(new Page(bc.getBoardName(), "sub/board.do?bid="
+					+ bc.getBoardCodeId()));
+		return pgList;
+	}
+	
 	
 	public boolean addQA(QA qa) {
 		boolean isQA = (1 == articleMapper.addQA(qa))? true : false;		

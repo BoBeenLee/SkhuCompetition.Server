@@ -55,16 +55,10 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="inputGroupPW" class="col-md-3 control-label">그룹
-				패스워드 :</label>
-			<div class="col-md-5">
-				<form:password id="inputGroupPW" class="form-control"
-					path="groupPW" />
+			<div class="col-md-offset-3 col-md-9">
+			<input type="submit" class="btn btn-default" value="확인" /> <a
+				href="mypage/mypage.do" class="btn btn-default">취소</a>
 			</div>
-		</div>
-		<div class="form-group">
-			<input type="submit" class="btn col-md-offset-3" value="확인" /> <a
-				href="mypage/mypage.do" class="btn">취소</a>
 		</div>
 	</form:form>
 </div>

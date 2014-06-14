@@ -10,7 +10,7 @@
 			<option>학과</option>
 		</select>
 		<input class="form-control input-sm" type="text" value="" />
-		<input class="form-control btn btn-default input-sm" type="submit" value="검색" />
+		<input class="form-control btn btn-default" type="submit" value="검색" />
 	</form>
 	
 	<table>

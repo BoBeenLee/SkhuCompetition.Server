@@ -14,7 +14,7 @@ import competition.service.ScoreService;
 
 @Service("scoreService")
 public class ScoreServiceImpl implements ScoreService{
-	@Autowired
+	@Autowired(required=false)
 	ScoreMapper scoreMapper;
 	
 	public boolean addScoreCode(ScoreCode ScoreCode) {
@@ -62,8 +62,8 @@ public class ScoreServiceImpl implements ScoreService{
 		return score;
 	}
 
-	public List<ScoreView> findScores(int boardCodeId, int valuerId, int teamCodeId) {
-		List<ScoreView> scoreList = scoreMapper.findScores(boardCodeId, valuerId, teamCodeId);
+	public List<ScoreView> findScores(int boardCodeId, int teamCodeId) {
+		List<ScoreView> scoreList = scoreMapper.findScores(boardCodeId, teamCodeId);
 		return scoreList;
 	}
 }

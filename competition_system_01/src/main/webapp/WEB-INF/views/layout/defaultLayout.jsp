@@ -66,18 +66,34 @@
 	myAppModule.controller('CollapseCtrl', [ '$scope', function($scope) {
 		$scope.isCollapsed = true;
 	} ]);
-
+	
 	myAppModule.controller('OpenWindowCtrl', [ '$scope', '$window', function($scope, $window) {
+		$window.$windowScope = $scope;		
 		$scope.itemList = [];
-		$window.$windowScope = $scope;
-		$scope.popup = function(url){
+		$scope.keys = [];
+		
+		$scope.init = function(list){
+			$scope.itemList.push(list);			
+		};
+
+		$scope.popup = function(url){			
 			$window.open("popup/" + url, '_blank', 'width=400, height=400, toolbar=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no');	
 		};
 		
 		$scope.addItem = function(item){
-			$scope.itemList.push(item);
-			$scope.$apply();
-		};
+			var itemObj = {itemId : item.itemId, itemName : item.itemName};
+			 
+			if($scope.keys.indexOf(itemObj.itemId) === -1) {
+				$scope.keys.push(itemObj.itemId);
+				$scope.itemList.push(itemObj);
+				$scope.$apply();			
+			}
+		};		
+	    $scope.removeItem = function(index) {
+	    	$scope.keys.splice($scope.keys.indexOf($scope.itemList[index].itemId), 1);
+	    	$scope.itemList.splice(index, 1);
+	    	$scope.$apply();
+	    };	
 	} ]);
 
 	myAppModule.controller('AutoSizeCtrl', [ '$scope', function($scope) {
@@ -85,35 +101,39 @@
 	} ]);
 	
 	myAppModule.controller('CalendarCtrl', [ '$scope', function($scope) {
-		var calendarList = [  
-		    <c:forEach var="calendar" varStatus="idx" items="${ calendarList }">
-		    {
-		        title : '${ calendar.content }',
-		        start : new Date('${ calendar.startDateView }'),
-		        end : new Date('${ calendar.endDateView }'),
-		        allDay : false
-		    } 
-		    <c:if test="${ !idx.last }">, </c:if>
-		    </c:forEach>  
-		];
-		           		
-		$('#calendar').fullCalendar({
-		    editable : false,
-		    events : calendarList
-		});
+		$scope.init = function(list){
+			for(var idx in list){
+				list[idx].start = new Date(list[idx].start);
+				list[idx].end = new Date(list[idx].end);
+			}
+			$('#calendar').fullCalendar({
+			    editable : false,
+			    events : list
+			});
+		};
 	} ]);
 	
-	myAppModule.controller('ManageScCtrl', [ '$scope', function($scope) {
+	myAppModule.controller('BidToTidCtrl', [ '$scope', function($scope) {
+		$scope.teamList = [];
+		
+		$scope.init = function(bid, tid, url){
+			if(bid){
+				$scope.bid = bid;
+				$scope.getSelectedBid(url);
+			}
+			$scope.tid = tid;			
+		};
 		$scope.getSelectedBid = function(url){
 			var param = { bid : $scope.bid };
-			//alert(url);
+			
+			//alert($scope.bid );
 			// fire off the request to AjaxCtrl 
 			$.ajax({
 			      url: url,
 			      method: "get",
 			      type: "json",
 			      data : param,
-			      success: function(data) {
+			      success: function(data) {			    	
 			    	$scope.teamList = data;
 			    	$scope.$apply();
 			      },
@@ -123,12 +143,32 @@
 			 });
 		};
 	} ]);
-
 	
+	myAppModule.controller('ShowHideCtrl', [ '$scope', function($scope) {
+		$scope.init = function(item){
+			$scope.tmp = item;
+		};
+		
+		$scope.change = function(){
+			if($scope.confirmed)
+				$scope.item = $scope.tmp;
+			else 
+				$scope.item = "";
+		};
+	} ]);
+	
+	myAppModule.controller('DatepickerCtrl', [ '$scope', function($scope) {
+		$scope.init = function(){
+			$('.datepair .datepair-date').datepicker({
+				'format' : 'yyyy-m-d',
+				'autoclose' : true
+			});
 
-
+			// initialize datepairs
+			$('.datepair').datepair();
+		};
+	} ]);
 </script>
-
 </head>
 <body>
 	<div class="container">

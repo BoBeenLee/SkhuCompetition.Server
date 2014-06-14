@@ -3,10 +3,6 @@
     "-//ApacheSoftwareFoundation//DTDTiles Configuration 2.1//EN" 
     "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<!-- Tiles - 
-	EL 을 써서 반복 부분을 줄이자 
-	EL 쓰면 expression= 하는거 잊지 말기!
-	-->
 	<definition name="defaultLayout" template="/WEB-INF/views/layout/defaultLayout.jsp">
 		<put-attribute name="title" value="LAYOUT" />
 		<put-attribute name="header" value="/WEB-INF/views/header/header.jsp" />
@@ -19,9 +15,15 @@
 		<put-attribute name="body" value="/WEB-INF/views/popup/popup.jsp" />
 	</definition>
 
-	<definition name="/index" extends="defaultLayout">
+	<!-- main -->
+	<definition name="/main/*" extends="defaultLayout">
 		<put-attribute name="title" value="main" />
-		<put-attribute name="body" value="/WEB-INF/views/body/main/main.jsp" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub1.jsp">
+				<put-attribute name="content"
+					expression="/WEB-INF/views/body/main/${mainType}.jsp" />
+			</definition>
+		</put-attribute>
 	</definition>
 
 	<!-- popup -->
@@ -30,7 +32,7 @@
 		<put-attribute name="body" expression="/WEB-INF/views/popup/${popupType}.jsp" />
 	</definition>
 	
-	<!-- User -->
+	<!-- user -->
 	<definition name="/user/*" extends="defaultLayout">
 		<put-attribute name="title" value="user" />
 		<put-attribute name="body">
@@ -41,7 +43,7 @@
 		</put-attribute>
 	</definition>
 
-	<!-- Mypage -->
+	<!-- mypage -->
 	<definition name="/mypage/*" extends="defaultLayout">
 		<put-attribute name="title" value="mypage" />
 		<put-attribute name="body">
@@ -52,6 +54,39 @@
 		</put-attribute>
 	</definition>
 
+	<!-- team -->
+	<definition name="/team/*" extends="defaultLayout">
+		<put-attribute name="title" value="team" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub.jsp">
+				<put-attribute name="content"
+					expression="/WEB-INF/views/body/team/${teamType}.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+
+	<!-- competition -->
+	<definition name="/competition/*" extends="defaultLayout">
+		<put-attribute name="title" value="competition" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub.jsp">
+				<put-attribute name="content"
+					expression="/WEB-INF/views/body/competition/${competitionType}.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+	
+	<!-- mail -->
+	<definition name="/mail/*" extends="defaultLayout">
+		<put-attribute name="title" value="mail" />
+		<put-attribute name="body">
+			<definition template="/WEB-INF/views/body/common/layout/sub.jsp">
+				<put-attribute name="content"
+					expression="/WEB-INF/views/body/common/mail/${mypageType}.jsp" />
+			</definition>
+		</put-attribute>
+	</definition>
+	
 	<!-- board -->
 	<definition name="/*/board" extends="defaultLayout">
 		<put-attribute name="title" value="board" />
@@ -74,15 +109,10 @@
 		</put-attribute>
 	</definition>
 
-	<!-- common -->
+	<!-- comment -->
 	<definition name="comment" template="/WEB-INF/views/body/common/board/read.jsp">
 		<put-attribute name="comment"
 			value="/WEB-INF/views/body/common/board/comment.jsp" />
-	</definition>
-
-	<definition name="/test/*" extends="defaultLayout">
-		<put-attribute name="title" value="{1}" />
-		<put-attribute name="body" value="/WEB-INF/views/test/{1}.jsp" />
 	</definition>
 </tiles-definitions>
 

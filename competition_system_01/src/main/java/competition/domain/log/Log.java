@@ -9,6 +9,10 @@ public class Log {
 	private String userId;
 	private Timestamp enterDate;
 	
+	public Log() {
+		super();
+	}
+	
 	public int getLogId() {
 		return logId;
 	}
