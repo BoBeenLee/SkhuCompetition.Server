@@ -3,13 +3,22 @@ package competition.domain;
 import java.sql.Blob;
 import java.sql.Timestamp;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Article {
 	public static final int IS_ARTICLE = 1;
 	public static final int IS_NOT_ARTICLE = 0;
 	public static final int IS_NOT_MODIFY = 0;
+	public static final int IS_SHARE = 1;
+	public static final int IS_NOT_SHARE = 0;
+	public static final int IS_HIDDEN = 1;
+	public static final int IS_NOT_HIDDEN = 0;
 	
 	private int articleId;
+	@NotEmpty @Length(min = 1, message="Title 3 ~ ")
 	private String title;
+	@NotEmpty
 	private byte[] content;
 	private Timestamp writtenDate;
 	private int hit;
@@ -23,7 +32,8 @@ public class Article {
 	private int authId;
 	private Timestamp fileLimitDate;
 	private int isFile;
-
+	private int isShare;
+	
 	public int getArticleId() {
 		return articleId;
 	}
@@ -144,5 +154,13 @@ public class Article {
 
 	public void setIsFile(int isFile) {
 		this.isFile = isFile;
+	}
+
+	public int getIsShare() {
+		return isShare;
+	}
+
+	public void setIsShare(int isShare) {
+		this.isShare = isShare;
 	}
 }

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<link rel="stylesheet/less" type="text/css" href="css/user/user.less">
+	
 <div class="forget">
 	<form class="form-horizontal" action="user/forget.do" method="post">
 		<div class="form-group">

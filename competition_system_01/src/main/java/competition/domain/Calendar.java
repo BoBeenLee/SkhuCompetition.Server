@@ -1,6 +1,7 @@
 package competition.domain;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class Calendar {
 	private int calendarId;
@@ -20,6 +21,10 @@ public class Calendar {
 		return startDate;
 	}
 
+	public void setStartDate(Date date) {
+		this.startDate = new Timestamp(date.getTime());
+	}
+	
 	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
@@ -27,7 +32,11 @@ public class Calendar {
 	public Timestamp getEndDate() {
 		return endDate;
 	}
-
+	
+	public void setEndDate(Date date) {
+		this.endDate = new Timestamp(date.getTime());
+	}
+	
 	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}

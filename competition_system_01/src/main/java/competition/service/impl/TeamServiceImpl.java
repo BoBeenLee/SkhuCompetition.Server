@@ -39,7 +39,13 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	public List<TeamCodeView> findTeamCodes(int boardCodeId, String userId) {
-		List<TeamCodeView> teamCodeList = teamMapper.findTeamCodes(boardCodeId, userId);
+		List<TeamCodeView> teamCodeList = this.findTeamCodes(boardCodeId, userId, TeamCode.IS_NOT_PERMISSION);
+		return teamCodeList;
+	}
+	
+	public List<TeamCodeView> findTeamCodes(int boardCodeId, String userId,
+			int isPermission) {
+		List<TeamCodeView> teamCodeList = teamMapper.findTeamCodes(boardCodeId, userId, isPermission);
 		return teamCodeList;
 	}
 
@@ -58,6 +64,11 @@ public class TeamServiceImpl implements TeamService {
 		return isTeam;
 	}
 	
+	public boolean removeTeams(int teamCodeId) {
+		boolean isTeam = (1 == teamMapper.removeTeams(teamCodeId))? true : false;
+		return isTeam;
+	}
+	
 	public TeamView getTeam(int teamId) {
 		TeamView team = teamMapper.getTeam(teamId);
 		return team;
@@ -69,7 +80,15 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	public boolean containsTeam(String userId, int boardCodeId) {
-		boolean isTeam = (teamMapper.containsTeam(userId, boardCodeId) == 1)? true : false;
+		boolean isTeam = (teamMapper.containsTeam(userId, boardCodeId, false) == 1)? true : false;
 		return isTeam;
 	}
+
+	public boolean containsTeam(String userId, int boardCodeId,
+			boolean isPermission) {
+		boolean isTeam = (teamMapper.containsTeam(userId, boardCodeId, isPermission) == 1)? true : false;
+		return isTeam;
+	}
+	
+	
 }

@@ -2,6 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<sec:authentication property="name" var="currentUserName"/>
+
 <div class="managetm">
 	<div ng-controller="BidToTidCtrl" class="manage-header" ng-init="init('${ teamList.boardCodeId }', '${ teamList.teamCodeId }', 'team/tclist.do')">
 		<form class="form-inline" action="team/managetm.do" method="get">
@@ -27,8 +30,12 @@
 			<span><b>리더 :</b> ${ teamList.leaderId }</span>
 			
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESOR')">
-			<a href="team/managetm.do?cmd=pm&pm=1&bid=${ teamList.boardCodeId }&tid=${ teamList.teamCodeId }" class="btn btn-default pull-right">승인</a>
-			<a href="team/managetm.do?cmd=pm&pm=0&bid=${ teamList.boardCodeId }&tid=${ teamList.teamCodeId }" class="btn btn-default pull-right">거부</a>
+			<c:if test="${ not empty teamList.teams && teamList.isPermission == 0 }">
+				<a href="team/managetm.do?cmd=pm&pm=1&bid=${ teamList.boardCodeId }&tid=${ teamList.teamCodeId }" class="btn btn-default pull-right">승인</a>
+			</c:if>
+			<c:if test="${ not empty teamList.teams && teamList.isPermission == 1 }">
+				<a href="team/managetm.do?cmd=pm&pm=0&bid=${ teamList.boardCodeId }&tid=${ teamList.teamCodeId }" class="btn btn-default pull-right">거부</a>
+			</c:if>
 		</sec:authorize>
 		</div>
 	</div>
@@ -65,9 +72,14 @@
 				</c:forEach>
 			</tbody>
 		</table>
+		<c:if test="${ teamList.leaderId == currentUserName }">
+			<a class="btn btn-default pull-right" href="team/addtm.do?tid=${ teamList.teamCodeId }">팀수정</a>
+			<a class="btn btn-default pull-right" href="team/removetm.do?tid=${ teamList.teamCodeId }">팀삭제</a>
+		</c:if>
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESOR')">
 			<input class="btn btn-default pull-right" type="submit" value="메일보내기" />
 		</sec:authorize>
 		</form>
+	
 	</div>
 </div>

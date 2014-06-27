@@ -12,4 +12,6 @@ public interface CommentService {
 	public boolean removeComment(int commentId);	
 	public CommentView getComment(int commentId);
 	public List<CommentView> findComments(int articleId);
+	public List<CommentView> findBoardComments(int boardCodeId);
+	public List<CommentView> findBoardComments(int boardCodeId, int isShare);
 }

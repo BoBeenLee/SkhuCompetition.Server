@@ -7,38 +7,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html ng-app="competition">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><tiles:getAsString name="title" /></title>
 <!--  경로 디폴트 설정  -->
 <base href="/competition_system_01/">
 
-<link rel="stylesheet/less" type="text/css" href="css/main/main.less">
 <link rel="stylesheet/less" type="text/css"
 	href="css/common/common.less">
-
-<!-- sub1 -->
-<link rel="stylesheet/less" type="text/css" href="css/user/login.less">
-<link rel="stylesheet/less" type="text/css" href="css/common/sub1.less">
-<link rel="stylesheet/less" type="text/css" href="css/common/sub.less">
-
-<!-- board -->
-<link rel="stylesheet/less" type="text/css" href="css/common/board.less">
-<link rel="stylesheet/less" type="text/css"
-	href="css/common/article.less">
-<link rel="stylesheet/less" type="text/css"
-	href="css/common/comment.less">
-
-<!-- editor -->
-<script src="css/ckeditor/ckeditor.js"></script>
-
-<!-- fullcalendar -->
-<link
-	href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css"
-	rel='stylesheet' />
-<link
-	href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.print.css"
-	rel='stylesheet' media='print' />
-
+	
 <!-- angularjs -->
 <script
 	src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.js"></script>
@@ -50,15 +27,17 @@
 
 <script src="//code.jquery.com/jquery.js"></script>
 
-<script
-	src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"></script>
+<!-- bootstrap -->
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
-
-<!-- autosize -->
-<script src="js/common/jquery.autosize.min.js"></script>
-
+</head>
+<body>
+	<div class="container">
+		<tiles:insertAttribute name="header" />
+		<tiles:insertAttribute name="body" />
+		<tiles:insertAttribute name="footer" />
+	</div>
+</body>
 
 <script type="text/javascript">
 	var myAppModule = angular.module('competition', [ 'ui.bootstrap' ]);
@@ -73,16 +52,18 @@
 		$scope.keys = [];
 		
 		$scope.init = function(list){
-			$scope.itemList.push(list);			
+			for(var i=0; i<list.length; i++){
+				$scope.addItem(list[i]);
+			}
 		};
 
 		$scope.popup = function(url){			
-			$window.open("popup/" + url, '_blank', 'width=400, height=400, toolbar=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no');	
+			$window.open("popup/" + url, '_blank', 'width=430, height=400, toolbar=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no');	
 		};
 		
 		$scope.addItem = function(item){
 			var itemObj = {itemId : item.itemId, itemName : item.itemName};
-			 
+			
 			if($scope.keys.indexOf(itemObj.itemId) === -1) {
 				$scope.keys.push(itemObj.itemId);
 				$scope.itemList.push(itemObj);
@@ -102,10 +83,10 @@
 	
 	myAppModule.controller('CalendarCtrl', [ '$scope', function($scope) {
 		$scope.init = function(list){
-			for(var idx in list){
+			/* for(var idx in list){
 				list[idx].start = new Date(list[idx].start);
 				list[idx].end = new Date(list[idx].end);
-			}
+			} */
 			$('#calendar').fullCalendar({
 			    editable : false,
 			    events : list
@@ -121,7 +102,7 @@
 				$scope.bid = bid;
 				$scope.getSelectedBid(url);
 			}
-			$scope.tid = tid;			
+			$scope.tmpid = tid;			
 		};
 		$scope.getSelectedBid = function(url){
 			var param = { bid : $scope.bid };
@@ -135,6 +116,7 @@
 			      data : param,
 			      success: function(data) {			    	
 			    	$scope.teamList = data;
+			    	$scope.tid = $scope.tmpid;
 			    	$scope.$apply();
 			      },
 			      error : function(data, status){
@@ -168,13 +150,25 @@
 			$('.datepair').datepair();
 		};
 	} ]);
+	
+
+	myAppModule.controller('TagCtrl', [ '$scope', function($scope) {
+		$scope.tagList = [];
+
+		$scope.init = function(){	};
+		$scope.addTag = function(){
+			var tagName = $scope.tag;
+			if($scope.tagList.indexOf(tagName) === -1)
+				$scope.tagList.push(tagName);			
+		};
+		
+	    $scope.removeTag = function(index) {
+	    	$scope.tagList.splice(index, 1);
+	    };			
+	} ]);
+	
 </script>
-</head>
-<body>
-	<div class="container">
-		<tiles:insertAttribute name="header" />
-		<tiles:insertAttribute name="body" />
-		<tiles:insertAttribute name="footer" />
-	</div>
-</body>
+
+<!-- lessjs -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
 </html>

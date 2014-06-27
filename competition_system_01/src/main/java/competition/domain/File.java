@@ -12,6 +12,7 @@ public class File {
 	private int articleId;
 	private String userId;
 	private int isArticle;
+	private int teamCodeId;
 	
 	public int getFileId() {
 		return fileId;
@@ -66,5 +67,11 @@ public class File {
 	}
 	public void setIsArticle(int isArticle) {
 		this.isArticle = isArticle;
+	}
+	public int getTeamCodeId() {
+		return teamCodeId;
+	}
+	public void setTeamCodeId(int teamCodeId) {
+		this.teamCodeId = teamCodeId;
 	}
 }

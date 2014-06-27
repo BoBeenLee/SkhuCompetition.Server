@@ -10,7 +10,7 @@ import competition.domain.view.FileView;
 import competition.service.FileService;
 
 public class FileUtils {
-	public static final String FILE_PATH = "G:/dev/eclipse-ee/git/CompetitionSystem/competition_system_01/src/main/webapp/image/";
+	public static final String FILE_PATH = "G:/dev/eclipse-ee/git/CompetitionSystem/competition_system_01/src/main/webapp/file/";
 	@Autowired
 	FileService fileService;
 	
@@ -21,7 +21,7 @@ public class FileUtils {
 		 if (uploadfile != null && uploadfile.getSize() > 0) {
 			 	fileView = new FileView();
 	            String fileName = uploadfile.getOriginalFilename();
-	            String fileUrl = FILE_PATH + fileName;
+	            String fileUrl = FILE_PATH + articleId + "-" + userId + "-" + fileName;
 	            
 	            fileView.setFileName(fileName);
 	            fileView.setArticleId(articleId);

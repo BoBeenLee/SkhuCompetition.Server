@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,7 +63,7 @@ public class UserController {
 			userService.forgetPW(userId, "test");
 			mailService.sendMail(toMail, "비밀번호 변경 완료", "비밀번호 : test");
 		}
-		return  "redirect:" + "/index.do?message=forget";
+		return  "redirect:" + "/main/main.do?message=forget";
 	}
 	
 	@RequestMapping(value="/user/register.do", method=RequestMethod.GET)
@@ -75,7 +76,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="/user/register.do", method=RequestMethod.POST)
-	public String register(@ModelAttribute("userView") UserView userView){
+	public String register(@ModelAttribute("userView") @Valid UserView userView){
 		String url = "";
 		boolean isUser = false;
 		
@@ -85,7 +86,7 @@ public class UserController {
 			System.out.println((isUser = userService.addUser(userView)));	
 
 	    if(isUser)
-	    	url = "redirect:" + "/index.do?message=register";
+	    	url = "redirect:" + "/main/main.do?message=register";
 	    else
 	    	url = "redirect:" + "/user/register.do";			
 		return url;

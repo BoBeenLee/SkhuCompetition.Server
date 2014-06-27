@@ -56,7 +56,7 @@
 	<select id="findBoards" resultType="competition.domain.view.code.BoardCodeView">
 		select *
 		from boardcode_db
-		where isHidden = 0
+		where isHidden = #{isHidden}
 		<if test="builderId != null">
 			and builderId = #{builderId}
 		</if>
@@ -116,6 +116,12 @@
 		where articleId = #{articleId}
 	</update>
 
+	<update id="modifyShare">
+		update article_db set
+		isShare = #{isShare}
+		where articleId = #{articleId}
+	</update>
+
 	<delete id="removeArticle" parameterType="int">
 		delete from article_db
 		where articleId = #{articleId}
@@ -124,6 +130,21 @@
 	<select id="getArticle" resultType="competition.domain.view.ArticleView">
 		select * from article_db 
 		where articleId = #{articleId}
+	</select>
+	
+	<select id="findNotices" resultType="competition.domain.view.ArticleView">
+		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, authId, commentCount
+		from article_db 
+		where 1 
+		<if test="isShare != 0">
+		and isShare = #{isShare}
+		</if>
+		<if test="boardCodeId != 0">
+		and boardCodeId = #{boardCodeId}
+		</if>
+		AND ((isNotice = 1 AND (startPeriod &lt;= now() AND endPeriod &gt;= now()))
+		OR (isNotice = 1 AND (startPeriod = endPeriod)))		
+		order by articleId desc
 	</select>
 	
 	<select id="findArticleAll" resultType="competition.domain.view.ArticleView">
@@ -136,44 +157,59 @@
 	<select id="findArticles" resultType="competition.domain.view.ArticleView">
 		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, authId, commentCount
 		from article_db	a1
-		where a1.boardCodeId = #{boardCodeId}
-		<if test="srchType == null">
-			AND ((a1.isNotice = 1 AND a1.startPeriod &gt; now()) OR a1.isNotice = 0)
-		</if>
+		where 1  
+		<include refid="etcCondition" />
 		<include refid="articleCondition" />
 		AND a1.articleId &lt;= ( <include refid="findMaxArticleId" /> )
 		order by a1.articleId desc
 		limit #{ pageSize }
 	</select>
-
-	<select id="findNotices" resultType="competition.domain.view.ArticleView">
-		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, authId, commentCount
-		from article_db 
-		where boardCodeId = #{boardCodeId}
-		AND isNotice = 1
-		AND (startPeriod &lt;= now() AND endPeriod &gt;= now())
-		order by articleId desc
-	</select>
-
-	<select id="getTotalArticles" resultType="int">
-		select count(*)
-		from article_db a1
-		where a1.boardCodeId = #{boardCodeId}
-		<include refid="articleCondition" />
-	</select>
-
+	
 	<sql id="findMaxArticleId">
 		select a1.articleId
 		from article_db a1 join article_db a2
 		on a2.articleId &gt;= a1.articleId
-		where a1.boardCodeId = #{boardCodeId}
-		and a2.boardCodeId = #{boardCodeId}
+		where 1  
+		<include refid="etcCondition" />
+		<include refid="etcCondition1" />
 		<include refid="articleCondition" />
 		<include refid="articleCondition1" />
 		group by a1.articleId
 		having count(*) &gt; ((#{currentPage} - 1) * #{pageSize}) 
 		order by a1.articleId desc
 		limit 1
+	</sql>
+
+	<select id="getTotalArticles" resultType="int">
+		select count(*)
+		from article_db a1
+		where 1
+		<include refid="etcCondition" />
+		<include refid="articleCondition" />
+	</select>
+	
+	<sql id="etcCondition">
+		<if test="isShare != 0">
+			and a1.isShare = #{isShare}
+		</if>
+		<if test="boardCodeId != 0">
+			and a1.boardCodeId = #{boardCodeId}
+		</if>
+		<if test="srchType == null">
+			AND ((a1.isNotice = 1 AND (a1.endPeriod &lt; now() OR now() &lt; a1.startPeriod OR a1.startPeriod &lt;&gt; a1.endPeriod)) OR a1.isNotice = 0)
+		</if>
+	</sql>
+
+	<sql id="etcCondition1">
+		<if test="isShare != 0">
+			and a2.isShare = #{isShare}
+		</if>
+		<if test="boardCodeId != 0">
+			and a2.boardCodeId = #{boardCodeId}
+		</if>
+		<if test="srchType == null">
+			AND ((a2.isNotice = 1 AND (a2.endPeriod &lt; now() OR now() &lt; a2.startPeriod OR a2.startPeriod &lt;&gt; a2.endPeriod)) OR a2.isNotice = 0)
+		</if>
 	</sql>
 
 	<sql id="articleCondition">

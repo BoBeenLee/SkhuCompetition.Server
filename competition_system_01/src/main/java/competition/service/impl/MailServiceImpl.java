@@ -28,6 +28,8 @@ public class MailServiceImpl implements MailService {
 	 * */
 	public void sendMail(String to, String subject, String body) {
 		SimpleMailMessage message = new SimpleMailMessage();
+		
+	//	System.out.println(to);
 		message.setTo(to);
 		message.setSubject(subject);
 		message.setText(body);

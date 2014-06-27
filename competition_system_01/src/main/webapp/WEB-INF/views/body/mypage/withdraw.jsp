@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<link rel="stylesheet/less" type="text/css" href="css/mypage/mypage.less" />
 
 <div class="withdraw">
 	<form class="form-horizontal" action="mypage/withdraw.do" method="post"

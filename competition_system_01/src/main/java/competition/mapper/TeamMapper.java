@@ -16,13 +16,14 @@ public interface TeamMapper {
 	public int removeTeamCode(int teamCodeId);
 	public int modifyTeamCode(TeamCode teamCode);
 	public TeamCodeView getTeamCode(int teamCodeId);
-	public List<TeamCodeView> findTeamCodes(@Param("boardCodeId") int boardCodeId, @Param("userId") String userId);
+	public List<TeamCodeView> findTeamCodes(@Param("boardCodeId") int boardCodeId, @Param("userId") String userId, @Param("isPermission") int isPermission);
 	public List<Rank> findRanks(int boardCodeId);
 	
 //	Team
 	public int addTeam(Team team);
 	public int removeTeam(int teamId);
+	public int removeTeams(int teamCodeId);
 	public TeamView getTeam(int teamId);
 	public List<TeamView> findTeams(int teamCodeId);
-	public int containsTeam(@Param("userId") String userId, @Param("boardCodeId") int boardCodeId);
+	public int containsTeam(@Param("userId") String userId, @Param("boardCodeId") int boardCodeId, @Param("isPermission") boolean isPermission);
 }

@@ -37,6 +37,9 @@
 							from team_db
 							where userId = #{userId})
 		</if>
+		<if test="isPermission != 0">
+			and tc1.isPermission = #{isPermission}
+		</if>
 		group by tc1.teamCodeId
 	</select>
 
@@ -57,6 +60,11 @@
 	<delete id="removeTeam" parameterType="int">
 		delete from team_db
 		where teamId = #{teamId}
+	</delete>
+	
+	<delete id="removeTeams" parameterType="int">
+		delete from team_db
+		where teamCodeId = #{teamCodeId}
 	</delete>
 
 	<select id="getTeam" resultType="competition.domain.view.TeamView">
@@ -81,5 +89,8 @@
 		on t1.teamCodeId = tc1.teamCodeId
 		where t1.userId = #{userId} 
 		and tc1.boardCodeId = #{boardCodeId}
+		<if test="isPermission">
+			and tc1.isPermission = 1
+		</if>
 	</select>
 </mapper> 

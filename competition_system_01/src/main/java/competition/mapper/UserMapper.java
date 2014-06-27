@@ -23,6 +23,9 @@ public interface UserMapper {
 	public List<AuthView> getAllAuths();
 	public int getChkGroupPW(UserView user);
 	public int forgetPW(@Param("userId") String userId, @Param("userPW") String userPW);
+	public int grantAuth(UserView user);
+	public int returnAuth(String userId);
+	
 //	Mail
 	public MailView getEmail(@Param("userId") String userId, @Param("question") String question, @Param("answer") String answer);
 }

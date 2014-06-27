@@ -1,21 +1,45 @@
 @content-background-color: white;
-.container {
-	.content {
-		.box {
-			margin: 3%;
-		}
-
-		.box-board {
-			h4 {
-				text-align: center;
-				padding-bottom: 15px;
-				border-bottom: 2px solid #b0b0b0;
+.content {
+	background-color: inherit ! important;
+	padding: 0px ! important;
+	.content-body {
+	 	padding: 0px ! important; 
+		.main {
+			.box {
 			}
-		}
 
-		.box-calendar {
-			#calendar {
-				margin: 0 auto;
+			.box-board {
+				padding: 30px;
+				height: 179px;
+				background-color: white;
+				margin-bottom: 20px;
+				h4 {
+					color: #00294a;
+					text-align: left;
+					padding-bottom: 15px;
+					border-bottom: 2px solid #f4f4f4;
+				}
+			}
+
+			.box-board:nth-of-type(2) {
+				height: 240px;
+			}
+
+			.box-board:nth-of-type(3) {
+				margin-bottom: 0px ! important;
+			}
+
+			.box-calendar {
+				padding: 30px;
+				height: 638px;
+				background-color: white;
+				#calendar {
+					margin: 0 auto;
+				}
+				> a {
+					color: #fff;
+					background-color: #cfcfcf;
+				}
 			}
 		}
 	}

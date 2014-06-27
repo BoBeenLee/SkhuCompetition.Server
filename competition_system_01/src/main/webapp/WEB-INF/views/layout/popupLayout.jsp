@@ -7,6 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><tiles:getAsString name="title" /></title>
+<!--  경로 디폴트 설정  -->
+<base href="/competition_system_01/">
 
 <!-- angularjs -->
 <script
@@ -21,7 +23,7 @@
 
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
+
 <script type="text/javascript">
 	var myAppModule = angular.module('popup', [ 'ui.bootstrap' ]);
 
@@ -43,4 +45,5 @@
 		<tiles:insertAttribute name="body" />
 	</div>
 </body>
+<script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
 </html>

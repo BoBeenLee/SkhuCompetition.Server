@@ -34,4 +34,18 @@
 		from comment_db
 		where articleId = #{articleId}
 	</select>
+	
+	<select id="findBoardComments" parameterType="int" resultType="competition.domain.view.CommentView">
+		select c1.commentId commentId, c1.articleId articleId, c1.writerId writerId, c1.content content, c1.writtenDate writtenDate, a1.title title
+		from article_db a1 join comment_db c1
+		on a1.articleId = c1.articleId
+		where 1
+		<if test="boardCodeId != 0">
+		and a1.boardCodeId = #{boardCodeId}
+		</if>
+		<if test="isShare != 0">
+		and a1.isShare = #{isShare}
+		</if>
+		order by a1.articleId
+	</select>
 </mapper> 

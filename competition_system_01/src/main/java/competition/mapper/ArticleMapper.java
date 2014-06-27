@@ -3,6 +3,7 @@ package competition.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.junit.runners.Parameterized.Parameters;
 
 import competition.domain.Article;
 import competition.domain.Pagination;
@@ -21,7 +22,7 @@ public interface ArticleMapper{
 	public int modifyBoardCode(BoardCode boardCode);
 	public List<BoardCodeView> getAllBoardCodes();	
 	public BoardCodeView getBoard(int boardCodeId);
-	public List<BoardCodeView> findBoards(@Param("builderId") String builderId, @Param("parentBoardCodeId") int parentBoardCodeId);
+	public List<BoardCodeView> findBoards(@Param("isHidden") int isHidden, @Param("builderId") String builderId, @Param("parentBoardCodeId") int parentBoardCodeId);
 	
 	public int addQA(QA qa);
 	public int modifyQA(QA qa);	
@@ -38,6 +39,7 @@ public interface ArticleMapper{
 	public List<ArticleView> findArticles(Pagination pagination);
 	public List<ArticleView> findNotices(Pagination pagination);	
 	public int getTotalArticles(Pagination pagination);
+	public int modifyShare(@Param("isShare") int isShare, @Param("articleId") int articleId);
 	
 	public String getBoardName(int boardCodeId);	
 }

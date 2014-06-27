@@ -6,6 +6,7 @@ public class Pagination {
     private String srchType;
     private String content;
     private int boardCodeId;
+    private int isShare;
     
 	public int getPg() {
         return currentPage;
@@ -87,9 +88,32 @@ public class Pagination {
 		this.content = content;
 	}
 
+	public int getIs(){
+		return this.isShare;
+	}
+	
+	public void setIs(int isShare){
+		this.isShare = isShare;
+	}
+	
+	public int getIsShare() {
+		return isShare;
+	}
+
+	public void setIsShare(int isShare) {
+		this.isShare = isShare;
+	}
+
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("bid=%d&sz=%d", boardCodeId, pageSize));
+        
+        if(isShare != 0 && boardCodeId != 0)
+        	sb.append(String.format("is=%d&bid=%d&sz=%d", isShare, boardCodeId, pageSize));
+        else if(isShare != 0)
+            sb.append(String.format("is=%d&sz=%d", isShare, pageSize));
+        else if(boardCodeId != 0)
+        	sb.append(String.format("bid=%d&sz=%d", boardCodeId, pageSize));
+       
         if (srchType != null) sb.append("&st=" + srchType);
         if (content != null) sb.append("&ct=" + content);
         return sb.toString();

@@ -3,6 +3,7 @@ package competition.web.controller;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import util.BeanUtils;
 import util.DateUtils;
 import competition.domain.Pagination;
+import competition.domain.code.BoardCode;
 import competition.domain.view.ArticleView;
 import competition.domain.view.CalendarView;
 import competition.service.ArticleService;
@@ -46,19 +48,26 @@ public class MainController {
 		List<CalendarView> calendarList = calendarService.findCalendars(startDate, endDate);
 //		Notice
 		Pagination pg1 = new Pagination();
-		pg1.setBid(1); // Notice Number
-		pg1.setSz(5);
+		pg1.setBid(BoardCode.BOARDCODE_NOTICE); // Notice Number
+		pg1.setSz(3);
 		List<ArticleView> noticeList = articleService.findArticles(pg1);
 		
 //		Competition
 		Pagination pg2 = new Pagination();
-		pg2.setBid(2); // Competition Number
+		pg2.setBid(BoardCode.BOARDCODE_COMPETITION); // Competition Number
 		pg2.setSz(5);
 		List<ArticleView> competitionList = articleService.findArticles(pg2);
 			
+//		QnA
+		Pagination pg3 = new Pagination();
+		pg3.setBid(BoardCode.BOARDCODE_QA); // QnA Number
+		pg3.setSz(3);
+		List<ArticleView> qnaList = articleService.findArticles(pg3);
+		
 		modelAndView.addObject("calendarList", calendarList);
 		modelAndView.addObject("noticeList", noticeList);
 		modelAndView.addObject("competitionList", competitionList); 
+		modelAndView.addObject("qnaList", qnaList); 
 		modelAndView.addObject("mainType", "main");
 		return modelAndView;
 	}
@@ -68,13 +77,18 @@ public class MainController {
 			@ModelAttribute("calendarView1") CalendarView calendarView1) {
 		ModelAndView modelAndView = new ModelAndView("/main/managecal");
 		List<CalendarView> calendarList = null;
-
-		if (calendarView1 != null) {
+		
+		if(calendarView1.getStartDate() == null || calendarView1.getEndDate() == null){
+			Calendar c1 = Calendar.getInstance();
+			calendarView1.setStartDate(c1.getTime());
+			c1.set(Calendar.DATE, c1.get(Calendar.DATE) + 30);
+			calendarView1.setEndDate(c1.getTime());
+		}
+		if (calendarView1.getEndDate().compareTo(calendarView1.getStartDate()) >= 0 && calendarView1 != null) {
 			calendarList = calendarService.findCalendars(
 					calendarView1.getStartDate(), calendarView1.getEndDate());
-		} else
-			calendarView1 = new CalendarView();
-
+		} 
+		
 		modelAndView.addObject("calendarList", calendarList);
 		modelAndView.addObject("calendarView2", new CalendarView());
 		modelAndView.addObject("subTitle", "달력관리");
@@ -86,23 +100,22 @@ public class MainController {
 	public ModelAndView addCalendar(@RequestParam("sd") String startDateView,
 			@RequestParam("ed") String endDateView,
 			@ModelAttribute("calendarView2") CalendarView calendarView2)
-			throws ParseException {
+					throws ParseException {
 		ModelAndView modelAndView = new ModelAndView("/main/managecal");
 		boolean isCalendar = false;
 		List<CalendarView> calendarList = null;
+		CalendarView calendarView1 = new CalendarView();
 		
-		int diff = DateUtils.getStringToTimestamp(endDateView).compareTo(DateUtils.getStringToTimestamp(startDateView));
-		if(diff >= 0)
+		if(calendarView2.getEndDate().compareTo(calendarView2.getStartDate()) >= 0)	
 			calendarService.addCalendar(calendarView2);
 
 		// 조회 
-		CalendarView calendarView1 = new CalendarView();
-		calendarView1.setStartDateView(startDateView);
-		calendarView1.setEndDateView(endDateView);
+		if(startDateView != null && startDateView != "" && endDateView != null && endDateView != ""){
+			calendarView1.setStartDateView(startDateView);
+			calendarView1.setEndDateView(endDateView);
 
-		calendarList = calendarService.findCalendars(
-				calendarView1.getStartDate(), calendarView1.getEndDate());
-
+			calendarList = calendarService.findCalendars(calendarView1.getStartDate(), calendarView1.getEndDate());
+		}
 		calendarView2 = new CalendarView();
 		modelAndView.addObject("calendarList", calendarList);
 		modelAndView.addObject("calendarView1", calendarView1);

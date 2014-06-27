@@ -2,6 +2,8 @@ package competition.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import competition.domain.Article;
 import competition.domain.Page;
 import competition.domain.Pagination;
@@ -18,6 +20,8 @@ public interface ArticleService {
 	public List<BoardCodeView> getAllBoardCodes();	
 	public BoardCodeView getBoard(int boardCodeId);
 	public List<BoardCodeView> findBoards(String builderId, int parentBoardCodeId);
+	public List<BoardCodeView> findBoards(int isHidden, String builderId, int parentBoardCodeId);
+	
 	public String getBoardName(int boardCodeId);	
 	
 	public boolean addArticle(Article article);
@@ -28,8 +32,11 @@ public interface ArticleService {
 	public List<ArticleView> findArticles(Pagination pagination);
 	public List<ArticleView> findNotices(Pagination pagination);	
 	public int getTotalArticles(Pagination pagination);
-	 List<Page> getPageList(int parentBoardId);
-	 
+	public boolean modifyShare(int isShare, int articleId);
+	List<Page> getPageList(int parentBoardId);
+	List<Page> getPageList(int parentBoardId, String userId);
+	public List<Page> getSubList(int parentBoardCodeId);
+	
 	public boolean addQA(QA qa);
 	public boolean modifyQA(QA qa);	
 //	 remove QA가 없는 건 Article만 지워도 같이 지워진다.

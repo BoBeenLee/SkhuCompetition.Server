@@ -2,45 +2,41 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
+<!-- editor -->
+<script src="css/ckeditor/ckeditor.js"></script>
 
+<!-- datepicker -->
+<script type="text/javascript"
+	src="js/calendar/jquery.timepicker.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="css/calendar/jquery.timepicker.css" />
+
+<script type="text/javascript"
+	src="js/calendar/bootstrap-datepicker.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="css/calendar/bootstrap-datepicker.css" />
+
+<link rel="stylesheet/less" type="text/css"
+	href="css/common/article.less">
 
 <div class="write">
-	<!-- datepicker -->
-	<script type="text/javascript"
-		src="js/calendar/jquery.timepicker.min.js"></script>
-	<link rel="stylesheet" type="text/css"
-		href="css/calendar/jquery.timepicker.css" />
-
-	<script type="text/javascript"
-		src="js/calendar/bootstrap-datepicker.js"></script>
-	<link rel="stylesheet" type="text/css"
-		href="css/calendar/bootstrap-datepicker.css" />
-
-	<form:form class="form-horizontal"
+	<form:form class="form-horizontal" ng-controller="DatepickerCtrl" ng-init="init()" 
 		action="${ boardType }/article/write.do" method="post" enctype="multipart/form-data" commandName="articleView">
 		<div class="form-group">
-			<label for="inputTitle" class="col-md-1 control-label">제목 : </label>
+			<label for="inputTitle" class="col-md-1 control-label text-left">제목 : </label>
 			<div class="col-md-11">
 				<form:input path="title" class="title form-control" id="inputTitle"
 					placeholder="제목" />
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group editor">
 			<form:textarea id="editor" class="ckeditor form-control"
 				path="contentView" />
 		</div>
-		<div class="form-group">
-			<input class="btn" type="submit" value="확인" /> 
-			<input type="hidden" name="mf" value="${ mf }" />
-			<form:hidden path="articleId" />
-			<a
-				href="${ boardType }/board.do?${ pagination }&pg=${ pagination.currentPage}"
-				class="btn">취소</a>
-		</div>
-		<div class="file">
+		<div class="file form-group">
 			<form:input type="file" path="uploadfile" />
 		</div>
-		<div class="notice datepair form-inline" ng-controller="CollapseCtrl">
+		<div class="notice datepair form-group" ng-controller="CollapseCtrl">
 			<label>공지 : </label> <form:checkbox path="isNoticeView" value="false"
 				ng-click="isCollapsed = !isCollapsed" />
 			<div collapse="isCollapsed">
@@ -48,7 +44,7 @@
 					type="text" path="endPeriodView" class="datepair-date form-control input-sm" placeholder="end" />
 			</div>
 		</div>
-		<div class="isFile datepair form-inline" ng-controller="CollapseCtrl">
+		<div class="isFile datepair form-group" ng-controller="CollapseCtrl">
 			<label>파일제출여부 : </label> <form:checkbox path="isFileView" value="false"
 				ng-click="isCollapsed = !isCollapsed" />
 			<div collapse="isCollapsed">
@@ -56,25 +52,28 @@
 				<form:input type="text" path="fileLimitDateView" class="datepair-date form-control input-sm" placeholder="end" />
 			</div>
 		</div>
-		<div class="isPassword form-inline" ng-controller="CollapseCtrl">
+		<div class="isPassword form-group" ng-controller="CollapseCtrl">
 			<label>비밀번호 설정여부 : </label> <input type="checkbox" ng-click="isCollapsed = !isCollapsed" />
 			<div collapse="isCollapsed">
 				<label>비밀번호</label>
 				<form:password path="password" class="form-control input-sm" placeholder="password" />
 			</div>
 		</div>
+		<div class="write-btn form-group">
+			<button class="btn" type="submit">
+				<img src="image/common/check.png" />
+				확인
+			</button>
+			<input type="hidden" name="mf" value="${ mf }" />
+			<form:hidden path="articleId" />
+			<a
+				href="${ boardType }/board.do?${ pagination }&pg=${ pagination.currentPage}"
+				class="btn"><img src="image/common/cancel.png" /> 
+				취소
+			</a>
+		</div>
 		<form:hidden path="writerId" />
 		<form:hidden path="boardCodeId" />
 		<form:hidden path="authId" />
 	</form:form>
-
-	<script>
-		$('.datepair .datepair-date').datepicker({
-			'format' : 'yyyy-m-d',
-			'autoclose' : true
-		});
-
-		// initialize datepairs
-		$('.datepair').datepair();
-	</script>
 </div>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="competition.mapper.TagMapper">
+	<insert id="addTag" parameterType="competition.domain.Tag">
+		insert into tag_db(tagName, fileId) 
+		values(#{tagName}, #{fileId})
+	</insert>
+	
+	<update id="modifyTag">
+		update tag_db
+		set tagName = #{tagName}
+		where tagId = #{tagId}
+	</update>
+	
+	<delete id="removeTag" parameterType="int">
+		delete from tag_db
+		where tagId = #{tagId}
+	</delete>
+	
+	<select id="getTag" resultType="competition.domain.view.TagView">
+		select *
+		from tag_db t1 join file_db f1
+		on t1.fileId = f1.fileId
+		where tagId = #{tagId}
+	</select>
+	
+	<select id="findTags" resultType="competition.domain.view.TagView">
+		select * 
+		from tag_db t1 join file_db f1
+		on t1.fileId = f1.fileId
+		where 1
+		<if test="fileId != 0">
+		and t1.fileId = #{fileId}
+		</if>
+		<if test="tagName != null">
+		and t1.tagName = #{tagName}
+		</if>
+	</select>
+	
+	<select id="findTagTypes" resultType="competition.domain.view.TagView">
+		select *
+		from tag_db t1 join file_db f1
+		on t1.fileId = f1.fileId
+		group by tagName
+		order by tagName
+	</select>
+</mapper> 

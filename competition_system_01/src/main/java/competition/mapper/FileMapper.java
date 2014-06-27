@@ -12,5 +12,5 @@ public interface FileMapper {
 	public int addFile(File file);
 	public int removeFile(int fileId);	
 	public FileView getFile(int fileId);
-	public List<FileView> findFiles(@Param("articleId") int articleId, @Param("userId") String userId, @Param("isArticle") int isArticle);
+	public List<FileView> findFiles(@Param("articleId") int articleId, @Param("userId") String userId, @Param("teamCodeId") int teamCodeId, @Param("isArticle") int isArticle);
 }

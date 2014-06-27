@@ -23,4 +23,6 @@ public interface UserService {
 	public List<AuthView> getAllAuths();
 	public boolean getChkGroupPW(UserView user);
 	public boolean forgetPW(String userId, String userPW);
+	public boolean grantAuth(UserView user);
+	public boolean returnAuth(String userId);
 }

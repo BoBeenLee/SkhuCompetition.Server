@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="competition.mapper.FileMapper">
-	<insert id="addFile" parameterType="competition.domain.File">
-		insert into file_db(fileName, fileSize, fileType, fileDate, fileUrl, articleId, userId, isArticle)
-		values(#{fileName}, #{fileSize}, #{fileType}, #{fileDate}, #{fileUrl}, #{articleId}, #{userId}, #{isArticle})
+	<insert id="addFile" parameterType="competition.domain.File" useGeneratedKeys="true" keyProperty="fileId">
+		insert into file_db(fileName, fileSize, fileType, fileDate, fileUrl, articleId, userId, teamCodeId, isArticle)
+		values(#{fileName}, #{fileSize}, #{fileType}, #{fileDate}, #{fileUrl}, #{articleId}, #{userId}, #{teamCodeId}, #{isArticle})
 	</insert>
 
 	<delete id="removeFile" parameterType="int">
@@ -18,12 +18,18 @@
 	</select>
 
 	<select id="findFiles" parameterType="int" resultType="competition.domain.view.FileView">
-		select *
-		from file_db
+		select fileId, fileName, fileSize, fileType, fileDate, fileUrl, articleId, f1.userId userId, isArticle, teamName, t1.teamCodeId teamCodeId
+		from file_db f1 left join team_db t1
+		on t1.userId = f1.userId and f1.teamCodeId = t1.teamCodeId
+		left join teamcode_db tc1
+		on t1.teamCodeId = tc1.teamCodeId
 		where articleId = #{articleId}
-			and isArticle = #{isArticle}
-			<if test="userId != null">
-				and userId = #{userId}
-			</if> 
+		and isArticle = #{isArticle}
+		<if test="userId != null">
+			and f1.userId = #{userId}
+		</if> 
+		<if test="teamCodeId != 0">
+			and t1.teamCodeId = #{teamCodeId}
+		</if>
 	</select>
-</mapper> 
+</mapper>

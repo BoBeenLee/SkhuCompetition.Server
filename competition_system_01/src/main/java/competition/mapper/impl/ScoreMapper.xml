@@ -33,7 +33,8 @@
 		left join score_db s1
 		on sc1.teamCodeId = s1.teamCodeId 
 		where sc1.boardCodeId = #{boardCodeId}
-		group by sc1.scoreCodeId
+		group by sc1.scoreCodeId, sc1.rank, sc1.teamCodeId
+		order by sc1.rank asc
 	</select>
 
 	<insert id="addScore" parameterType="competition.domain.Score">
@@ -54,6 +55,11 @@
 		where scoreId = #{scoreId}
 	</delete>
 
+	<delete id="removeScores" parameterType="int">
+		delete from score_db
+		where articleId = #{articleId}
+	</delete>
+
 	<select id="getScore" parameterType="int" resultType="competition.domain.view.ScoreView">
 		select *
 		from score_db
@@ -62,12 +68,15 @@
 
 	<select id="findScores" resultType="competition.domain.view.ScoreView">
 		select s1.scoreId scoreId, s1.score score, a1.articleId articleId, s1.teamCodeId teamCodeId, f1.userId userId, s1.valuerId valuerId, f1.fileName fileName, f1.fileId fileId, a1.title title
-		from article_db a1 join file_db f1
-		on a1.articleId = f1.articleId
+		from article_db a1 join teamcode_db tc1 
+		on a1.boardCodeId = tc1.boardCodeId and tc1.teamCodeId = #{teamCodeId}
+		left join file_db f1
+		on f1.isArticle = 0 and a1.articleId = f1.articleId and f1.teamCodeId = #{teamCodeId}
 		left join score_db s1
-		on a1.articleId = s1.articleId
-		where f1.isArticle = 0 and a1.boardCodeId = #{boardCodeId}
-		and (s1.teamCodeId is null or s1.teamCodeId = #{teamCodeId})
-		order by a1.articleId asc
+		on tc1.teamCodeId = s1.teamCodeId and a1.articleId = s1.articleId
+		where a1.boardCodeId = #{boardCodeId} 
+		and isFile = 1
+		and tc1.isPermission = 1
+		order by a1.articleId desc
 	</select>
 </mapper> 

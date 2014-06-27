@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import util.AuthUtils;
 import competition.domain.Article;
+import competition.domain.Auth;
 import competition.domain.Page;
 import competition.domain.Pagination;
 import competition.domain.QA;
@@ -17,6 +21,8 @@ import competition.domain.view.QAView;
 import competition.domain.view.code.BoardCodeView;
 import competition.mapper.ArticleMapper;
 import competition.service.ArticleService;
+import competition.service.TagService;
+import competition.service.TeamService;
 import competition.service.ValuerService;
 
 @Service("articleService")
@@ -25,7 +31,8 @@ public class ArticleServiceImpl implements ArticleService {
 	ArticleMapper articleMapper;
 	@Autowired(required=false)
 	ValuerService valuerService;
-	
+	@Autowired(required=false)
+	TeamService teamService;
 	
 	public boolean addBoardCode(BoardCode boardCode) {
 		Valuer valuer = new Valuer();
@@ -57,10 +64,16 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	public List<BoardCodeView> findBoards(String builderId, int parentBoardCodeId) {
-		List<BoardCodeView> bcList = articleMapper.findBoards(builderId, parentBoardCodeId);		
+		List<BoardCodeView> bcList = findBoards(Article.IS_NOT_HIDDEN, builderId, parentBoardCodeId);		
 		return bcList;
 	}
-	
+
+	public List<BoardCodeView> findBoards(int isHidden, String builderId,
+			int parentBoardCodeId) {
+		List<BoardCodeView> bcList = articleMapper.findBoards(isHidden, builderId, parentBoardCodeId);		
+		return bcList;
+	}
+
 	public String getBoardName(int boardCodeId) {
 		return articleMapper.getBoardName(boardCodeId);
 	}
@@ -100,9 +113,38 @@ public class ArticleServiceImpl implements ArticleService {
 		return totalArticleCount;
 	}
 	
-	public List<Page> getPageList(int parentBoardId) {
+	public boolean modifyShare(int isShare, int articleId) {
+		boolean isChk = (1 == articleMapper.modifyShare(isShare, articleId))? true : false;
+		return isChk;
+	}
+
+	public List<Page> getSubList(int parentBoardCodeId){
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		List<String> authNames = AuthUtils.getAuthNames(auth);
+		List<Page> pgList = new ArrayList<Page>();
+		
+		if(BoardCode.BOARDCODE_COMPETITION == parentBoardCodeId){ // 경진대회
+			if(authNames.contains(Auth.ROLE_ADMIN) || authNames.contains(Auth.ROLE_PROFESOR)){
+				pgList.add(new Page("대회신청", "competition/addcpt.do"));
+				pgList.add(new Page("대회관리", "competition/managecpt.do"));
+				pgList.addAll(this.getPageList(parentBoardCodeId));
+			} else if(authNames.contains(Auth.ROLE_STUDENT)){
+				pgList.add(new Page("대회관리", "competition/managecpt.do"));
+				pgList.addAll(this.getPageList(parentBoardCodeId, auth.getName()));
+			} else {
+				pgList.addAll(this.getPageList(parentBoardCodeId, auth.getName()));
+			}
+		} else { // 그외의 것
+			pgList.addAll(this.getPageList(parentBoardCodeId));
+		}
+		
+		return pgList;
+	}
+	
+	public List<Page> getPageList(int parentBoardCodeId) {
 		List<BoardCodeView> bcList = findBoards(null,
-				parentBoardId);
+				parentBoardCodeId);
 
 		ArrayList<Page> pgList = new ArrayList<Page>();
 
@@ -112,6 +154,23 @@ public class ArticleServiceImpl implements ArticleService {
 		return pgList;
 	}
 	
+	public List<Page> getPageList(int parentBoardId, String userId) {
+		List<BoardCodeView> bcList = findBoards(null,
+				parentBoardId);
+
+		ArrayList<Page> pgList = new ArrayList<Page>();
+
+		for (BoardCodeView bc : bcList){			
+			if(bc.getBoardCodeId() == BoardCode.BOARDCODE_COMPETITION)
+				pgList.add(new Page(bc.getBoardName(), "sub/board.do?bid="
+						+ bc.getBoardCodeId()));
+			else if(teamService.containsTeam(userId, bc.getBoardCodeId(), true)){
+				pgList.add(new Page(bc.getBoardName(), "sub/board.do?bid="
+						+ bc.getBoardCodeId()));
+			}
+		}
+		return pgList;
+	}
 	
 	public boolean addQA(QA qa) {
 		boolean isQA = (1 == articleMapper.addQA(qa))? true : false;		

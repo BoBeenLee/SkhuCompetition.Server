@@ -69,4 +69,15 @@ public class UserServiceImpl implements UserService{
 		boolean isChk = 	(1 == userMapper.forgetPW(userId, userPW))? true : false;
 		return isChk;
 	}
+
+	public boolean grantAuth(UserView user) {
+		boolean isGrant = (1 == userMapper.grantAuth(user))? true : false;
+		return isGrant;
+	}
+	
+	public boolean returnAuth(String userId) {
+		boolean isReturn = (1 == userMapper.returnAuth(userId))? true : false;
+		return isReturn;
+	}
+	
 }

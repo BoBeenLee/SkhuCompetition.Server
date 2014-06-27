@@ -4,22 +4,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
 <div class="managetm">
-	<form class="form-horizontal" action="mypage/addtm.do" method="post">
+	<form:form class="form-horizontal" action="team/addtm.do" method="post" commandName="teamCodeView">
 		<div class="form-group">
 			<label for="inputType" class="col-md-3 control-label">구분 : </label>
 			<div class="col-md-5">
-				<select id="inputType" name="boardCodeId" class="form-control">
+				<form:select id="inputType" path="boardCodeId" class="form-control">
 					<c:forEach var="boardCode" items="${ boardCodeList }">
-						<option value="${ boardCode.boardCodeId }">${ boardCode.boardName }</option>
+						<form:option value="${ boardCode.boardCodeId }" label="${ boardCode.boardName }" />
 					</c:forEach>
-				</select>
+				</form:select>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="inputTeamName" class="col-md-3 control-label">팀명
 				: </label>
 			<div class="col-md-5">
-				<input id="inputTeamName" name="teamName" class="form-control"
+				<form:input id="inputTeamName" path="teamName" class="form-control"
 					type="text" placeholder="팀명" />
 			</div>
 		</div>
@@ -27,8 +27,11 @@
 			<label for="inputTeamContent" class="col-md-3 control-label">팀
 				내용 : </label>
 			<div class="col-md-5">
-				<textarea id="inputTeamContent" name="teamContent"
-					class="form-control">팀 내용을 적어주세요.</textarea>
+				<form:textarea id="inputTeamContent" path="teamContent"
+					class="form-control" value="팀 내용을 적어주세요." />
+				<form:hidden path="teamCodeId"/>
+				<form:hidden path="leaderId"/>
+				<form:hidden path="teamType"/>
 			</div>
 		</div>
 		<!-- 팀원은 추가하는 방식으로  -->
@@ -41,7 +44,15 @@
 			</div>
 		</div>
 		<hr>
-		<div ng-controller="OpenWindowCtrl" class="form-group">
+		<div ng-controller="OpenWindowCtrl" class="form-group" ng-init="init([
+			<c:forEach var="team" varStatus="idx" items="${ teamList }">
+				{ 
+					itemId : '${ team.userId }',
+					itemName : '${ team.userName }'
+				} 
+				<c:if test="${ !idx.last }">, </c:if>
+			</c:forEach>
+		])">
 			<label for="inputTeamContent" class="col-md-3 control-label">
 				팀원 </label>
 			<input type="button" ng-click="popup('findUsers.do')"
@@ -59,5 +70,5 @@
 		<div class="form-group">
 			<input type="submit" class="btn btn-default col-md-offset-3" value="확인" />
 		</div>
-	</form>
+	</form:form>
 </div>

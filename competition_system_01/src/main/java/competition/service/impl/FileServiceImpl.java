@@ -30,10 +30,16 @@ public class FileServiceImpl implements FileService {
 		return file;
 	}
 
-	
-	
 	public List<FileView> findFiles(int articleId, String userId, int isArticle) {
-		List<FileView> fileList = fileMapper.findFiles(articleId, userId, isArticle);
+		List<FileView> fileList = findFiles(articleId, userId, 0, isArticle);
+		return fileList;
+	}
+	public List<FileView> findFiles(int articleId, int teamCodeId, int isArticle) {
+		List<FileView> fileList = findFiles(articleId, null, teamCodeId, isArticle);
+		return fileList;
+	}
+	public List<FileView> findFiles(int articleId, String userId, int teamCodeId, int isArticle) {
+		List<FileView> fileList = fileMapper.findFiles(articleId, userId, teamCodeId, isArticle);
 		return fileList;
 	}
 }

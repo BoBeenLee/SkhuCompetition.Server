@@ -1,24 +1,35 @@
+/* @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);  */
 
 @body-background: #eee;
 @container-background: #eee;
-@header-height: 150px;
+@header-height: 50px;
 @header-background-color: white;
-@menu-background-color: white;
-@content-background-color: white;
+@menu-background-color: #00294a;
+@content-background-color: #eee;
 @footer-height: 100px;
-@footer-background-color: white;
-@side-gap: 10px;
+@footer-background-color: #e3e3e3;
+@side-gap: 20px;
+
+html {
+
+}
+
 body {
-	background-color: @body-background ! important;
+	background: url('/competition_system_01/image/common/bg.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; 
 }
 
 * {
-	color: #444 ! important;
+	color: #444;
+	font-family: 'Nanum Gothic', sans-serif;
 }
 
 .btn {
-	border-width: 2px ! important;
-	border-color: #ffe ! important;
+	border-width: 1px ! important;
+	border-color: #eee ! important;
 }
 
 .container {
@@ -27,25 +38,26 @@ body {
 	.header {
 		margin-bottom: @side-gap;
 		height: @header-height;
-		background-color: @header-background-color;
+		* {
+			color: #fff;
+		}
+		
+		// background-color: @header-background-color;
 		.main-title {
 			display: inline-block;
-			margin-top: 40px;
 			margin-left: 40px;
 			font-size: 200%;
 		}
-
-		.box-link {
+		.btn {
+			border-style: none;
+			background-color: inherit;
 		}
-
 		.box-login {
 		}
 
 		.box-register {
 		}
 		.box-name {
-			line-height: 1.8em;	
-			font-size: 12px;
 			margin-right: 5px;			
 		}
 	}
@@ -54,20 +66,27 @@ body {
 		margin-bottom: @side-gap;
 		background-color: @menu-background-color;
 		.box-menu {
-			li a {
+			li a{
+				color: #fff;
+				background-color: #00294a;
+			}
+			li a:hover{
 				color: black;
+				background-color: #ffe21e;
 			}
 		}
 	}
 
 	.content {
-		padding: 3%;
-		background-color: @content-background-color;
+		padding: 30px;
+	/* 	background-color: @content-background-color; */
 		margin-bottom: @side-gap;
 		h4 {
-			text-align: center;
-			padding-bottom: 15px;
-			border-bottom: 2px solid #b0b0b0;
+			font-size: 24px;
+			color: #00294a;
+			text-align: left;
+			padding-bottom: 20px;
+			border-bottom: 2px solid #f4f4f4;
 		}
 	}
 
@@ -75,7 +94,11 @@ body {
 		padding: 2%;
 		height: @footer-height;
 		background-color: @footer-background-color;
-		div:nth-of-type(1) {
+		
+		.col-md-9, .col-md-1{
+			margin-top: 5px;
+		}
+		/*div:nth-of-type(1) {
 			float: left;
 			padding-right: 20px;
 		}
@@ -83,13 +106,16 @@ body {
 		div:nth-of-type(2) {
 			font: normal 9pt arial;
 			color: #666;
-			margin-top: 15px;
+			margin-top: 5px;
 		}
 
 		div:nth-of-type(3) {
 			font: normal 9pt arial;
 			color: #aaa;
 			margin-top: 5px;
+		}*/
+		.box-link {
+			
 		}
 	}
 }

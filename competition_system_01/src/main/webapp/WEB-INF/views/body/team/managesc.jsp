@@ -4,9 +4,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="managesc">
-	<div ng-controller="BidToTidCtrl" ng-init="init('${ scoreList.boardCodeId }', '${ scoreList.teamCodeId }', 'team/tclist.do')">
+	<div ng-controller="BidToTidCtrl" ng-init="init('${ scoreList.boardCodeId }', ${ param.tid }, 'team/tclist.do?ip=1')">
 	<form class="form-inline" action="team/managesc.do" method="get">
-		<select name="bid" class="form-control input-sm" ng-model="bid" ng-change="getSelectedBid('team/tclist.do')">
+		<select name="bid" class="form-control input-sm" ng-model="bid" ng-change="getSelectedBid('team/tclist.do?ip=1')">
 			<c:forEach var="boardCode" items="${ boardCodeList }">
 				<option value="${ boardCode.boardCodeId }">${ boardCode.boardName }</option>
 			</c:forEach>

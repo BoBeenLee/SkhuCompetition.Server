@@ -3,8 +3,8 @@
 <mapper namespace="competition.mapper.UserMapper">
 	<!-- 구현한 것 -->
 	<insert id="addUser" parameterType="competition.domain.view.UserView">
-		insert into user_db(userId, authId, userName, userPW, userTel, userEmail, question, answer, grade, department)
-		select #{userId}, authId, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{grade}, #{department} 
+		insert into user_db(userId, authId, userName, userPW, userTel, userEmail, question, answer, grade, department, preAuthId)
+		select #{userId}, authId, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{grade}, #{department}, authId
 		from auth_db
 		where authName = #{authName} and
 		groupPW = #{groupPW}
@@ -28,14 +28,14 @@
 	</delete>
 
 	<select id="getUser" resultType="competition.domain.view.UserView">
-		select userId, u1.authId, authName, userName, userPW, userTel, userEmail, question, answer, grade, department, createdDate
+		select userId, u1.authId, authName, userName, userPW, userTel, userEmail, question, answer, grade, department, createdDate, preAuthId
 		from user_db u1 join auth_db a1
 		on u1.authId = a1.authId
 		where userId = #{userId} and userPW = #{userPW}
 	</select>
 
 	<select id="findUsers" resultType="competition.domain.view.UserView">
-		select userId, u1.authId authId, authName, userName, userPW, userTel, userEmail, question, answer, grade, department, createdDate
+		select userId, u1.authId authId, authName, userName, userPW, userTel, userEmail, question, answer, grade, department, createdDate, preAuthId
 		from user_db u1
 		join auth_db a1
 		on u1.authId = a1.authId
@@ -55,7 +55,7 @@
 					AND u1.department like concat("%", #{content}, "%")
 				</when>				
 				<when test="srchType.equals('authName')">
-					AND u1.authName like concat("%", #{content}, "%")
+					AND a1.authName like concat("%", #{content}, "%")
 				</when>
 			</choose>
 		</if>
@@ -111,4 +111,19 @@
 		set userPW = #{userPW}
 		where userId = #{userId}
 	</update>
+	
+	<update id="grantAuth" parameterType="competition.domain.view.UserView">
+		update user_db
+		set authId = (select authId
+					from auth_db
+					where authName = #{authName})
+		where userId = #{userId}
+	</update>
+	
+	<update id="returnAuth" parameterType="string">
+		update user_db
+		set authId = preAuthId
+		where userId = #{userId}
+	</update>
+	
 </mapper> 

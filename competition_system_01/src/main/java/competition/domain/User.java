@@ -2,18 +2,34 @@ package competition.domain;
 
 import java.sql.Timestamp;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.sun.istack.internal.NotNull;
+
 public class User {
+	@NotEmpty @Length(min = 3, max = 20, message = "UserId 3 ~ 20")
 	private String userId;
 	private int authId;
+	@NotEmpty
 	private String userName;
+	@NotEmpty @Length(min = 3, max = 20, message = "Password 3 ~ 20")
 	private String userPW;
+	@NotEmpty
 	private String userTel;
+	@NotEmpty @Email(message = "Invalid Email")
 	private String userEmail;
+	@NotEmpty
 	private String question;
+	@NotEmpty
 	private String answer;
+	
 	private int grade;
+	@NotEmpty
 	private String department;
 	private Timestamp createdDate;
+	private int preAuthId;
 	
 	public String getUserId() {
 		return userId;
@@ -81,4 +97,11 @@ public class User {
 	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
+	public int getPreAuthId() {
+		return preAuthId;
+	}
+	public void setPreAuthId(int preAuthId) {
+		this.preAuthId = preAuthId;
+	}
+	
 }

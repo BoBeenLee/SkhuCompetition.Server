@@ -1,9 +1,9 @@
 package competition.domain.view;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import util.DateUtils;
-
 import competition.domain.Calendar;
 
 public class CalendarView extends Calendar {

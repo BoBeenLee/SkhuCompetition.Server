@@ -39,4 +39,14 @@ public class CommentServiceImpl implements CommentService {
 		List<CommentView> commentList = commentMapper.findComments(articleId);
 		return commentList;
 	}
+
+	public List<CommentView> findBoardComments(int boardCodeId) {
+		List<CommentView> commentList = this.findBoardComments(boardCodeId, 0);
+		return commentList;
+	}
+
+	public List<CommentView> findBoardComments(int boardCodeId, int isShare) {
+		List<CommentView> commentList = commentMapper.findBoardComments(boardCodeId, isShare);
+		return commentList;
+	}
 }

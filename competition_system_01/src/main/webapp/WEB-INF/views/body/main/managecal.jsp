@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<div class="managecal">
+<div class="managecal" ng-controller="DatepickerCtrl" ng-init="init()">
 	<!-- datepicker -->
 	<script type="text/javascript"
 		src="js/calendar/jquery.timepicker.min.js"></script>
@@ -60,7 +60,7 @@
 	</div>
 	<hr>
 	<form:form class="form-inline" action="main/addCalendar.do"
-		method="post" commandName="calendarView2" ng-controller="DatepickerCtrl" ng-init="init()">
+		method="post" commandName="calendarView2">
 		<div class="datepair form-group">
 			<form:input path="startDateView"
 				class="datepair-date form-control input-sm" placeholder="start" />
@@ -75,7 +75,4 @@
 		<input class="form-control btn btn-default" type="submit"
 			value="추가" />
 	</form:form>
-	<script>
-
-	</script>
 </div>

@@ -17,12 +17,15 @@ public interface TeamService {
 	public boolean modifyTeamCode(TeamCode teamCode);
 	public TeamCodeView getTeamCode(int teamCodeId);
 	public List<TeamCodeView> findTeamCodes(int boardCodeId, String userId);
+	public List<TeamCodeView> findTeamCodes(int boardCodeId, String userId, int isPermission);
 	public List<Rank> findRanks(int boardCodeId);
 	
 //	Team
 	public boolean addTeam(Team team);
 	public boolean removeTeam(int teamId);
+	public boolean removeTeams(int teamCodeId);
 	public TeamView getTeam(int teamId);
 	public List<TeamView> findTeams(int teamCodeId);
 	public boolean containsTeam(String userId, int boardCodeId);
+	public boolean containsTeam(String userId, int boardCodeId, boolean isPermission);
 }

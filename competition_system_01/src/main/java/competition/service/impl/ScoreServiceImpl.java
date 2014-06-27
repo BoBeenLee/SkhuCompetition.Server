@@ -52,6 +52,11 @@ public class ScoreServiceImpl implements ScoreService{
 		return isScore;
 	}
 	
+	public boolean removeScores(int articleId) {
+		boolean isScore = (1 == scoreMapper.removeScores(articleId))? true : false;
+		return isScore;
+	}
+
 	public boolean modifyScore(Score Score) {
 		boolean isScore = (1 == scoreMapper.modifyScore(Score))? true : false;
 		return isScore;

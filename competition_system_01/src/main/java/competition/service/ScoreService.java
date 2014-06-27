@@ -19,6 +19,7 @@ public interface ScoreService {
 	// Score
 	public boolean addScore(Score Score);
 	public boolean removeScore(int scoreId);
+	public boolean removeScores(int articleId);
 	public boolean modifyScore(Score Score);
 	public ScoreView getScore(int scoreId);
 	public List<ScoreView> findScores(int boardCodeId, int teamCodeId);

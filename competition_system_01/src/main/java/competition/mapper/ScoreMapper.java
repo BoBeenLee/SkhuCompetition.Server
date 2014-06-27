@@ -11,16 +11,17 @@ import competition.domain.view.code.ScoreCodeView;
 
 public interface ScoreMapper {
 	// ScoreCode
-	public int addScoreCode(ScoreCode ScoreCode);
+	public int addScoreCode(ScoreCode scoreCode);
 	public int removeScoreCode(int scoreCodeId);
-	public int modifyScoreCode(ScoreCode ScoreCode);
+	public int modifyScoreCode(ScoreCode scoreCode);
 	public ScoreCodeView getScoreCode(int scoreCodeId);
 	public List<ScoreCodeView> findScoreCodes(int boardCodeId);
 
 	// Score
-	public int addScore(Score Score);
+	public int addScore(Score score);
 	public int removeScore(int scoreId);
-	public int modifyScore(Score Score);
+	public int removeScores(int articleId);
+	public int modifyScore(Score score);
 	public ScoreView getScore(int scoreId);
 	public List<ScoreView> findScores(@Param("boardCodeId") int boardCodeId, @Param("teamCodeId") int teamCodeId);
 }
