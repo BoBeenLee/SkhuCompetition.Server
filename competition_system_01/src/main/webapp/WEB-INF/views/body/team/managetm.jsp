@@ -14,7 +14,7 @@
 				</c:forEach>
 			</select> 
 			<select name="tid" class="form-control input-sm" ng-model="tid">
-				<option ng-repeat="team in teamList" value="{{ team.teamCodeId }}">{{team.teamName}}</option>
+				<option ng-selected="{{tid == team.teamCodeId}}" ng-repeat="team in teamList" value="{{ team.teamCodeId }}">{{team.teamName}}</option>
 			</select>
 			<input class="form-control btn btn-default" type="submit"
 				value="조회" />
@@ -73,7 +73,9 @@
 			</tbody>
 		</table>
 		<c:if test="${ teamList.leaderId == currentUserName }">
-			<a class="btn btn-default pull-right" href="team/addtm.do?tid=${ teamList.teamCodeId }">팀수정</a>
+			<c:if test="${ not empty teamList.teams && teamList.isPermission == 0 }">
+				<a class="btn btn-default pull-right" href="team/addtm.do?tid=${ teamList.teamCodeId }">팀수정</a>
+			</c:if>
 			<a class="btn btn-default pull-right" href="team/removetm.do?tid=${ teamList.teamCodeId }">팀삭제</a>
 		</c:if>
 		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESOR')">

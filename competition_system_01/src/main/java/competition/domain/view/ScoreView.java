@@ -1,10 +1,13 @@
 package competition.domain.view;
 
+import java.sql.Timestamp;
+
 import competition.domain.Score;
 
 public class ScoreView extends Score{
 //	File DB
 	private String fileName;
+	private Timestamp fileDate;
 	private int fileId;
 	private String title;
 	
@@ -25,5 +28,11 @@ public class ScoreView extends Score{
 	}
 	public void setFileId(int fileId) {
 		this.fileId = fileId;
+	}
+	public Timestamp getFileDate() {
+		return fileDate;
+	}
+	public void setFileDate(Timestamp fileDate) {
+		this.fileDate = fileDate;
 	}
 }

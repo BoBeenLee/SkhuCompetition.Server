@@ -1,6 +1,7 @@
 package competition.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import util.AuthUtils;
-import util.BeanUtils;
 import competition.domain.Article;
 import competition.domain.Auth;
 import competition.domain.Page;
+import competition.domain.Rank;
 import competition.domain.code.BoardCode;
 import competition.domain.code.TeamCode;
 import competition.domain.list.ScoreCodeList;
@@ -61,15 +62,6 @@ public class CompetitionController {
 		
 		model.addAttribute("selectedURI", selectedURI);		
 		model.addAttribute("pgList", pgList);
-	}
-	
-	@RequestMapping("/competition/competition.do")
-	public ModelAndView viewCompetition(HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView("/competition/competition");
-
-		modelAndView.addObject("subTitle", "대회페이지");
-		modelAndView.addObject("competitionType", "competition");
-		return modelAndView;
 	}
 	
 	//	Add Cpt
@@ -122,7 +114,9 @@ public class CompetitionController {
 	public String hiddenCpt(@RequestParam("boardCodeId") int boardCodeId,
 			@RequestParam("isHidden") int isHidden) {
 		String message = "";
-		BoardCodeView boardCodeView = articleService.getBoard(boardCodeId);
+		BoardCodeView boardCodeView = null;
+		
+		boardCodeView = articleService.getBoard(boardCodeId);
 		boardCodeView.setIsHidden(isHidden);
 
 		boolean isBoardCode = articleService.modifyBoardCode(boardCodeView);
@@ -145,27 +139,17 @@ public class CompetitionController {
 		List<BoardCodeView> boardCodeList = null;
 		BoardCodeView boardCodeView = null;
 		
-		//		권한에 따른 설정
-		if(authNames.contains(Auth.ROLE_ADMIN)){
-			boardCodeList = articleService.findBoards(null, 2);
-		} else if(authNames.contains(Auth.ROLE_PROFESOR)) {
-			List<ValuerView> vvList =  valuerService.findValuers(0, auth.getName());
-			boardCodeList = new ArrayList<BoardCodeView>();
-			for(ValuerView vv : vvList)
-				boardCodeList.add(articleService.getBoard(vv.getBoardCodeId()));	
-		} else {
-			boardCodeList = new ArrayList<BoardCodeView>();
-			List<BoardCodeView> tmpList = articleService.findBoards(null, 2); 
-			for(BoardCodeView bcv : tmpList){
-				if(teamService.containsTeam(auth.getName(), bcv.getBoardCodeId()))
-					boardCodeList.add(bcv);
-			}
-		}
+		List<Rank> rankList = null;
 		
 		ScoreCodeList scoreCodeList = new ScoreCodeList();
 		List<TeamCodeView> teamCodeList = null;
 		List<ValuerView> valuerList = null;
-
+		
+		boolean isValuer = false;
+		
+		//	대회 관리는 누구에게나 보여주는 걸로
+		boardCodeList = articleService.findBoards(null, 2);
+		
 		//		조회했을 경우
 		if (boardCodeId != 0) {
 			scoreCodeList.setBoardCodeId(boardCodeId);
@@ -173,9 +157,24 @@ public class CompetitionController {
 					.findScoreCodes(boardCodeId));
 			teamCodeList = teamService.findTeamCodes(boardCodeId, null, TeamCode.IS_PERMISSION);
 			valuerList = valuerService.findValuers(boardCodeId, null);
+			// isValuer
+			if(valuerList != null){
+				for(ValuerView vv : valuerList){
+					if(vv.getUserId().equals(auth.getName())){
+						isValuer = true;
+						break;
+					}
+				}
+			}
 			boardCodeView = articleService.getBoard(boardCodeId);
 		}		
+		
+		// Rank 
+		rankList = teamService.findRanks(boardCodeId);
+		
+		modelAndView.addObject("isValuer", isValuer);
 		modelAndView.addObject("valuerList", valuerList);
+		modelAndView.addObject("rankList", rankList);
 		modelAndView.addObject("teamCodeList", teamCodeList);
 		modelAndView.addObject("scoreCodeList", scoreCodeList);
 		modelAndView.addObject("boardCodeList", boardCodeList);
@@ -226,8 +225,17 @@ public class CompetitionController {
 	
 	@RequestMapping(value = "/competition/savevaluer.do", method = RequestMethod.POST)
 	public String saveValuer(@RequestParam("bid") int boardCodeId,
-			@RequestParam("valuerList") Set<String> valuerList) {
+			@RequestParam(value="valuerList", required=false) Set<String> valuerList) {
+		BoardCodeView boardCodeView = articleService.getBoard(boardCodeId);
+		
+		if(valuerList == null)
+			valuerList = new HashSet<String>();
+		// 대회 개설자 평가자로 등록
+		valuerList.add(boardCodeView.getBuilderId());
+		// 전에 있던 평가자들 삭제하고
 		valuerService.removeValuers(boardCodeId);
+		
+		// 새로 다시 평가자들 등록
 		for (String userId : valuerList) {
 			ValuerView valuerView = valuerService
 					.getValuer(userId, boardCodeId);

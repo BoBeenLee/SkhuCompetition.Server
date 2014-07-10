@@ -80,10 +80,11 @@ public class UserController {
 		String url = "";
 		boolean isUser = false;
 		
-		boolean isGroupPwChk = userService.getChkGroupPW(userView);
+//		System.out.println(userView.getAuthName());
+//		boolean isGroupPwChk = userService.getChkGroupPW(userView);
 		
-		if(isGroupPwChk)
-			System.out.println((isUser = userService.addUser(userView)));	
+//		if(isGroupPwChk)
+		System.out.println((isUser = userService.addUser(userView)));	
 
 	    if(isUser)
 	    	url = "redirect:" + "/main/main.do?message=register";

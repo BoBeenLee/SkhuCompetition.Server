@@ -22,6 +22,4 @@ public class UserView extends User {
 	public void setGroupPW(String groupPW) {
 		this.groupPW = groupPW;
 	}
-	
-	
 }

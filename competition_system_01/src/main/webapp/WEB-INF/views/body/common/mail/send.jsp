@@ -10,14 +10,14 @@
 
 <div class="mail">
 	<form action="mail/sendMail.do" method="post">
-		<div ng-controller="OpenWindowCtrl" class="mailList form-group" 
+		<div ng-controller="OpenWindowCtrl" class="mailList form-group row" 
 		ng-init="init([
 			<c:forEach var="mail" varStatus="idx" items="${ mailList.mails }">
+			<c:if test="${ !idx.first }">, </c:if>
 			{
 				itemId : '${ mail.toId }',
 				itemName : '${ mail.toName }'
 			}
-			<c:if test="${ !idx.last }">, </c:if>
 			</c:forEach>
 		 ])" >
 		 	<div class="form-group">
@@ -31,8 +31,10 @@
 				<input type="button" ng-click="removeItem($index)" class="btn" value="삭제" /></li>
 			</ul>
 		</div>
-		<input type="text" class="form-control" name="title" />
-		<div ng-controller="AutoSizeCtrl">
+		<div class="row">
+			<label class="">제목 : </label><input type="text" class="form-control" name="title" />
+		</div>
+		<div class="row" ng-controller="AutoSizeCtrl">
 			<textarea id="inputContent" name="content" class="form-control"></textarea>
 		</div>
 		<input class="btn btn-default pull-right" type="submit"

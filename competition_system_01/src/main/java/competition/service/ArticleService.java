@@ -18,6 +18,7 @@ public interface ArticleService {
 	public boolean removeBoard(int boardCodeId);
 	public boolean modifyBoardCode(BoardCode boardCode);
 	public List<BoardCodeView> getAllBoardCodes();	
+	public BoardCodeView getBoard(int boardCodeId, int isHidden);
 	public BoardCodeView getBoard(int boardCodeId);
 	public List<BoardCodeView> findBoards(String builderId, int parentBoardCodeId);
 	public List<BoardCodeView> findBoards(int isHidden, String builderId, int parentBoardCodeId);

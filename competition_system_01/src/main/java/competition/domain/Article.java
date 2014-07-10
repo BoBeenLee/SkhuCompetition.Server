@@ -29,7 +29,6 @@ public class Article {
 	private Timestamp endPeriod;
 	private int commentCount;
 	private String password;
-	private int authId;
 	private Timestamp fileLimitDate;
 	private int isFile;
 	private int isShare;
@@ -130,14 +129,6 @@ public class Article {
 		if(password == null || password.equals(""))
 			return ;
 		this.password = password;
-	}
-
-	public int getAuthId() {
-		return authId;
-	}
-
-	public void setAuthId(int authId) {
-		this.authId = authId;
 	}
 
 	public Timestamp getFileLimitDate() {

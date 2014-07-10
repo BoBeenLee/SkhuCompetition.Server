@@ -6,7 +6,7 @@ public class Score {
 	private int articleId;
 	private int teamCodeId;
 	private String userId;
-	private int valuerId;
+	private String valuerId;
 	
 	public int getScoreId() {
 		return scoreId;
@@ -38,10 +38,10 @@ public class Score {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public int getValuerId() {
+	public String getValuerId() {
 		return valuerId;
 	}
-	public void setValuerId(int valuerId) {
+	public void setValuerId(String valuerId) {
 		this.valuerId = valuerId;
 	}
 }

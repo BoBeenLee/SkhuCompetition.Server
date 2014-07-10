@@ -6,13 +6,15 @@
 <div class="grantadmin">
 	<div ng-controller="OpenWindowCtrl" class="user" 
 	ng-init="init([
+		<c:set var="comma" value="0" />
 		<c:forEach var="user" varStatus="idx" items="${ userList }">
 			<c:if test="${ user.userId != 'admin' }">
+				<c:if test="${ comma != 0 }">, </c:if>	
+				<c:if test="${ comma == 0 }"><c:set var="comma" value="1" /></c:if>	
 				{
 					itemId : '${ user.userId }',
 					itemName : '${ user.userName }'
 				}				
-			<c:if test="${ !idx.last }">, </c:if>
 			</c:if>
 		</c:forEach>  
 	])"	>

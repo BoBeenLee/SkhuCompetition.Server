@@ -36,6 +36,7 @@
 					<input id="inputFile" type="file" name="uploadfile" />
 				</div>
 				<input type="hidden" name="ai" value="${ article.articleId }" />
+				<input type="hidden" name="is" value="${ pagination.is }" />
 				<input type="hidden" name="bid" value="${ pagination.bid }" />
 				<input type="hidden" name="sz" value="${ pagination.sz }" />
 			</div>
@@ -63,7 +64,7 @@
 		<label>제출 파일</label>
 		<ul>
 		<c:forEach var="file" items="${ fileList }">
-			<li><span>팀 : ${ file.teamName } - </span><a href="fileDown.do?fi=${ file.fileId }">${ file.fileName }</a>
+			<li><span>팀 : ${ file.teamName }</span><span> 파일명 : <a href="fileDown.do?fi=${ file.fileId }">${ file.fileName }</a></span>
 			<span>
 			태그 : 
 			<c:forEach var="tag" items="${ file.tagList }">
@@ -81,12 +82,11 @@
 	<hr>
 	<div class="read-option">
 	<c:if test="${ article.writerId == currentUserName || isAdmin}">
-	
 		<c:if test="${ article.isShare == 1 }">
-			<a class="btn btn-default" href="${ boardType }/article/modifyShare.do?${ pagination }&ai=${ article.articleId }&is=0">공유 취소</a>
+			<a class="btn btn-default" href="${ boardType }/article/modifyShare.do?${ pagination }&ai=${ article.articleId }&cis=0">공유 취소</a>
 		</c:if>
 		<c:if test="${ article.isShare == 0 && parentBoardCodeId == 2 }">
-			<a class="btn btn-default" href="${ boardType }/article/modifyShare.do?${ pagination }&ai=${ article.articleId }&is=1">대회자료 공유</a>
+			<a class="btn btn-default" href="${ boardType }/article/modifyShare.do?${ pagination }&ai=${ article.articleId }&cis=1">대회자료 공유</a>
 		</c:if>
 		<a class="btn btn-default" href="${ boardType }/article/write.do?${ pagination }&ai=${ article.articleId }">수정</a>
 		<a class="btn btn-default" href="${ boardType }/article/remove.do?${ pagination }&ai=${ article.articleId }">삭제</a>

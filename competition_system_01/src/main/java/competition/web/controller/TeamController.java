@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,16 +75,6 @@ public class TeamController {
 		model.addAttribute("pgList", pgList);
 	}
 	
-	// <!-- Team --> 보기 선택에서 시작하면 됨.
-	@RequestMapping("/team/team.do")
-	public ModelAndView viewTeam(HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView("/team/team");
-
-		modelAndView.addObject("subTitle", "팀페이지");
-		modelAndView.addObject("teamType", "team");
-		return modelAndView;
-	}
-	
 	@RequestMapping(value = "/team/addtm.do", method = RequestMethod.GET)
 	public ModelAndView viewAddTm(@RequestParam(value="tid", defaultValue="0") int teamCodeId) {
 		ModelAndView modelAndView = new ModelAndView("/team/addtm");
@@ -90,9 +82,12 @@ public class TeamController {
 		TeamCodeView teamCodeView = null;
 		List<TeamView> teamList = null;
 		
-		if(teamCodeId != 0)
+		if(teamCodeId != 0) {
 			teamCodeView = teamService.getTeamCode(teamCodeId);
-		else 
+			// 승인 된 상태에서 수정하려 할 경우
+			if(teamCodeView.getIsPermission() == TeamCode.IS_PERMISSION)
+				modelAndView.setViewName("redirect:" + "/team/managetm.do");
+		} else 
 			teamCodeView = new TeamCodeView();		
 		teamList = teamService.findTeams(teamCodeId);
 		
@@ -105,10 +100,17 @@ public class TeamController {
 	}
 
 	@RequestMapping(value = "/team/addtm.do", method = RequestMethod.POST)
-	public String addTm(
-			@ModelAttribute("teamCodeView") TeamCodeView teamCodeView,
+	public ModelAndView addTm(
+			@ModelAttribute("teamCodeView") @Valid TeamCodeView teamCodeView, BindingResult result,
 			@RequestParam(value="teamList", required=false) Set<String> teamIdList) {
-		String url = "redirect:" + "/team/addtm.do?message=addtm";
+		ModelAndView modelAndView = new ModelAndView("/team/addtm");
+		List<BoardCodeView> boardCodeList = articleService.findBoards(null, 2);
+		
+		modelAndView.addObject("teamCodeView", new TeamCodeView());
+		modelAndView.addObject("boardCodeList", boardCodeList);
+		modelAndView.addObject("subTitle", "팀신청");
+		modelAndView.addObject("teamType", "addtm");
+		
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		
@@ -117,17 +119,25 @@ public class TeamController {
 		// Add Leader
 		teamIdList.add(auth.getName());
 		
+		// valid에 맞지 않을 경우
+		if(result.hasErrors()){
+			modelAndView.addObject("teamCodeView", teamCodeView);
+			return modelAndView;
+		}
 		// 조건 검색 부분 - 팀 생성 시 타팀에 중복된 사람이 있는 지
 		if(teamCodeView.getTeamCodeId() == 0){
 			for(String userId : teamIdList){
-				if(teamService.containsTeam(userId, teamCodeView.getBoardCodeId()))
-					return url + "&message=fail";
+				if(teamService.containsTeam(userId, teamCodeView.getBoardCodeId())){
+					modelAndView.addObject("message", "팀 중복");
+					return modelAndView;
+				}
 			}
 		}
 		// 조건 팀 권한에 맞는 사람이 수정하는 지
-		if(teamCodeView.getTeamCodeId() != 0 && !auth.getName().equals(teamCodeView.getLeaderId()))
-				return url + "&message=fail";		
-		
+		if(teamCodeView.getTeamCodeId() != 0 && !auth.getName().equals(teamCodeView.getLeaderId())){
+				modelAndView.addObject("message", "권한이 맞지 않습니다.");
+				return modelAndView;				
+		}
 		// 조건 만족 시 - 생성, 수정
 		teamCodeView.setLeaderId(auth.getName());
 		teamCodeView.setTeamType("A");
@@ -135,23 +145,22 @@ public class TeamController {
 		if(teamCodeView.getTeamCodeId() != 0) {
 			teamService.modifyTeamCode(teamCodeView);
 			teamService.removeTeams(teamCodeView.getTeamCodeId());
-		} else
+			
+			modelAndView.addObject("message", "수정 완료되었습니다");
+		} else {
 			teamService.addTeamCode(teamCodeView);
-		
+			
+			modelAndView.addObject("message", "신청 완료되었습니다");
+		}
 		// Add Team 원
 		for (String userId : teamIdList) {
 			TeamView team = new TeamView();
 			team.setTeamCodeId(teamCodeView.getTeamCodeId());
 			team.setUserId(userId);
-			try {
-				System.out.println(BeanUtils.getBeanGetValue(team));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			teamService.addTeam(team);
 		}
-		return url;
+
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "/team/managetm.do", method = RequestMethod.GET)
@@ -172,7 +181,7 @@ public class TeamController {
 			List<ValuerView> vvList =  valuerService.findValuers(0, auth.getName());
 			boardCodeList = new ArrayList<BoardCodeView>();
 			for(ValuerView vv : vvList)
-				boardCodeList.add(articleService.getBoard(vv.getBoardCodeId()));	
+				boardCodeList.add(articleService.getBoard(vv.getBoardCodeId(), BoardCode.IS_NOT_HIDDEN));	
 		} else {
 			boardCodeList = new ArrayList<BoardCodeView>();
 			List<BoardCodeView> tmpList = articleService.findBoards(null, 2); 
@@ -243,9 +252,10 @@ public class TeamController {
 			List<ValuerView> vvList =  valuerService.findValuers(0, auth.getName());
 			boardCodeList = new ArrayList<BoardCodeView>();
 			for(ValuerView vv : vvList)
-				boardCodeList.add(articleService.getBoard(vv.getBoardCodeId()));	
+				boardCodeList.add(articleService.getBoard(vv.getBoardCodeId(), BoardCode.IS_NOT_HIDDEN));	
 		} 
 		
+		// 평가자이거나 관리자 일 경우만 
 		if(valuerView != null || authNames.contains(Auth.ROLE_ADMIN))
 			isValuer = true;
 		
@@ -257,10 +267,10 @@ public class TeamController {
 			scoreList.setTeamCodeId(teamCodeId);
 		}
 		
-		// Test
-		try {
-			System.out.println(BeanUtils.getBeanGetValue(valuerView));
-		} catch(Exception e){}
+//		// Test
+//		try {
+//			System.out.println(BeanUtils.getBeanGetValue(valuerView));
+//		} catch(Exception e){}
 
 		modelAndView.addObject("isValuer", isValuer);	
 		modelAndView.addObject("scoreList", scoreList);
@@ -283,7 +293,7 @@ public class TeamController {
 		
 		if (scoreList.getScores() != null) {
 			for (ScoreView sv : scoreList.getScores()) {
-				sv.setValuerId(valuerView.getValuerId());
+				sv.setValuerId(auth.getName());
 				if (sv.getScoreId() == 0)
 					scoreService.addScore(sv);
 				else

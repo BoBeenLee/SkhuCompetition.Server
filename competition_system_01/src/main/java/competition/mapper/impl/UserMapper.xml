@@ -6,8 +6,8 @@
 		insert into user_db(userId, authId, userName, userPW, userTel, userEmail, question, answer, grade, department, preAuthId)
 		select #{userId}, authId, #{userName}, #{userPW}, #{userTel}, #{userEmail}, #{question}, #{answer}, #{grade}, #{department}, authId
 		from auth_db
-		where authName = #{authName} and
-		groupPW = #{groupPW}
+		where authName = #{authName} 
+		and (groupPW is null or groupPW = #{groupPW})
 	</insert>
 
 	<update id="modifyUser" parameterType="competition.domain.view.UserView">
@@ -97,7 +97,6 @@
 		select count(*)
 		from auth_db
 		where authName = #{authName}
-		AND groupPW = #{groupPW}
 	</select>
 
 	<update id="changePW" parameterType="competition.domain.view.UserView">

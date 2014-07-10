@@ -10,8 +10,10 @@
 		update scorecode_db set
 		scoreName = #{scoreName}, 
 		content = #{content},
-		rank = #{rank},
-		teamCodeId = #{teamCodeId}
+		rank = #{rank}
+		<if test="teamCodeId != 0">
+		,teamCodeId = #{teamCodeId}
+		</if>
 		where scoreCodeId = #{scoreCodeId}
 	</update>
 
@@ -67,7 +69,7 @@
 	</select>
 
 	<select id="findScores" resultType="competition.domain.view.ScoreView">
-		select s1.scoreId scoreId, s1.score score, a1.articleId articleId, s1.teamCodeId teamCodeId, f1.userId userId, s1.valuerId valuerId, f1.fileName fileName, f1.fileId fileId, a1.title title
+		select s1.scoreId scoreId, s1.score score, a1.articleId articleId, s1.teamCodeId teamCodeId, f1.userId userId, s1.valuerId valuerId, f1.fileName fileName, f1.fileId fileId, f1.fileDate fileDate, a1.title title
 		from article_db a1 join teamcode_db tc1 
 		on a1.boardCodeId = tc1.boardCodeId and tc1.teamCodeId = #{teamCodeId}
 		left join file_db f1

@@ -30,26 +30,28 @@ public class ArticleView extends Article{
 	public void setStartPeriodView(String startPeriod) throws ParseException {
 		if(startPeriod == null || startPeriod.equals(""))
 			return ;
-		setStartPeriod(DateUtils.getStringToTimestamp(startPeriod));
+		setStartPeriod(DateUtils.getStringToDate(startPeriod));
 	}
 	public String getStartPeriodView() {
-		return DateUtils.getTimestampToString(super.getStartPeriod());
+		return DateUtils.getDateToString(super.getStartPeriod());
 	}
 	public void setEndPeriodView(String endPeriod) throws ParseException {
 		if(endPeriod == null || endPeriod.equals(""))
 			return ;
-		setEndPeriod(DateUtils.getStringToTimestamp(endPeriod));
+		setEndPeriod(DateUtils.getStringToDate(endPeriod));
 	}
 	public String getEndPeriodView() {
-		return DateUtils.getTimestampToString(super.getEndPeriod());
+		return DateUtils.getDateToString(super.getEndPeriod());
 	}
 	public void setFileLimitDateView(String fileLimitDate) throws ParseException {
+		fileLimitDate = fileLimitDate.trim();
+		
 		if(fileLimitDate == null || fileLimitDate.equals(""))
 			return ;
-		setFileLimitDate(DateUtils.getStringToTimestamp(fileLimitDate));
+		setFileLimitDate(DateUtils.getStringToDateTime(fileLimitDate));
 	}
 	public String getFileLimitDateView() {
-		return DateUtils.getTimestampToString(super.getFileLimitDate());
+		return DateUtils.getDateTimeToString(super.getFileLimitDate());
 	}
 	public boolean getIsFileView() {
 		return getIsFile() == 1;

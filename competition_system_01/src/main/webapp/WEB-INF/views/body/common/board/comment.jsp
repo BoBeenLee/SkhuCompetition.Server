@@ -23,6 +23,7 @@
 					class="form-control" />
 				<form:hidden path="writerId" />
 				<form:hidden path="articleId" />
+				<input type="hidden" name="is" value="${ pagination.is }" />
 				<input type="hidden" name="bid" value="${ pagination.bid }" />
 				<input type="hidden" name="sz" value="${ pagination.sz }" />
 				<input type="hidden" name="pg" value="${ pagination.pg }" />
@@ -46,6 +47,7 @@
 							class="form-control" rows="2" cols="50">${ comment.contentView }</textarea>
 						<input type="hidden" name="commentId"
 							value="${ comment.commentId }" /> 
+						<input type="hidden" name="is" value="${ pagination.is }" />
 						<input type="hidden" name="bid" value="${ pagination.bid }" /> 
 						<input type="hidden" name="sz" value="${ pagination.sz }" /> 
 						<input type="hidden" name="pg" value="${ pagination.pg }" /> 

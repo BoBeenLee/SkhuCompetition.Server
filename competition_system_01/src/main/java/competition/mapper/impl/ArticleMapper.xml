@@ -5,7 +5,7 @@
 	<select id="findQAs" resultType="competition.domain.view.QAView">
 		select a1.articleId article, title, writtenDate, hit, writerId, boardCodeId,
 		isNotice,
-		startPeriod, endPeriod, password, authId, qaId,
+		startPeriod, endPeriod, password, qaId,
 		processId,
 		parentQAId, distance, step
 		from article_db a1 join qa_db q1
@@ -51,6 +51,7 @@
 		select *
 		from boardcode_db
 		where boardCodeId = #{boardCodeId}
+		and isHidden = #{isHidden}
 	</select>
 
 	<select id="findBoards" resultType="competition.domain.view.code.BoardCodeView">
@@ -72,8 +73,8 @@
 	</select>
 
 	<insert id="addQA" parameterType="competition.domain.QA">
-		insert into qa_db(articleId, processId, parentQAId, distance, step)
-		values(#{articleId}, #{processId}, #{parentQAId}, #{distance}, #{step})
+		insert into qa_db(articleId, processId, distance, step)
+		values(#{articleId}, #{processId}, #{distance}, #{step})
 	</insert>
 
 	<update id="modifyQA" parameterType="competition.domain.QA">
@@ -93,8 +94,8 @@
 
 	<insert id="addArticle" parameterType="competition.domain.Article"
 		useGeneratedKeys="true" keyProperty="articleId">
-		insert into article_db(title, content, writtenDate, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, authId, fileLimitDate, isFile)
-		values(#{title}, #{content}, #{writtenDate}, #{writerId}, #{boardCodeId}, #{isNotice}, #{startPeriod}, #{endPeriod}, #{password}, #{authId}, #{fileLimitDate}, #{isFile})
+		insert into article_db(title, content, writtenDate, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, fileLimitDate, isFile)
+		values(#{title}, #{content}, #{writtenDate}, #{writerId}, #{boardCodeId}, #{isNotice}, #{startPeriod}, #{endPeriod}, #{password}, #{fileLimitDate}, #{isFile})
 	</insert>
 
 	<update id="modifyArticle" parameterType="competition.domain.Article">
@@ -102,17 +103,25 @@
 		title = #{title},
 		content = #{content}, 
 		writtenDate = #{writtenDate},
-		hit = #{hit},
 		writerId = #{writerId}, 
-		boardCodeId = #{boardCodeId},
 		isNotice = #{isNotice},
 		startPeriod = #{startPeriod},
 		endPeriod = #{endPeriod},
-		commentCount = #{commentCount},
 		password = #{password}, 
-		authId = #{authId},
 		fileLimitDate = #{fileLimitDate},
 		isFile = #{isFile}
+		where articleId = #{articleId}
+	</update>
+
+	<update id="increaseHit">
+		update article_db set
+		hit = hit + 1
+		where articleId = #{articleId}
+	</update>
+
+	<update id="updownCommentCount">
+		update article_db set
+		commentCount = commentCount + (#{count})
 		where articleId = #{articleId}
 	</update>
 
@@ -133,7 +142,7 @@
 	</select>
 	
 	<select id="findNotices" resultType="competition.domain.view.ArticleView">
-		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, authId, commentCount
+		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, commentCount
 		from article_db 
 		where 1 
 		<if test="isShare != 0">
@@ -155,7 +164,7 @@
 	</select>
 	
 	<select id="findArticles" resultType="competition.domain.view.ArticleView">
-		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, authId, commentCount
+		select articleId, title, writtenDate, hit, writerId, boardCodeId, isNotice, startPeriod, endPeriod, password, commentCount
 		from article_db	a1
 		where 1  
 		<include refid="etcCondition" />
@@ -196,7 +205,7 @@
 			and a1.boardCodeId = #{boardCodeId}
 		</if>
 		<if test="srchType == null">
-			AND ((a1.isNotice = 1 AND (a1.endPeriod &lt; now() OR now() &lt; a1.startPeriod OR a1.startPeriod &lt;&gt; a1.endPeriod)) OR a1.isNotice = 0)
+			AND ((a1.isNotice = 1 AND a1.startPeriod &lt;&gt; a1.endPeriod AND (a1.endPeriod &lt; now() OR now() &lt; a1.startPeriod)) OR a1.isNotice = 0)
 		</if>
 	</sql>
 
@@ -208,7 +217,7 @@
 			and a2.boardCodeId = #{boardCodeId}
 		</if>
 		<if test="srchType == null">
-			AND ((a2.isNotice = 1 AND (a2.endPeriod &lt; now() OR now() &lt; a2.startPeriod OR a2.startPeriod &lt;&gt; a2.endPeriod)) OR a2.isNotice = 0)
+			AND ((a2.isNotice = 1 AND a2.startPeriod &lt;&gt; a2.endPeriod AND (a2.endPeriod &lt; now() OR now() &lt; a2.startPeriod)) OR a2.isNotice = 0)
 		</if>
 	</sql>
 

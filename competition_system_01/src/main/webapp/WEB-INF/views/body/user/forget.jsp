@@ -5,7 +5,7 @@
 <div class="forget">
 	<form class="form-horizontal" action="user/forget.do" method="post">
 		<div class="form-group">
-			<label for="inputUserId1" class="col-md-3 control-label">UserId</label>
+			<label for="inputUserId1" class="col-md-3 control-label">아이디</label>
 			<div class="col-md-5">
 				<input type="text" name="userId" id="inputUserId1" class="form-control" />
 			</div>
@@ -25,7 +25,7 @@
 	</form>
 	<form class="form-horizontal" action="user/forget.do" method="post">
 		<div class="form-group">
-			<label for="inputUserId2" class="col-md-3 control-label">UserId</label>
+			<label for="inputUserId2" class="col-md-3 control-label">아이디</label>
 			<div class="col-md-5">
 				<input type="text" name="userId" id="inputUserId2" class="form-control" />
 			</div>

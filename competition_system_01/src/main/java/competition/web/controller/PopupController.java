@@ -47,6 +47,4 @@ public class PopupController {
 		modelAndView.addObject("popupType", "findTeams"); 
 		return modelAndView;
 	}
-	
-	
 }

@@ -9,18 +9,18 @@ import competition.domain.Calendar;
 public class CalendarView extends Calendar {
 	
 	public void setStartDateView(String startDate) throws ParseException {
-		setStartDate(DateUtils.getStringToTimestamp(startDate));
+		setStartDate(DateUtils.getStringToDate(startDate));
 	}
 
 	public void setEndDateView(String endDate) throws ParseException {
-		setEndDate(DateUtils.getStringToTimestamp(endDate));
+		setEndDate(DateUtils.getStringToDate(endDate));
 	}
 
 	public String getStartDateView() {
-		return DateUtils.getTimestampToString(super.getStartDate());
+		return DateUtils.getDateToString(super.getStartDate());
 	}
 
 	public String getEndDateView() {
-		return DateUtils.getTimestampToString(super.getEndDate());
+		return DateUtils.getDateToString(super.getEndDate());
 	}
 }

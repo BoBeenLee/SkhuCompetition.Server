@@ -1,14 +1,26 @@
-1. article_db에 authId 부분 애매모호함 - 읽기도 boardcode_db에 놓는것이 좀더 올바를 듯
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------
+
 
 궁금 사항
 1. annotation-config, component-scan, ContextLoaderListener 의 역할
-2. select id, name, @RNUM
-from test, (SELECT @RNUM := 0) R
-where @RNUM := @RNUM + 1
-order by id desc; 뭐징.
-3. less 한곳에 모아놓아서 충돌 날 수 있으니 유의
-
-
 
 js, css 참조 부분
 

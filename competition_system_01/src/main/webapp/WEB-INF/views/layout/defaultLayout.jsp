@@ -95,15 +95,19 @@
 	} ]);
 	
 	myAppModule.controller('BidToTidCtrl', [ '$scope', function($scope) {
-		$scope.teamList = [];
-		
+		$scope.teamList = [];	
+
 		$scope.init = function(bid, tid, url){
 			if(bid){
 				$scope.bid = bid;
 				$scope.getSelectedBid(url);
 			}
-			$scope.tmpid = tid;			
+			if(tid){
+				$scope.tid = tid;
+			}
+			$scope.$apply();
 		};
+		
 		$scope.getSelectedBid = function(url){
 			var param = { bid : $scope.bid };
 			
@@ -114,9 +118,10 @@
 			      method: "get",
 			      type: "json",
 			      data : param,
-			      success: function(data) {			    	
-			    	$scope.teamList = data;
-			    	$scope.tid = $scope.tmpid;
+			      success: function(data) {	
+			    	for(var idx in data){
+			    		$scope.teamList = data;
+			    	}			    	
 			    	$scope.$apply();
 			      },
 			      error : function(data, status){
@@ -145,9 +150,24 @@
 				'format' : 'yyyy-m-d',
 				'autoclose' : true
 			});
+			
+			// initialize timepairs
+			$('.timepair').timepicker();
+			
+			// fileLimitDate
+			$scope.limitDate = 	$('.datepair .limitdate').val();
+			
+			// Event Handler
+			$('.datepair .limitdate').on("change", function(){
+				$scope.limitDate = $(this).val();
+				$scope.$apply();
+			});
 
-			// initialize datepairs
-			$('.datepair').datepair();
+			$('.limittime').on("change", function(){
+				$scope.limitTime = $(this).val();
+				$scope.$apply();
+			});
+			
 		};
 	} ]);
 	

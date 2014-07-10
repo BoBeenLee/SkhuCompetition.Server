@@ -26,12 +26,12 @@
 <div ng-controller="CalendarCtrl" class="main row" 
 ng-init="init([
  <c:forEach var="calendar" varStatus="idx" items="${ calendarList }">
+	<c:if test="${ !idx.first }">, </c:if>
 	{
 	    title : '${ calendar.content }',
 	    start : '${ calendar.startDateView }',
 	    end : '${ calendar.endDateView }'
 	} 
- <c:if test="${ !idx.last }">, </c:if>
  </c:forEach>  
 ])"	>
 	<div class="col-md-4">

@@ -61,7 +61,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public boolean getChkGroupPW(UserView user) {
-		boolean isChk = 	(1 == userMapper.getChkGroupPW(user))? true : false;		
+		boolean isChk = 	(1 == userMapper.getChkGroupPW(user))? true : false;	
+		System.out.println(userMapper.getChkGroupPW(user));
 		return isChk;
 	}
 

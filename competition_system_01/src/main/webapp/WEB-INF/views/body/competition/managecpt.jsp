@@ -33,7 +33,7 @@
 	</div>
 	<hr>
 	<div class="score">
-		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESOR')">
+		<c:if test="${ isAdmin || isValuer }">
 		<div class="score-pro">
 			<form class="form-inline" action="competition/managecpt.do?cmd=add" method="post">
 				<label for="inputScoreRank" class="control-label">순서 : </label> <input
@@ -81,8 +81,50 @@
 				</form:form>
 			</div>
 		</div>
-		</sec:authorize>
 		<hr>
+		<div>
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<td>팀명</td>
+						<c:forEach var="rank" items="${ rankList }">
+						<td>${ rank.name }</td>
+						</c:forEach>
+					</tr>
+					<tr>
+						<td>총 순위</td>
+						<c:set var="idx" value="0" />
+						<c:set var="sum" value="0" />
+						<c:forEach var="rank" items="${ rankList }">
+							<td>
+								<c:if test="${ idx != 0 && sum == rank.sum }">
+									${ idx }							
+								</c:if>
+								<c:if test="${ idx == 0 || sum != rank.sum }">
+									<c:set var="idx" value="${ idx + 1 }" />
+									<c:set var="sum" value="${ rank.sum }" />
+									${ idx }	
+								</c:if>
+							</td>
+						</c:forEach>
+					</tr>
+					<tr>
+						<td>총 합계</td>
+						<c:forEach var="rank" items="${ rankList }">
+						<td>${ rank.sum }</td>
+						</c:forEach>
+					</tr>
+					<tr>
+						<td>총 평균</td>
+						<c:forEach var="rank" items="${ rankList }">
+						<td>${ rank.average }</td>
+						</c:forEach>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		</c:if>
+		<c:if test="${ !(isAdmin || isValuer) }">
 		<!-- 학생  -->
 		<div class="score-stu scoreList">
 			<table class="table table-striped table-condensed table-hover">
@@ -106,17 +148,23 @@
 				</tbody>
 			</table>
 		</div>
+		</c:if>
+		<hr>
 		<div ng-controller="OpenWindowCtrl" class="valuer" 
 		ng-init="init([
+			<c:set var="comma" value="0" />
 			<c:forEach var="valuer" varStatus="idx" items="${ valuerList }">
-			{
-				itemId : '${ valuer.userId }',
-				itemName : '${ valuer.userName }'
-			}
-			<c:if test="${ !idx.last }">, </c:if>
+				<c:if test="${ valuer.userId != boardCodeView.builderId }">
+					<c:if test="${ comma != 0 }">, </c:if>	
+					<c:if test="${ comma == 0 }"><c:set var="comma" value="1" /></c:if>			
+					{
+						itemId : '${ valuer.userId }',
+						itemName : '${ valuer.userName }'
+					}
+				</c:if>
 			</c:forEach>  
 		])"	>
-		<h5>평가자 명단</h5>
+		<h5>평가자 명단 - 개설자 : ${ boardCodeView.builderId }</h5>
 		<form action="competition/savevaluer.do" method="post">
 			<div class="valuerList">
 				<!-- 평가자 명단을 어떻게 불러올 것인가?? -->

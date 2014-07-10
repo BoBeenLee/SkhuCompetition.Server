@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -70,12 +71,14 @@ public class MyPageController {
 			pgList.add(new Page("비밀번호 변경", myPath + "changepw.do"));
 			pgList.add(new Page("회원탈퇴", myPath + "withdraw.do"));
 			pgList.add(new Page("메일보내기", mailPath + "send.do"));
-			if(authNames.contains(Auth.ROLE_ADMIN) && auth.getName().equals("admin")){
-				pgList.add(new Page("관리자권한 부여", myPath + "grantadmin.do"));
+			if(authNames.contains(Auth.ROLE_ADMIN)){
 				pgList.add(new Page("덧글관리", myPath + "managecmt.do?bid=0"));
 				pgList.add(new Page("태그관리", myPath + "managetag.do"));
 			}
-		} else if(authNames.contains(Auth.ROLE_STUDENT)){
+			if(authNames.contains(Auth.ROLE_ADMIN) && auth.getName().equals("admin")){
+				pgList.add(new Page("관리자권한 부여", myPath + "grantadmin.do"));
+			}
+		} else if(authNames.contains(Auth.ROLE_STUDENT) || authNames.contains(Auth.ROLE_USER)){
 			pgList.add(new Page("회원정보 수정", myPath + "modify.do?cmd=chkpw"));
 			pgList.add(new Page("비밀번호 변경", myPath + "changepw.do"));
 			pgList.add(new Page("회원탈퇴", myPath + "withdraw.do"));
@@ -92,17 +95,6 @@ public class MyPageController {
 		model.addAttribute("pgList", pgList);
 	}
 
-	// <!-- Mypage --> 보기 선택에서 시작하면 됨.
-	@RequestMapping("/mypage/mypage.do")
-	public ModelAndView viewMypage(HttpServletRequest request) {
-		ModelAndView modelAndView = new ModelAndView("/mypage/mypage");
-
-		modelAndView.addObject("subTitle", "마이페이지");
-		modelAndView.addObject("mypageType", "mypage");
-		return modelAndView;
-	}
-
-	
 	@RequestMapping(value = "/mypage/modify.do", method = RequestMethod.GET, params = "cmd=chkpw")
 	public ModelAndView viewChkPw() throws Exception {
 		ModelAndView modelAndView = new ModelAndView("/mypage/modify");
@@ -143,7 +135,6 @@ public class MyPageController {
 
 		userView.setUserId(auth.getName());
 
-		BeanUtils.getBeanGetValue(userView);
 		isUser = userService.modifyUser(userView);
 
 		if (isUser)

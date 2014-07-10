@@ -58,8 +58,15 @@ public class ArticleServiceImpl implements ArticleService {
 		return boardCodeList;
 	}
 
+	public BoardCodeView getBoard(int boardCodeId, int isHidden) {
+		BoardCodeView bc = articleMapper.getBoard(boardCodeId, isHidden);
+		return bc;
+	}
+	
 	public BoardCodeView getBoard(int boardCodeId) {
-		BoardCodeView bc = articleMapper.getBoard(boardCodeId);
+		BoardCodeView bc = getBoard(boardCodeId, BoardCode.IS_NOT_HIDDEN);
+		if(bc == null)
+			bc = getBoard(boardCodeId, BoardCode.IS_HIDDEN);
 		return bc;
 	}
 
@@ -193,22 +200,13 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	public boolean increaseHit(int articleId) {
-		boolean isHit = false;
-		ArticleView article = getArticle(articleId);
-		article.setHit(article.getHit() + 1);
-		
-		isHit = this.modifyArticle(article);
+		boolean isHit = (1 == articleMapper.increaseHit(articleId))? true : false;
 		return isHit;
 	}
 
 	public boolean updownCommentCount(int articleId, boolean isCommentCount) {
-		boolean isHit = false;
-		ArticleView article = getArticle(articleId);
-		if(isCommentCount)
-			article.setCommentCount(article.getCommentCount() + 1);
-		else
-			article.setCommentCount(article.getCommentCount() - 1);
-		isHit = this.modifyArticle(article);
-		return isHit;
+		int count = (isCommentCount)? 1 : -1;
+		boolean isComment = (1 == articleMapper.updownCommentCount(articleId, count))? true : false;
+		return isComment;
 	}
 }

@@ -5,6 +5,9 @@ public class BoardCode {
 	public final static int BOARDCODE_COMPETITION = 2;
 	public final static int BOARDCODE_DATA = 3;
 	public final static int BOARDCODE_QA = 4;
+	public final static int IS_NOT_HIDDEN = 0;
+	public final static int IS_HIDDEN = 1;
+	
 	
 	private int boardCodeId;	
 	private String builderId;

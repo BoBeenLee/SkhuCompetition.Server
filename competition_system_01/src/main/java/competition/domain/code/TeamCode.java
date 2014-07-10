@@ -2,16 +2,26 @@ package competition.domain.code;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+
 public class TeamCode {
 	public static final int IS_NOT_PERMISSION = 0;
 	public static final int IS_PERMISSION = 1;
 	
 	private int teamCodeId;
 	private String leaderId;
+	@NotEmpty @Length(min = 3, max = 20, message = "TeamName 3 ~ 20")
 	private String teamName;
+	@Range(min = 1, message = "해당 보드를 찾을 수 없습니다.")
 	private int boardCodeId;
 	private Timestamp teamDate;
 	private String teamType;
+	@NotEmpty @Length(min = 3, max = 20, message = "Team Content 3 ~ 20")
 	private String teamContent;
 	private int isPermission;
 	

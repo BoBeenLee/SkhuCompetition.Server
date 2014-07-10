@@ -21,7 +21,7 @@
 		<li><a href="sub1/board.do?bid=1">공지사항</a></li>
 		<li><a href="sub/board.do?bid=2">경진대회</a></li>
 		<li><a href="sub1/board.do?is=1">대회자료</a></li>
-		<sec:authorize access="!isAnonymous()" >
+		<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESOR', 'ROLE_STUDENT')" >
 		<li><a href="team/managetm.do">팀</a></li>
 		</sec:authorize>
 		<li><a href="sub1/board.do?bid=4">QnA</a></li>

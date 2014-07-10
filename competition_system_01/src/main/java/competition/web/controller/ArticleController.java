@@ -1,13 +1,17 @@
 package competition.web.controller;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,14 +22,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import util.AuthUtils;
 import util.BeanUtils;
 import util.FileUtils;
-
 import competition.domain.Article;
+import competition.domain.Auth;
 import competition.domain.Comment;
 import competition.domain.Page;
 import competition.domain.Pagination;
@@ -36,6 +41,7 @@ import competition.domain.view.CommentView;
 import competition.domain.view.ContentView;
 import competition.domain.view.FileView;
 import competition.domain.view.TagView;
+import competition.domain.view.ValuerView;
 import competition.domain.view.code.BoardCodeView;
 import competition.domain.view.code.TeamCodeView;
 import competition.service.ArticleService;
@@ -45,9 +51,12 @@ import competition.service.ScoreService;
 import competition.service.TagService;
 import competition.service.TeamService;
 import competition.service.UserService;
+import competition.service.ValuerService;
 
 @Controller
-public class ArticleController  {
+public class ArticleController implements ApplicationContextAware {
+    private WebApplicationContext context = null;
+	
 	@Autowired
 	ArticleService articleService;
 	@Autowired
@@ -62,6 +71,8 @@ public class ArticleController  {
 	ScoreService scoreService;
 	@Autowired
 	TagService tagService;
+	@Autowired
+	ValuerService valuerService;
 	
 	@ModelAttribute
 	private void addModelData(HttpServletRequest request, Model model, Pagination pagination) {
@@ -74,7 +85,7 @@ public class ArticleController  {
 			if(bcv != null) {
 				pgList.addAll(articleService.getSubList(bcv.getParentBoardCodeId()));
 			
-				// context 명 제외한 이후 경로 명 - 게시판일 경우
+				// context 명 제외한 이후 경로 명 - 게시판일 경우 - subList 선택 된게 어떤건지 보는 것
 				selectedURI = request.getRequestURI();
 				selectedURI = selectedURI.substring(selectedURI.indexOf("/", selectedURI.indexOf("/") + 1) + 1) + "?bid=" + pagination.getBid();
 				
@@ -108,10 +119,10 @@ public class ArticleController  {
 			modelAndView.setViewName("redirect:/main/main.do");
 			return modelAndView;
 		}
-		
+		// 글쓰기 권한 부여
 		for(GrantedAuthority granted : auth.getAuthorities()) 
 			if(authNames.contains(granted.getAuthority()))
-				isWrite = true;
+				isWrite = true;		
 		//System.out.println(isWrite);
 
 		// Test
@@ -145,7 +156,15 @@ public class ArticleController  {
 	@RequestMapping(value = "/{boardType}/article/confirmpw.do", method = RequestMethod.GET)
 	public ModelAndView confirmPwView(@PathVariable String boardType, @ModelAttribute("pagination") Pagination pagination, @RequestParam("ai") int articleId){
 			ModelAndView modelAndView = new ModelAndView("/" + boardType	+ "/article/confirmpw");
+			// 권한 설정
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();	
+			List<String> authList = AuthUtils.getAuthNames(auth);
 			
+			if(authList.contains(Auth.ROLE_ADMIN)){
+				modelAndView.setViewName("redirect:" + "/" + boardType + "/article/read.do?" + pagination +  "&ai=" + articleId);
+				return modelAndView;
+			}
 			modelAndView.addObject("articleId", articleId);
 			modelAndView.addObject("pagination", pagination);
 			modelAndView.addObject("boardType", boardType);
@@ -161,23 +180,38 @@ public class ArticleController  {
 			throws Exception {
 		ModelAndView modelAndView = new ModelAndView("/" + boardType
 				+ "/article/read");
+		// 권한 설정
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();	
+		List<String> authList = AuthUtils.getAuthNames(auth);
+		// 팀, 조회 여부
 		boolean isTeam = false;
-		
+		boolean isHit = false;
+		// 댓글
 		CommentView commentView = null;
+		List<CommentView> commentList = null;
+		// 게시판 정보
+		BoardCodeView boardCodeView = null;
+		// 게시물
 		ArticleView articleView = articleService.getArticle(articleId);
+		// 파일 관련
+		List<FileView> articleFile = null;
+		List<FileView> fileList = null;
+		// 평가자 정보
+		ValuerView valuerView = null;
 		
-		// 비밀번호 있을 경우,
-		if(articleView.getPassword() != null && !articleView.getPassword().equals(password)){
+		// 비밀번호 있을 경우, - 하지만 Admin 권한일 경우 통과 하게끔
+		if(!authList.contains(Auth.ROLE_ADMIN) && articleView.getPassword() != null && !articleView.getPassword().equals(password)){
 			modelAndView.setViewName("redirect:" + "/" + boardType + "/board.do?bid=" 	+ pagination.getBoardCodeId());
 			return modelAndView;
 		}
 		// 파일 관련
-		List<FileView> articleFile = fileService.findFiles(articleView.getArticleId(), null, Article.IS_ARTICLE);
-		List<FileView> fileList = new ArrayList<FileView>();
+		articleFile = fileService.findFiles(articleView.getArticleId(), null, Article.IS_ARTICLE);
+		fileList = new ArrayList<FileView>();
 		
-		if(pagination.getIsShare() == 0) {
+		valuerView = valuerService.getValuer(auth.getName(), pagination.getBoardCodeId());
+		
+		if(pagination.getIsShare() == 0 && !(valuerView != null || authList.contains(Auth.ROLE_ADMIN))) {
 			// 팀 내 파일 제출 시, 
 			List<TeamCodeView> teamCodeList = teamService.findTeamCodes(pagination.getBoardCodeId(), auth.getName());
 			
@@ -194,15 +228,12 @@ public class ArticleController  {
 			fv.setTagList(tagService.findTags(fileId));
 		}		
 		
-		
 		// 조회 수 증가
-		boolean isHit = articleService.increaseHit(articleView.getArticleId());
-		
+		isHit = articleService.increaseHit(articleView.getArticleId());
 		// 해당 게시판의 팀원인지 아닌지 체크
-		isTeam = teamService.containsTeam(auth.getName(), articleView.getBoardCodeId());
+		isTeam = teamService.containsTeam(auth.getName(), pagination.getBoardCodeId());
 		// isTeam
 		modelAndView.addObject("isTeam", isTeam);
-		
 		// Article
 		modelAndView.addObject("article", articleView);
 		// file List
@@ -210,11 +241,11 @@ public class ArticleController  {
 		modelAndView.addObject("fileList", fileList);
 		
 		// parentBoardCodeId
-		BoardCodeView boardCodeView = articleService.getBoard(articleView.getBoardCodeId());
+		boardCodeView = articleService.getBoard(articleView.getBoardCodeId());
 		modelAndView.addObject("parentBoardCodeId", boardCodeView.getParentBoardCodeId());
 		
 		// Comment
-		List<CommentView> commentList = commentService.findComments(articleId);
+		commentList = commentService.findComments(articleId);
 		// Write Comment 
 		commentView = new CommentView();
 		commentView.setArticleId(articleId);
@@ -261,14 +292,19 @@ public class ArticleController  {
 					}
 				}
 			}			
-			return "redirect:" + "/" + boardType + "/article/read.do?" + pagination.toString() +  "&ai=" + articleId;
+			return "redirect:" + "/" + boardType + "/article/read.do?" + pagination +  "&ai=" + articleId;
 	}
 	
 	@RequestMapping(value = "/{boardType}/article/modifyShare.do", method = RequestMethod.GET)
-	public String modifyShare(@PathVariable String boardType, @ModelAttribute("pagination") Pagination pagination, @RequestParam("ai") int articleId, @RequestParam("is") int isShare){
+	public String modifyShare(@PathVariable String boardType, @ModelAttribute("pagination") Pagination pagination, @RequestParam("ai") int articleId, @RequestParam("cis") int isShare){
+			String url = "";
 			articleService.modifyShare(isShare, articleId);
 			
-			return "redirect:" + "/" + boardType + "/article/read.do?bid=" + pagination.getBid() + "&sz=" + pagination.getPageSize() +  "&ai=" + articleId;
+			if(pagination.getBid() == 0)
+				url = "redirect:" + "/" + boardType + "/article/read.do?" + pagination +  "&ai=" + articleId;
+			else
+				url = "redirect:" + "/" + boardType + "/article/read.do?" + pagination +  "&ai=" + articleId;
+			return url;
 	}
 	
 	@RequestMapping(value = "/fileDown.do", method = RequestMethod.GET)
@@ -287,6 +323,7 @@ public class ArticleController  {
 		ModelAndView modelAndView = new ModelAndView("/" + boardType
 				+ "/article/write");
 		ArticleView articleView = null;
+		BoardCodeView boardCodeView = articleService.getBoard(pagination.getBid());
 		
 		if(articleId == 0) {
 			 articleView = new ArticleView();
@@ -294,7 +331,8 @@ public class ArticleController  {
 			articleView = articleService.getArticle(articleId);
 		}
 		articleView.setBoardCodeId(pagination.getBid());
-
+		
+		modelAndView.addObject("boardCodeView", boardCodeView);
 		modelAndView.addObject("articleView", articleView);
 		modelAndView.addObject("boardType", boardType);
 		modelAndView.addObject("articleType", "write");
@@ -302,7 +340,7 @@ public class ArticleController  {
 	}
 
 	@RequestMapping(value = "/{boardType}/article/write.do", method = RequestMethod.POST)
-	public String writeArticle(@PathVariable String boardType,
+	public String writeArticle(@PathVariable String boardType, @ModelAttribute("pagination") Pagination pagination,
 			@ModelAttribute("articleView") @Valid ArticleView articleView)
 			throws Exception {
 		FileView fileView =  null;
@@ -310,8 +348,6 @@ public class ArticleController  {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();	
 		String userId = auth.getName();
-		String authName = userService.getAuthName(userId);
-		int authId = userService.getAuthId(authName);
 		String message = "";
 		boolean isArticle = false;
 		
@@ -320,9 +356,9 @@ public class ArticleController  {
 			scoreService.removeScores(articleView.getArticleId());
 		}
 		
+		// 수정이 아닐 경우는 add, 수정일 경우 modify
 		if(articleView.getArticleId() == Article.IS_NOT_MODIFY){
 			articleView.setWriterId(userId);
-			articleView.setAuthId(authId);
 			isArticle = articleService.addArticle(articleView);
 		} else {	
 			isArticle = articleService.modifyArticle(articleView);
@@ -341,8 +377,8 @@ public class ArticleController  {
 //		System.out.println(BeanUtils.getBeanGetValue(fileView));
 		message = (isArticle) ? "success" : "fail";
 
-		return "redirect:" + "/" + boardType + "/board.do?bid="
-				+ articleView.getBoardCodeId() + "&message=" + message;
+		return "redirect:" + "/" + boardType + "/board.do?"
+				+ pagination + "&message=" + message;
 	}
 
 	@RequestMapping("/{boardType}/article/remove.do")
@@ -355,8 +391,8 @@ public class ArticleController  {
 		isArticle = articleService.removeArticle(articleId);
 		message = (isArticle) ? "success" : "fail";
 
-		return "redirect:" + "/" + boardType + "/board.do?bid="
-				+ pagination.getBid() + "&message=" + message;
+		return "redirect:" + "/" + boardType + "/board.do?"
+				+ pagination + "&message=" + message;
 	}
 	
 	@RequestMapping(value = "/{boardType}/article/addComment.do", method = RequestMethod.POST)
@@ -396,5 +432,10 @@ public class ArticleController  {
 		message = (isComment) ? "success" : "fail";
 //		 bid=%d&sz=%d pg
 		return "redirect:" + "/" + boardType + "/article/read.do?" + pagination.toString() + "&ai=" + articleId + "&message=" + message;
+	}
+ 
+    public void setApplicationContext(ApplicationContext arg0)
+			throws BeansException {
+		  this.context = (WebApplicationContext)arg0;
 	}
 }

@@ -3,6 +3,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<link rel="stylesheet/less" type="text/css" href="css/team/team.less" />
+
 <div class="managesc">
 	<div ng-controller="BidToTidCtrl" ng-init="init('${ scoreList.boardCodeId }', ${ param.tid }, 'team/tclist.do?ip=1')">
 	<form class="form-inline" action="team/managesc.do" method="get">
@@ -12,7 +14,7 @@
 			</c:forEach>
 		</select> 
 		<select name="tid" class="form-control input-sm" ng-model="tid">
-			<option ng-repeat="team in teamList" value="{{ team.teamCodeId }}">{{team.teamName}}</option>
+			<option ng-selected="{{tid == team.teamCodeId}}" ng-repeat="team in teamList" value="{{ team.teamCodeId }}">{{team.teamName}}</option>
 		</select>
 		<input class="form-control btn btn-default" type="submit"
 			value="조회" />
@@ -21,13 +23,14 @@
 	<hr>
 	<div>
 		<form:form action="team/managesc.do?cmd=save" method="post" commandName="scoreList">
-		<table class="table table-striped table-condensed table-hover">
+		<table class="scoretable table table-striped table-condensed table-hover">
 			<thead>
 				<tr>
 					<th>번호</th>
 					<th>제목</th>
 					<th>제출자</th>
 					<th>점수</th>
+					<th>제출날짜</th>
 					<th>파일 URL</th>
 				</tr>
 			</thead>
@@ -42,6 +45,7 @@
 					<td>${ score.title }</td>
 					<td>${ score.userId }<form:hidden path="scores[${ idx.index }].userId" /></td>
 					<td><form:input path="scores[${ idx.index }].score" class="input-sm" type="text" /></td>
+					<td>${ score.fileDate }</td>
 					<td><a href="fileDown.do?fi=${ score.fileId }">${ score.fileName }</a></td>
 				</tr>
 				</c:forEach>
@@ -66,8 +70,19 @@
 				</tr>
 				<tr>
 					<td>총 순위</td>
-					<c:forEach var="rank" varStatus="idx" items="${ rankList }">
-					<td>${ idx.count }</td>
+					<c:set var="idx" value="0" />
+					<c:set var="sum" value="0" />
+					<c:forEach var="rank" items="${ rankList }">
+						<td>
+							<c:if test="${ idx != 0 && sum == rank.sum }">
+								${ idx }							
+							</c:if>
+							<c:if test="${ idx == 0 || sum != rank.sum }">
+								<c:set var="idx" value="${ idx + 1 }" />
+								<c:set var="sum" value="${ rank.sum }" />
+								${ idx }	
+							</c:if>
+						</td>
 					</c:forEach>
 				</tr>
 				<tr>

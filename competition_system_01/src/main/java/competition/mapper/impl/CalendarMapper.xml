@@ -13,7 +13,7 @@
 		content = #{content}
 		where calendarId = #{calendarId}
 	</update>
-
+	
 	<delete id="removeCalendar" parameterType="int">
 		delete from
 		calendar_db

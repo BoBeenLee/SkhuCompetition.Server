@@ -21,7 +21,7 @@ public interface ArticleMapper{
 	public int removeBoard(int boardCodeId);
 	public int modifyBoardCode(BoardCode boardCode);
 	public List<BoardCodeView> getAllBoardCodes();	
-	public BoardCodeView getBoard(int boardCodeId);
+	public BoardCodeView getBoard(@Param("boardCodeId") int boardCodeId, @Param("isHidden") int isHidden);
 	public List<BoardCodeView> findBoards(@Param("isHidden") int isHidden, @Param("builderId") String builderId, @Param("parentBoardCodeId") int parentBoardCodeId);
 	
 	public int addQA(QA qa);
@@ -41,5 +41,7 @@ public interface ArticleMapper{
 	public int getTotalArticles(Pagination pagination);
 	public int modifyShare(@Param("isShare") int isShare, @Param("articleId") int articleId);
 	
-	public String getBoardName(int boardCodeId);	
+	public String getBoardName(int boardCodeId);
+	public int increaseHit(int articleId);
+	public int updownCommentCount(@Param("articleId") int articleId, @Param("count") int count);	
 }

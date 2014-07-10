@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!-- editor -->
@@ -44,14 +45,18 @@
 					type="text" path="endPeriodView" class="datepair-date form-control input-sm" placeholder="end" />
 			</div>
 		</div>
+		<c:if test="${ boardCodeView.parentBoardCodeId == 2 }">
 		<div class="isFile datepair form-group" ng-controller="CollapseCtrl">
 			<label>파일제출여부 : </label> <form:checkbox path="isFileView" value="false"
 				ng-click="isCollapsed = !isCollapsed" />
 			<div collapse="isCollapsed">
 				<label>제출기한</label>
-				<form:input type="text" path="fileLimitDateView" class="datepair-date form-control input-sm" placeholder="end" />
+				<input type="text" class="datepair-date limitdate form-control input-sm" value="${ articleView.fileLimitDateView }" placeholder="end" />
+				<input type="text" class="timepair limittime form-control input-sm" placeholder="time" />
+				<form:hidden path="fileLimitDateView" value="{{ limitDate + ' ' + limitTime }}"/>
 			</div>
 		</div>
+		</c:if>
 		<div class="isPassword form-group" ng-controller="CollapseCtrl">
 			<label>비밀번호 설정여부 : </label> <input type="checkbox" ng-click="isCollapsed = !isCollapsed" />
 			<div collapse="isCollapsed">
@@ -72,8 +77,10 @@
 				취소
 			</a>
 		</div>
+		<input type="hidden" name="is" value="${ pagination.is }" />
+		<input type="hidden" name="bid" value="${ pagination.bid }" />
+		<input type="hidden" name="sz" value="${ pagination.sz }" />
 		<form:hidden path="writerId" />
 		<form:hidden path="boardCodeId" />
-		<form:hidden path="authId" />
 	</form:form>
 </div>
