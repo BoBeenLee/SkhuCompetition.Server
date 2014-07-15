@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import util.AuthUtils;
 import util.BeanUtils;
 import competition.domain.Auth;
@@ -315,6 +317,7 @@ public class TeamController {
 		 * System.out.println("test"); for(TeamCodeView tcv : teamCodeList)
 		 * System.out.println(BeanUtils.getBeanGetValue(tcv));
 		 */
+		
 		return teamCodeList;
 	}
 }
