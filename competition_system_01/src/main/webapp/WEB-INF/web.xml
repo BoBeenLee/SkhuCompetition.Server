@@ -36,11 +36,6 @@
 		<servlet-name>dispatcher</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Test</servlet-name>
-		<url-pattern>/Test</url-pattern>
-	</servlet-mapping>
-	
 	<listener>
 		<listener-class>
 			org.springframework.web.context.ContextLoaderListener
@@ -54,7 +49,6 @@
 			org.springframework.web.filter.DelegatingFilterProxy
 		</filter-class>
 	</filter>
-
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
