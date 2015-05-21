@@ -2,4 +2,6 @@
 
 =================
 
-Competition System
++ Client - Bootstrap, AngularJS, LessJS, JQuery 
++ Server - Spring Framework, Spring Security, Tiles, MyBatis, JUnit 
++ DB - MariaDB
