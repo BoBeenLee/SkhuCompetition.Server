@@ -1,4 +1,5 @@
-CompetitionSystem
+# 경진대회관리시스템
+
 =================
 
-CompetitionSystem
+Competition System
